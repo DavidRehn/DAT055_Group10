@@ -40,3 +40,11 @@ CREATE TABLE Chat_Members(
     joined_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY(chat_id, user_name)
 )
+
+CREATE TABLE Chat_Messages(
+    chat_id INTEGER NOT NULL ON DELETE CASCADE,
+    message_id INTEGER NOT NULL PRIMARY KEY ON DELETE CASCADE,
+    UNIQUE(chat_id, message_id),
+    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id),
+    FOREIGN KEY (message_id) REFERENCES Chats(message_id)
+)
