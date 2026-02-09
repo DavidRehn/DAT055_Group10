@@ -1,3 +1,0 @@
-&"C:\Program Files\PostgreSQL\18\bin\psql.exe" -f "C:\Users\Elliot\Documents\Chat_Project\runsetup.sql" postgresql://postgres:postgres@127.0.0.1
-
-Inkluderat detta för mig så att det är lättare att arbeta med sql, ni kan använda liknande (men ändra såklart eran path)
