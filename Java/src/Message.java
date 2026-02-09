@@ -1,3 +1,4 @@
+package src;
 /**
  * Describes the Message class of a chat system, contains a message, sender and time of creation
  */

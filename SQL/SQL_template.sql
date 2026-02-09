@@ -31,7 +31,7 @@ CREATE TABLE Chats(
     chat_type TEXT NOT NULL CHECK (chat_type IN ('dm','group')),
     title TEXT, -- If group chat, can have title, otherwise if dm, null
     created_at TIMESTAMPTZ NOT NULL DEFAULT now() -- Kan vara bra att ha kanske? Annars kan ta bort
-)
+);
 
 CREATE TABLE Chat_Members(
     chat_id INTEGER NOT NULL REFERENCES Chats(chat_id) ON DELETE CASCADE ,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
