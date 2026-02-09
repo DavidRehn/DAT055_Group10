@@ -23,7 +23,6 @@ public class test {
                 catch (SQLException e) {
                     System.out.println("Failure");
                     }
-        
     }
 }
 }
