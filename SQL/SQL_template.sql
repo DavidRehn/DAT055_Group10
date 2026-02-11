@@ -1,15 +1,23 @@
 -- PK name
 CREATE TABLE Users(
-    name TEXT PRIMARY KEY,      -- Namn som PK kan ändras vid behov
+    user_id SERIAL PRIMARY KEY,         -- Automatisk ökande identifier för varje användare, identifieras av användarnamn, görs så att ifall namn ändras så ändras inte också för många andra tabeller
+    name TEXT NOT NULL UNIQUE,                   
     login TEXT UNIQUE
+);
+
+CREATE TABLE Chats(
+    chat_id SERIAL PRIMARY KEY,
+    chat_type TEXT NOT NULL CHECK (chat_type IN ('dm','group')),
+    title TEXT, -- If group chat, can have title, otherwise if dm, null
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now() -- Kan vara bra att ha kanske? Annars kan ta bort
 );
 
 -- PK sender && message_date (kan ändras vid behov)
 CREATE TABLE Messages(
-    sender TEXT NOT NULL REFERENCES Users(name),
+    sender_id INT NOT NULL REFERENCES Users(user_id) ON DELETE CASCADE,
     message_date TIMESTAMPTZ NOT NULL DEFAULT now(),        -- date+time default till när en insert skapas i tabellen
-    message_id INTEGER PRIMARY KEY, 
-    FOREIGN KEY (sender) REFERENCES Users(name),        
+    message_id SERIAL PRIMARY KEY,
+    chat_id INT NOT NULL REFERENCES Chats(chat_id) ON DELETE CASCADE,       
     msg_type TEXT NOT NULL, 
     CHECK (msg_type IN ('text', 'image')),
     text_body TEXT,
@@ -26,25 +34,19 @@ CREATE TABLE Messages(
     )
 );
 
-CREATE TABLE Chats(
-    chat_id SERIAL PRIMARY KEY,
-    chat_type TEXT NOT NULL CHECK (chat_type IN ('dm','group')),
-    title TEXT, -- If group chat, can have title, otherwise if dm, null
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now() -- Kan vara bra att ha kanske? Annars kan ta bort
-);
-
 CREATE TABLE Chat_Members(
     chat_id INTEGER NOT NULL REFERENCES Chats(chat_id) ON DELETE CASCADE ,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
-    user_name TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,       -- Samma för en användare
+    user_id INTEGER NOT NULL REFERENCES Users(user_id) ON DELETE CASCADE,       -- Samma för en användare
     role TEXT NOT NULL DEFAULT 'member',
     joined_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY(chat_id, user_name)
-)
+    PRIMARY KEY(chat_id, user_id)
+);
 
-CREATE TABLE Chat_Messages(
-    chat_id INTEGER NOT NULL ON DELETE CASCADE,
-    message_id INTEGER NOT NULL PRIMARY KEY ON DELETE CASCADE,
-    UNIQUE(chat_id, message_id),
-    FOREIGN KEY (chat_id) REFERENCES Chats(chat_id),
-    FOREIGN KEY (message_id) REFERENCES Chats(message_id)
-)
+-- ? Messages kan tillhöra chatten direkt via att man lägger till chat_id i messages istället för att ha en ny tabell
+-- CREATE TABLE Chat_Messages(
+   -- chat_id INTEGER NOT NULL ON DELETE CASCADE,
+    -- message_id INTEGER NOT NULL PRIMARY KEY ON DELETE CASCADE,
+    -- UNIQUE(chat_id, message_id),
+    -- FOREIGN KEY (chat_id) REFERENCES Chats(chat_id),
+    -- FOREIGN KEY (message_id) REFERENCES Chats(message_id)
+-- )
