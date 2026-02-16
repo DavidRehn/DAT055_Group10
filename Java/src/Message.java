@@ -9,16 +9,16 @@ public class Message{
     private LocalDateTime timestamp;
     private int message_id;
     private int chat_id;
-    //private String msg_type;
-    //private String content;
+    private MsgType msg_type; 
+    private String content;
 
-    public Message(int sender_id, LocalDateTime timestamp, int message_id, int chat_id, String msg_type, String content){
+    public Message(int sender_id, LocalDateTime timestamp, int message_id, int chat_id, MsgType msg_type, String content){
         this.sender_id = sender_id;
         this.timestamp = timestamp;
         this.message_id = message_id;
         this.chat_id = chat_id;
-        //this.msg_type = msg_type;
-        //this.content = content;
+        this.msg_type = msg_type;
+        this.content = content;
     }
 
     public int GetSenderID(){
@@ -35,5 +35,9 @@ public class Message{
 
     public int GetChatID(){
         return chat_id;
+    }
+
+    public MsgType GetMesasgeType(){
+        return msg_type;
     }
 };
