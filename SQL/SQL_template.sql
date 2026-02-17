@@ -2,7 +2,7 @@
 CREATE TABLE Users(
     user_id SERIAL PRIMARY KEY,         -- Automatisk ökande identifier för varje användare, identifieras av användarnamn, görs så att ifall namn ändras så ändras inte också för många andra tabeller
     name TEXT NOT NULL UNIQUE,                   
-    login TEXT UNIQUE
+    login TEXT NOT NULL
 );
 
 CREATE TABLE Chats(

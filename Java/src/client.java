@@ -1,19 +1,20 @@
 package src;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class client {
     public static void main(String[] args) {
-        try {
-            Socket socket = new Socket("127.0.0.1", 3333);
+        try (Socket socket = new Socket("127.0.0.1", 3333);
+            ObjectOutputStream objOut = new ObjectOutputStream(socket.getOutputStream())) 
+        {
+            // right now this only sends an object (for testing)
             System.out.println("Connected to server");
+            objOut.writeObject(new User("Ben", "ABC123"));
+            objOut.flush();
 
-            DataInputStream dIn = new DataInputStream(socket.getInputStream());
-            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

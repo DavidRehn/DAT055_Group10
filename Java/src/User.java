@@ -1,9 +1,11 @@
 package src;
+
+import java.io.Serializable;
+
 /**
  * Describes the User class of a chat system
 */
-public class User{
-    // TODO
+public class User implements Serializable{
     private String name;
     private String login;
     
@@ -15,6 +17,11 @@ public class User{
 
     public String getUserName(){
         return this.name;
+    }
+
+    @Override
+    public String toString(){
+        return ("[" + name + ", " + login + "]");
     }
 };
 
