@@ -1,36 +1,37 @@
 package src;
-/**
- * Describes the Chat class of a chat system, contains users (members) and messages
- */
-
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 
+/** Abstract class thet describes the Chat class of a chat system, contains users (members) and messages.
+ */
 public class Chat implements Serializable{
-    private final int chat_id;
-    private final String chatType;
-    private final String title;
-    private final OffsetDateTime createdAt;
+    private int chat_id;
+    private String title;
+    private OffsetDateTime createdAt;
 
-    public Chat(int chat_id, String chatType, String title, OffsetDateTime createdAt){
-        this.chat_id = chat_id;
-        this.chatType = chatType;
+    public Chat(int id, String title, OffsetDateTime timestamp){
+        this.chat_id = id;
         this.title = title;
-        this.createdAt = createdAt;
+        this.createdAt = timestamp;
     }
 
+    /** Returns the chat ID.
+     * @return ID.
+     */
     public int getChatId(){
         return this.chat_id;
     }
 
-    public String getChatType(){
-        return this.chatType;
-    }
-
+    /** Returns the title of the chat.
+     * @return Title.
+     */
     public String getChatTitle(){
         return this.title;
     }
 
+    /** Returns the timestamp when the chat was created.
+     * @return Timestamp when created.
+     */
     public OffsetDateTime getCreatedAt(){
         return this.createdAt;
     }

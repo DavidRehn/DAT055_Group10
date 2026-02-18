@@ -2,23 +2,31 @@ package src;
 
 import java.io.Serializable;
 
-/**
- * Describes the User class of a chat system
+/** Abstract class that describes the User class of a chat system
 */
-public class User implements Serializable{
+public abstract class User implements Serializable{
     private String name;
     private String login;
     
-    // Konstruktor
+    /** Creates a user from the given parameters.
+     * @param name Username.
+     * @param login Password.
+     */
     public User(String name, String login){
         this.name = name;
         this.login = login;
     }
 
+    /** Rerturns the username of the user.
+     * @return Username.
+     */
     public String getUserName(){
         return this.name;
     }
 
+    /** Returns a string containing the users name ans password.
+     * @return String.
+     */
     @Override
     public String toString(){
         return ("[" + name + ", " + login + "]");

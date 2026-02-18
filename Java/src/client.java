@@ -10,7 +10,7 @@ public class client {
         {
             // right now this only sends an object (for testing)
             System.out.println("Connected to server");
-            objOut.writeObject(new User("Ben", "ABC123"));
+            objOut.writeObject(new ChatUser("Ben", "ABC123"));
             objOut.flush();
 
         } catch (IOException e) {

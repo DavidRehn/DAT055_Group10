@@ -1,6 +1,5 @@
 package src;
 import java.sql.*;
-import java.util.Properties;
 
 public class test {
 
@@ -33,7 +32,6 @@ public class test {
                     rs.next();
                     return new Chat(
                         rs.getInt("chat_id"),
-                        rs.getString("chat_type"),
                         rs.getString("title"),
                         rs.getObject("created_at", java.time.OffsetDateTime.class)
                     );

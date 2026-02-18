@@ -1,13 +1,13 @@
 package src;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 /** Abstract class to represent a message in a chat system.
  *  Message does not have any content fields.
  */
 public abstract class Message implements Serializable{
     private int sender_id;
-    private LocalDateTime timestamp;
+    private OffsetDateTime timestamp;
     private int message_id;
     private int chat_id;
 
@@ -21,7 +21,7 @@ public abstract class Message implements Serializable{
     /** Returns the timestamp when the message was sent.
      * @return timestamp.
      */
-    public LocalDateTime GetTimestamp(){
+    public OffsetDateTime GetTimestamp(){
         return timestamp;
     }
 
