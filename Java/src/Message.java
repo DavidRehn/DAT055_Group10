@@ -1,43 +1,41 @@
 package src;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-/**
- * Describes the Message class of a chat system, contains a message, sender and time of creation
+/** Abstract class to represent a message in a chat system.
+ *  Message does not have any content fields.
  */
-public class Message{
+public abstract class Message implements Serializable{
     private int sender_id;
     private LocalDateTime timestamp;
     private int message_id;
     private int chat_id;
-    private MsgType msg_type; 
-    private String content;
 
-    public Message(int sender_id, LocalDateTime timestamp, int message_id, int chat_id, MsgType msg_type, String content){
-        this.sender_id = sender_id;
-        this.timestamp = timestamp;
-        this.message_id = message_id;
-        this.chat_id = chat_id;
-        this.msg_type = msg_type;
-        this.content = content;
-    }
-
+    /** Returns the sender of the message.
+     * @return Sender id.
+    */
     public int GetSenderID(){
         return sender_id;
     }
 
+    /** Returns the timestamp when the message was sent.
+     * @return timestamp.
+     */
     public LocalDateTime GetTimestamp(){
         return timestamp;
     }
 
+    /** Returns the ID of the message.
+     * @return Message ID.
+     */
     public int GetMessageID(){
         return message_id;
     }
 
+    /** Returns the chat the message belongs to.
+     * @return Chat ID.
+     */
     public int GetChatID(){
         return chat_id;
-    }
-
-    public MsgType GetMesasgeType(){
-        return msg_type;
     }
 };

@@ -3,9 +3,10 @@ package src;
  * Describes the Chat class of a chat system, contains users (members) and messages
  */
 
+import java.io.Serializable;
 import java.time.OffsetDateTime;
 
-public class Chat{
+public class Chat implements Serializable{
     private final int chat_id;
     private final String chatType;
     private final String title;

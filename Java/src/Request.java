@@ -1,8 +1,8 @@
 package src;
-
+import java.io.Serializable;
 /** Abstract class to represent a request between a server and client.
  */
-public abstract class Request {
+public abstract class Request implements Serializable{
     private RequestType request;
 
     /** Creates a request using the RequestType as parameter.
