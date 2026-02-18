@@ -53,6 +53,50 @@ public class test {
              }
         }
     }
+
+    // Two functions returning the contents of the user/chat tables. Useful for database testing but shouldnt be used in final.
+    public String getAllUsers() throws SQLException {
+        String sql = "SELECT * From users";
+        try(Connection conn = getConnection()){
+             try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){
+                    
+                    String temp="";
+                    temp = temp+"ID: "+rs.getString("user_id")+" Name: "+rs.getString("name")+"\n";
+                    while(rs.next()){
+                
+                        temp = temp+"ID: "+rs.getString("user_id")+" Name: "+rs.getString("name")+"\n";
+                
+                        }
+                    return temp;
+                }
+                return "failed";
+             }
+        }
+    }
+    public String getAllChats() throws SQLException {
+        String sql = "SELECT * From chats";
+        try(Connection conn = getConnection()){
+             try(PreparedStatement ps = conn.prepareStatement(sql)){
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){
+                    
+                    
+                    String temp="";
+                    temp = temp+"ID: "+rs.getString("chat_id")+" Name: "+rs.getString("title")+"\n";
+                    while(rs.next()){
+                
+                        temp = temp+"ID: "+rs.getString("chat_id")+" Name: "+rs.getString("title")+"\n";
+                
+                        }
+                    return temp;
+                    
+                }
+                return "failed";
+             }
+        }
+    }
         
     public static void main(String[] args) throws Exception {
         test app = new test();
