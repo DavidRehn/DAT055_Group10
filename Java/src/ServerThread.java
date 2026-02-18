@@ -12,19 +12,31 @@ public class ServerThread extends Thread{
     @Override
     public void run(){
         ObjectInputStream objIn = null;
+        ObjectOutputStream objOut = null;
 
         try {
             objIn = new ObjectInputStream(clientSocket.getInputStream());
+            objOut = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (Exception e) {
             System.out.println("Could not create ObjStream");
         }
-        // Only receives an objects and prints it (for testing)
+
+        // For testing
         try {
-            User u = (User)objIn.readObject();
-            System.out.println(u);
+            Object request = objIn.readObject();
+            System.out.println("Received: " + request);
+
+            serverTest st = new serverTest();
+            if(request.getClass().equals(UserRequest.class)){
+                UserRequest r = (UserRequest)request;
+                objOut.writeObject(st.GetUser(r.GetUsername()));
+                objOut.flush();
+            }
+
+            objIn.close();
+            clientSocket.close();
         } catch (Exception e) {
             System.out.println("Server could not print object");
         }
-        
     }
 }
