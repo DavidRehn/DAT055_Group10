@@ -9,7 +9,7 @@ public class client {
             ObjectOutputStream objOut = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objIn = new ObjectInputStream(socket.getInputStream())) 
         {
-            // right now this only sends an object (for testing)
+            // Sends a request for a user(for testing)
             String username = "Sam";
             System.out.println("Connected to server");
             objOut.writeObject(new UserRequest(username));

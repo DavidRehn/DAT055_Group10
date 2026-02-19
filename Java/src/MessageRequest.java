@@ -1,8 +1,10 @@
 package src;
 
+import java.io.Serializable;
+
 /** Request for a message.
  */
-public class MessageRequest {
+public class MessageRequest implements Serializable, Request{
     private int messageId;
 
     /** Creates a request for the given message id.

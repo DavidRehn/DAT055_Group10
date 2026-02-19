@@ -1,8 +1,10 @@
 package src;
 
+import java.io.Serializable;
+
 /** Request for a Chat.
  */
-public class ChatRequest {
+public class ChatRequest implements Serializable, Request{
     private int chatId;
 
     /** Creates a request for chat with given id.

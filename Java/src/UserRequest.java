@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /** Request to get a user.
  */
-public class UserRequest implements Serializable{
+public class UserRequest implements Serializable, Request{
     private String username;
 
     /** Create a request for user with givan username.
