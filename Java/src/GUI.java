@@ -27,17 +27,22 @@ public class GUI {
         frame.setLayout(null);
         frame.setSize(1650, 1080); //Sets the program to full screen by default
         frame.setVisible(true);
+        frame.setResizable(false);
+            
         loginPanel.setBounds(375, 200, 750, 250);
         loginPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         loginButton.setBounds(1200, 300, 200, 100);
         loginButton.setFont(new Font("Consolas", Font.PLAIN, 35));
+        
         username.setPreferredSize(new Dimension(750, 125));
-        password.setPreferredSize(new Dimension(750, 125));
         username.setFont(new Font("Consolas", Font.PLAIN, 35));
+        
+        password.setPreferredSize(new Dimension(750, 125));
         password.setFont(new Font("Consolas", Font.PLAIN, 35));
 
         loginPanel.add(username);
         loginPanel.add(password);
+        
         frame.add(loginPanel);
         frame.add(loginButton);
     }
