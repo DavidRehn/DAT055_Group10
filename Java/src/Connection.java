@@ -6,8 +6,8 @@ public abstract class Connection {
     private int clientId;
     private Socket clientSocket;
 
-    public Connection(int client, Socket socket){
-        this.clientId = client;
+    public Connection(int clientId, Socket socket){
+        this.clientId = clientId;
         this.clientSocket = socket;
     }
 

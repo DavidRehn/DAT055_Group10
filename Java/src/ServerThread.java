@@ -1,27 +1,32 @@
 package src;
+import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class ServerThread extends Thread{
     private ServerSocket serverSocket;
+    private ArrayList<Connection> connections;
 
     public ServerThread(ServerSocket serverSocket){
         this.serverSocket = serverSocket;
+        this.connections = new ArrayList<>();
     }
 
     @Override
     public void run(){
-        System.out.println("test");
-        /* 
+        Socket clientSocket;
+        ObjectOutputStream objOut;
         while (true) { 
             try {
                 clientSocket = serverSocket.accept();
-                System.out.println("Client connected");
+                objOut = new ObjectOutputStream(clientSocket.getOutputStream());
+                int id = 0; // Placeholder
+                connections.add(new ClientConnection(id, clientSocket));
+                System.out.println("Client with id " + id + "connected");
             } catch (IOException e) {
-                System.out.println("Client could not connect" + e);
+                System.out.println("Client could not connect");
             }
-            
         }
-        */
 
         /* 
         ObjectInputStream objIn = null;
