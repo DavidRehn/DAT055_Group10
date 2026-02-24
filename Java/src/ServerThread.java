@@ -1,16 +1,29 @@
 package src;
-import java.io.*;
 import java.net.*;
 
 public class ServerThread extends Thread{
-    private Socket clientSocket;
+    private ServerSocket serverSocket;
 
-    public ServerThread(Socket clientSocket){
-        this.clientSocket = clientSocket;
+    public ServerThread(ServerSocket serverSocket){
+        this.serverSocket = serverSocket;
     }
 
     @Override
     public void run(){
+        System.out.println("test");
+        /* 
+        while (true) { 
+            try {
+                clientSocket = serverSocket.accept();
+                System.out.println("Client connected");
+            } catch (IOException e) {
+                System.out.println("Client could not connect" + e);
+            }
+            
+        }
+        */
+
+        /* 
         ObjectInputStream objIn = null;
         ObjectOutputStream objOut = null;
 
@@ -38,5 +51,6 @@ public class ServerThread extends Thread{
         } catch (Exception e) {
             System.out.println("Server could not print object");
         }
+            */
     }
 }
