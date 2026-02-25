@@ -1,28 +1,17 @@
 package src;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 
 public class client {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("127.0.0.1", 3333);
-            ObjectOutputStream objOut = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream objIn = new ObjectInputStream(socket.getInputStream())) 
-        {
-            // Sends a request for a user(for testing)
-            String username = "Sam";
+        try {
+            SocketChannel socketChannel = SocketChannel.open();
+            socketChannel.connect(new InetSocketAddress("127.0.0.1", 3333));
             System.out.println("Connected to server");
-            objOut.writeObject(new UserRequest(username));
-            objOut.flush();
-            System.out.println("Requested user: " + username);
-            
-            User u = (User)objIn.readObject();
-            System.out.println("Received user: " + u);
-
-            objIn.close();
-            socket.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e){
+            System.out.println("Could not connect to server");
         }
     }
 }
