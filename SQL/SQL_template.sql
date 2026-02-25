@@ -7,7 +7,6 @@ CREATE TABLE Users(
 
 CREATE TABLE Chats(
     chat_id SERIAL PRIMARY KEY,
-    chat_type TEXT NOT NULL CHECK (chat_type IN ('dm','group')),
     title TEXT, -- If group chat, can have title, otherwise if dm, null
     created_at TIMESTAMPTZ NOT NULL DEFAULT now() -- Kan vara bra att ha kanske? Annars kan ta bort
 );

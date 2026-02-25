@@ -58,8 +58,19 @@ public class UserDAO{
     // Metod för att uppdatera ?
 
     // Metod för att radera
+    public boolean DeleteUser(String name) throws SQLException {
+        String sql = "DELETE FROM Users WHERE name = ?";
+        try (Connection conn = db.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+                ps.setString(1,name);
 
-    // Metod för att hämta all info av en användare och returnera objekt
+                int rowsAffected = ps.executeUpdate();
+                return rowsAffected > 0;
+                }
+            }
+
+
+    // Metod för att hämta all info av en användare baserat på deras ID och returnera objekt
     public Optional<ChatUser> findById(int userId) throws SQLException {
         String sql = "SELECT user_id, name, login FROM Users WHERE user_id = ?";
         try (Connection conn = db.getConnection();

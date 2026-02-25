@@ -3,8 +3,6 @@ package src.Model.Entities;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
-import src.Message;
-
 /** Represents a Groupchat containing multiple Users.
  */
 public class GroupChat extends Chat {
