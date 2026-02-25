@@ -4,11 +4,14 @@ import java.net.InetSocketAddress;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerThread extends Thread{
     private ServerSocketChannel serverSocket;
     private final ClientHandler clientHandler;
     private final Selector selector;
+    
 
     public ServerThread() throws IOException{
         this.clientHandler = new ClientHandler();
@@ -20,6 +23,7 @@ public class ServerThread extends Thread{
         SocketChannel clientSocket;
         Iterator<SelectionKey> iter = null;
         Set<SelectionKey> selectedKeys;
+        ExecutorService threads = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
 
         // Starts the server
         try {
