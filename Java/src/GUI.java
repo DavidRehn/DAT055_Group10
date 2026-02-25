@@ -4,13 +4,17 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class GUI extends JFrame {
     private JPanel loginPanel, chatList, selectedChat;
-    private JTextField username, password;
-    public JButton loginButton, addChatButton;
+    private JTextField username, message;
+    private JPasswordField password;
+    public JButton loginButton, addChatButton, addImgButton, sendButton;
+    private JLabel usernameLabel, passwordLabel;
 
 
     public GUI () {
@@ -19,9 +23,13 @@ public class GUI extends JFrame {
         selectedChat = new JPanel();
         loginButton = new JButton("Log in");
         addChatButton = new JButton("Add Chat");
-        username = new JTextField("Enter Username");
-        password = new JTextField("Enter Passowrd");
-
+        username = new JTextField();
+        password = new JPasswordField();
+        usernameLabel = new JLabel("Username: ");
+        passwordLabel = new JLabel("Password: ");
+        message = new JTextField();
+        addImgButton = new JButton("+");
+        sendButton = new JButton("Send");
 
 
         this.setTitle("Chat program");
@@ -35,21 +43,32 @@ public class GUI extends JFrame {
     public void showLogInScreen() {
 
         loginPanel.setBounds(375, 200, 750, 250);
-        loginPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         loginButton.setBounds(1200, 300, 200, 100);
         loginButton.setFont(new Font("Consolas", Font.PLAIN, 35));
+        loginButton.setFocusable(false);
+    
         
         username.setPreferredSize(new Dimension(750, 125));
         username.setFont(new Font("Consolas", Font.PLAIN, 35));
-        
+
         password.setPreferredSize(new Dimension(750, 125));
         password.setFont(new Font("Consolas", Font.PLAIN, 35));
 
+        usernameLabel.setBounds(150, 200, 100, 100);
+        passwordLabel.setBounds(150, 325, 100, 100);
+
+
+        usernameLabel.setFont(new Font("Consolas", Font.BOLD, 17));
+        passwordLabel.setFont(new Font("Consolas", Font.BOLD, 17));
+
+        
         loginPanel.add(username);
         loginPanel.add(password);
         
         this.add(loginPanel);
         this.add(loginButton);
+        this.add(usernameLabel);
+        this.add(passwordLabel);
     }
 
 
@@ -59,15 +78,37 @@ public class GUI extends JFrame {
         this.remove(loginButton);
         this.remove(username);
         this.remove(password);
+        this.remove(usernameLabel);
+        this.remove(passwordLabel);
     }
 
 
-    public void showMainScreen() {
+    public void showHomeScreen() {
         chatList.setBounds(0, 100, 400, 1080);
         chatList.setBorder(BorderFactory.createLineBorder(Color.black));
         addChatButton.setBounds(0, 0, 400, 100);
+        addChatButton.setFont(new Font("Consolas", Font.PLAIN, 35));
+        addChatButton.setFocusable(false);
+
         this.add(chatList);
         this.add(addChatButton);
+    }
+
+    public void showChatroom() {
+        addImgButton.setBounds(400, 750, 75, 75);
+        addImgButton.setFont(new Font("Consolas", Font.BOLD, 35));
+        addImgButton.setFocusable(false);
+
+        sendButton.setBounds(1395, 750, 75, 75);
+        sendButton.setFont(new Font("Consolas", Font.BOLD, 15));
+        sendButton.setFocusable(false);
+
+        message.setBounds(475, 750, 920, 75);
+        message.setFont(new Font("Consolas", Font.PLAIN, 20));
+
+        this.add(addImgButton);
+        this.add(message);
+        this.add(sendButton);
     }
 
 
@@ -75,6 +116,7 @@ public class GUI extends JFrame {
         GUI gui = new GUI();
         gui.showLogInScreen();
         gui.removeLogInScreen();
-        gui.showMainScreen();
+        gui.showHomeScreen();
+        gui.showChatroom();
     }
 }
