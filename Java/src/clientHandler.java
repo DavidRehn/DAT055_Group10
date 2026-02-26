@@ -25,19 +25,19 @@ public class clientHandler implements Runnable{
         
         
         try {
-            
             try {
                 Object request = receiveObject();
                 System.out.println("Received");
                 sendObject(new UserRequest("a"));
             }catch (IOException e) {
                 sk.cancel();
+                System.out.println("Connection terminated");
             }
             
             
-            
         } catch (Exception e) {
-            System.out.println("Server could not print object");
+            
+            System.out.println("Server could not print object: "+e.toString());
         }
     }
     
@@ -54,11 +54,11 @@ public class clientHandler implements Runnable{
         lenBuffer.flip();
         while (lenBuffer.hasRemaining()) {
             clientSocket.write(lenBuffer);
-	    }
+        }
         ByteBuffer msgBuffer = ByteBuffer.wrap(byteArray);
         while (msgBuffer.hasRemaining()) {
-	        clientSocket.write(msgBuffer);
-	    }
+            clientSocket.write(msgBuffer);
+        }
     }
     
     private Object receiveObject() throws IOException, ClassNotFoundException {
@@ -75,7 +75,7 @@ public class clientHandler implements Runnable{
         // Get object
         ByteBuffer dataBuffer = ByteBuffer.allocate(length);
         while (dataBuffer.hasRemaining()){
-            if(clientSocket.read(dataBuffer)==-1{
+            if(clientSocket.read(dataBuffer)==-1){
 			throw new EOFException("Data transfere incomplete");
 			}
         }
