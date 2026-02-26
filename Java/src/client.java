@@ -1,7 +1,9 @@
 package src;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -25,6 +27,7 @@ public class client {
         try {
             SendObject(socketChannel, new ChatUser("Ben", "ABC123"));
             System.out.println("Object sent");
+            System.out.println((ChatUser)receiveObject(socketChannel));
         } catch (Exception e) {
             System.out.println("Something went wrong");
         }
@@ -48,5 +51,27 @@ public class client {
         while (msgBuffer.hasRemaining()) {
 	        channel.write(msgBuffer);
 	    }
+    }
+
+    private static Object receiveObject(SocketChannel channel) throws IOException, ClassNotFoundException {
+        // Get length of object
+        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
+        while (lengthBuffer.hasRemaining()) {
+            channel.read(lengthBuffer);
+        }
+        lengthBuffer.flip();
+        int length = lengthBuffer.getInt();
+
+        // Get object
+        ByteBuffer dataBuffer = ByteBuffer.allocate(length);
+        while (dataBuffer.hasRemaining()){
+            channel.read(dataBuffer);
+        }
+        dataBuffer.flip();
+        byte[] bytes = new byte[length];
+        dataBuffer.get(bytes);
+        try (ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+            return objIn.readObject();
+        }
     }
 }

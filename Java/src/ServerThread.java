@@ -61,7 +61,8 @@ public class ServerThread extends Thread{
                         SocketChannel client = (SocketChannel) key.channel();
                         try {
                             Object obj = receiveObject(client);
-                            System.out.println((ChatUser) obj); // for testing  
+                            System.out.println((ChatUser) obj); // for testing 
+                            SendObject(client, new ChatUser("Tom", "password"));// for testing 
                         } catch (ClassNotFoundException e) {}
                     }
                 } catch(IOException e){
@@ -93,6 +94,25 @@ public class ServerThread extends Thread{
         try (ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return objIn.readObject();
         }
+    }
+
+    private void SendObject(SocketChannel channel, Object obj) throws IOException{
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
+        objOut.writeObject(obj);
+        }
+
+        byte[] byteArray = byteStream.toByteArray();
+        ByteBuffer lenBuffer = ByteBuffer.allocate(4);
+        lenBuffer.putInt(byteArray.length);
+        lenBuffer.flip();
+        while (lenBuffer.hasRemaining()) {
+            channel.write(lenBuffer);
+	    }
+        ByteBuffer msgBuffer = ByteBuffer.wrap(byteArray);
+        while (msgBuffer.hasRemaining()) {
+	        channel.write(msgBuffer);
+	    }
     }
 }
 
