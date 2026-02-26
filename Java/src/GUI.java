@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import java.util.List;
+import java.util.ArrayList;
 
 public class GUI extends JFrame {
     private JPanel loginPanel, chatList, selectedChat;
@@ -15,7 +17,8 @@ public class GUI extends JFrame {
     private JPasswordField password;
     public JButton loginButton, addChatButton, addImgButton, sendButton;
     private JLabel usernameLabel, passwordLabel;
-
+    private JButton chatButton;
+    
 
     public GUI () {
         loginPanel = new JPanel();
@@ -83,12 +86,30 @@ public class GUI extends JFrame {
     }
 
 
-    public void showHomeScreen() {
+    public void showHomeScreen(List<String> a) {
+        int gapp = 10;
         chatList.setBounds(0, 100, 400, 1080);
         chatList.setBorder(BorderFactory.createLineBorder(Color.black));
+        chatList.setLayout(null);
+        
+        
         addChatButton.setBounds(0, 0, 400, 100);
-        addChatButton.setFont(new Font("Consolas", Font.PLAIN, 35));
+        addChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
         addChatButton.setFocusable(false);
+        
+        ArrayList<JButton> buttons;
+        buttons = new ArrayList<>();
+        
+        for(int i =0; i < a.size();i++){
+            chatButton = new JButton(a.get(i));
+            chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
+            chatButton.setBounds(0, i*75+gapp, 350, 75);
+            chatButton.setFocusable(false);
+            //chatButton.addActionListener(new chatManagement());
+            buttons.add(chatButton);
+            
+            chatList.add(buttons.get(i) );
+        }
 
         this.add(chatList);
         this.add(addChatButton);
@@ -114,9 +135,14 @@ public class GUI extends JFrame {
 
    public static void main(String[] args) { //används bara för test
         GUI gui = new GUI();
-        gui.showLogInScreen();
-        gui.removeLogInScreen();
-        gui.showHomeScreen();
-        gui.showChatroom();
+        //gui.showLogInScreen();
+        //gui.removeLogInScreen();
+        List<String> Chats = new ArrayList<>();
+        Chats.add("gg");
+        Chats.add("hh");
+        Chats.add("thh");
+        Chats.add("yy");
+        gui.showHomeScreen(Chats);
+        //gui.showChatroom();
     }
 }
