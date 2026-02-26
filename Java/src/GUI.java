@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -8,33 +10,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import java.util.List;
-import java.util.ArrayList;
 
 public class GUI extends JFrame {
-    private JPanel loginPanel, chatList, selectedChat;
-    private JTextField username, message;
-    private JPasswordField password;
-    public JButton loginButton, addChatButton, addImgButton, sendButton;
-    private JLabel usernameLabel, passwordLabel;
-    private JButton chatButton;
+    private JPanel loginPanel, chatList, selectedChat, createChatroomPanel;
+    public JTextField username, message, chatroomName;
+    public JPasswordField password;
+    public JButton loginButton, createChatButton, addImgButton, sendButton, chatButton, cancelButton, confirmButton;;
+    private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     
 
     public GUI () {
-        loginPanel = new JPanel();
-        chatList = new JPanel();
-        selectedChat = new JPanel();
-        loginButton = new JButton("Log in");
-        addChatButton = new JButton("Add Chat");
-        username = new JTextField();
-        password = new JPasswordField();
-        usernameLabel = new JLabel("Username: ");
-        passwordLabel = new JLabel("Password: ");
-        message = new JTextField();
-        addImgButton = new JButton("+");
-        sendButton = new JButton("Send");
-
-
         this.setTitle("Chat program");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -43,7 +28,15 @@ public class GUI extends JFrame {
         this.setResizable(false);
     }
 
-    public void showLogInScreen() {
+    public void showLogInScreen() { //Should be called when initializing the program
+        // Create instances of the attributes used in this method
+        loginPanel = new JPanel();
+        loginButton = new JButton("Log in");
+        username = new JTextField();
+        password = new JPasswordField();
+        usernameLabel = new JLabel("Username: ");
+        passwordLabel = new JLabel("Password: ");
+        
 
         loginPanel.setBounds(375, 200, 750, 250);
         loginButton.setBounds(1200, 300, 200, 100);
@@ -76,7 +69,7 @@ public class GUI extends JFrame {
 
 
 
-    public void removeLogInScreen() {
+    public void removeLogInScreen() { // Should be called when successfully loging in from the log in screen
         this.remove(loginPanel);
         this.remove(loginButton);
         this.remove(username);
@@ -86,36 +79,43 @@ public class GUI extends JFrame {
     }
 
 
-    public void showHomeScreen(List<String> a) {
-        int gapp = 10;
+    public void showHomeScreen(List<String> a) { // Should be called after successfully loging in and removing log in screen
+        chatList = new JPanel();
+        createChatButton = new JButton("Create Chat");
+        message = new JTextField();
+        addImgButton = new JButton("+");
+        sendButton = new JButton("Send");
+
+
         chatList.setBounds(0, 100, 400, 1080);
         chatList.setBorder(BorderFactory.createLineBorder(Color.black));
         chatList.setLayout(null);
         
         
-        addChatButton.setBounds(0, 0, 400, 100);
-        addChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
-        addChatButton.setFocusable(false);
+        createChatButton.setBounds(0, 0, 400, 100);
+        createChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
+        createChatButton.setFocusable(false);
         
         ArrayList<JButton> buttons;
         buttons = new ArrayList<>();
         
+        
         for(int i =0; i < a.size();i++){
             chatButton = new JButton(a.get(i));
             chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
-            chatButton.setBounds(0, i*75+gapp, 350, 75);
+            chatButton.setBounds(0, i*75+10, 400, 75);
             chatButton.setFocusable(false);
             //chatButton.addActionListener(new chatManagement());
             buttons.add(chatButton);
             
-            chatList.add(buttons.get(i) );
+            chatList.add(buttons.get(i));
         }
 
         this.add(chatList);
-        this.add(addChatButton);
+        this.add(createChatButton);
     }
 
-    public void showChatroom() {
+    public void showChatroom() { // Should be called when a chatroom (button) is pressed, might need a param
         addImgButton.setBounds(400, 750, 75, 75);
         addImgButton.setFont(new Font("Consolas", Font.BOLD, 35));
         addImgButton.setFocusable(false);
@@ -132,17 +132,58 @@ public class GUI extends JFrame {
         this.add(sendButton);
     }
 
+    public void showCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
+                                             // Might need to add something to make it so you cant click anywhere else in the JFrame outside the panel when this window is showing
+        createChatroomPanel = new JPanel();
+        chatroomName = new JTextField();
+        chatroomNameLabel = new JLabel("Name: ");
+        cancelButton = new JButton("Cancel");
+        confirmButton = new JButton("Confirm");
+        createChatroomLabel = new JLabel("Create chatroom");
 
-   public static void main(String[] args) { //används bara för test
+        createChatroomPanel.setBounds(600, 150, 500, 200);
+        createChatroomPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        createChatroomLabel.setBounds(150, 10, 300, 40);
+        createChatroomLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+
+        chatroomNameLabel.setBounds(25, 80, 75, 20);
+        chatroomName.setBounds(100, 70, 300, 50);
+
+        chatroomNameLabel.setFont(new Font("Consolas", Font.BOLD, 15));
+        chatroomName.setFont(new Font("Consolas", Font.PLAIN, 15));
+
+        cancelButton.setBounds(25, 150, 75, 20);
+        confirmButton.setBounds(400, 150, 75, 20);
+
+        createChatroomPanel.add(createChatroomLabel);
+        createChatroomPanel.add(chatroomName);
+        createChatroomPanel.add(chatroomNameLabel);
+        createChatroomPanel.add(cancelButton);
+        createChatroomPanel.add(confirmButton);
+        this.add(createChatroomPanel);
+    }
+
+    public void removeCreateChatroomWindow() { //Should be called whenever 'cancel' or 'confirm' is pressed in a CreateChatroomWindow"
+        this.remove(createChatroomPanel);
+    }
+
+
+   public static void main(String[] args) { // Testing
         GUI gui = new GUI();
         //gui.showLogInScreen();
         //gui.removeLogInScreen();
         List<String> Chats = new ArrayList<>();
-        Chats.add("gg");
-        Chats.add("hh");
-        Chats.add("thh");
-        Chats.add("yy");
+        /*
+        List<String> Chats = new ArrayList<>();
+        Chats.add("Chat 1");
+        Chats.add("Chat 2");
+        Chats.add("Chat 3");
+        Chats.add("Chat 4");
         gui.showHomeScreen(Chats);
+        */
+        gui.showHomeScreen(Chats);
+        gui.showCreateChatroomWindow();
         //gui.showChatroom();
     }
 }
