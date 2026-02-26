@@ -69,7 +69,7 @@ public class GUI extends JFrame {
 
 
 
-    public void removeLogInScreen() { // Should be called when successfully loging in from the log in screen
+    public void removeLogInScreen() { // Should be called when successfully logging in from the log in screen
         this.remove(loginPanel);
         this.remove(loginButton);
         this.remove(username);
@@ -79,7 +79,7 @@ public class GUI extends JFrame {
     }
 
 
-    public void showHomeScreen(List<String> a) { // Should be called after successfully loging in and removing log in screen
+    public void showHomeScreen(List<String> a) { // Should be called after successfully logging in and after removing log in screen
         chatList = new JPanel();
         createChatButton = new JButton("Create Chat");
         message = new JTextField();
