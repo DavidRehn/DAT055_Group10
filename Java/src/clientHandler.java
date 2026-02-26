@@ -65,7 +65,9 @@ public class clientHandler implements Runnable{
         // Get length of object
         ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
         while (lengthBuffer.hasRemaining()) {
-            clientSocket.read(lengthBuffer);
+            if(clientSocket.read(lengthBuffer)==-1){
+			throw new EOFException("Connection closed early");
+			}
         }
         lengthBuffer.flip();
         int length = lengthBuffer.getInt();
@@ -73,7 +75,9 @@ public class clientHandler implements Runnable{
         // Get object
         ByteBuffer dataBuffer = ByteBuffer.allocate(length);
         while (dataBuffer.hasRemaining()){
-            clientSocket.read(dataBuffer);
+            if(clientSocket.read(dataBuffer)==-1{
+			throw new EOFException("Data transfere incomplete");
+			}
         }
         dataBuffer.flip();
         byte[] bytes = new byte[length];
