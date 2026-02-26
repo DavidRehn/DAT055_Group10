@@ -29,6 +29,7 @@ public class clientHandler implements Runnable{
                 Object request = receiveObject();
                 System.out.println("Received");
                 sendObject(new UserRequest("a"));
+				sk.interestOps(SelectionKey.OP_READ);
             }catch (IOException e) {
                 sk.cancel();
                 System.out.println("Connection terminated");
