@@ -50,8 +50,9 @@ public class server{
                             // Read from channel
                             else if(key.isReadable()){
                                 
-
-                                ((clientHandler)key.attachment()).run();
+                                key.interestOps(0);
+                                System.out.println("Reading");
+                                threads.execute((clientHandler)key.attachment());
                                
                                 }
                             } catch(Exception e){
