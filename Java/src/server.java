@@ -43,7 +43,7 @@ public class server{
                         try {
                             // Set up connection
                             if(key.isAcceptable()){
-                                SocketChannel client = server.accept();
+                                SocketChannel client = serverSocket.accept();
                                 new clientHandler(selector, client);
                                 System.out.println("Client connected");
                             } 
