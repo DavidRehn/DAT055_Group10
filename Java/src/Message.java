@@ -11,6 +11,13 @@ public abstract class Message implements Serializable{
     private int message_id;
     private int chat_id;
 
+    public Message(int senderId, OffsetDateTime time, int messageId, int chatId){
+        this.sender_id = senderId;
+        this.timestamp = time;
+        this.message_id = messageId;
+        this.chat_id = chatId;
+    }
+
     /** Returns the sender of the message.
      * @return Sender id.
     */
