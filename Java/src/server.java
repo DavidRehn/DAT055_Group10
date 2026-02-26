@@ -16,7 +16,7 @@ public class server{
     public static void main(String[] args) {
         ServerSocketChannel serverSocket = null;
         SocketChannel clientSocket = null;
-        ExecutorService threads = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+        ExecutorService threads = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         
         
         Selector selector;
@@ -50,9 +50,9 @@ public class server{
                             // Read from channel
                             else if(key.isReadable()){
                                 
-                                try {
-                                    threads.execute((clientHandler)key.attachment());
-                                } catch (Exception e) {}
+
+                                ((clientHandler)key.attachment()).run();
+                               
                                 }
                             } catch(Exception e){
                                 System.out.println("Client closed connection");
@@ -74,5 +74,3 @@ public class server{
         
     }
 }
-
-
