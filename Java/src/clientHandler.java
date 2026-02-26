@@ -26,9 +26,13 @@ public class clientHandler implements Runnable{
         
         try {
             
-            Object request = receiveObject();
-            System.out.println("Received");
-            sendObject(new UserRequest("a"));
+            try {
+                Object request = receiveObject();
+                System.out.println("Received");
+                sendObject(new UserRequest("a"));
+            }catch (IOException e) {
+                sk.cancel();
+            }
             
             
             
