@@ -1,17 +1,78 @@
 package src;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.*;
+import java.nio.channels.*;
+import java.nio.*;
+import java.net.Socket;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 public class server{
+
     public static void main(String[] args) {
+        ServerSocketChannel serverSocket = null;
+        SocketChannel clientSocket = null;
+        ExecutorService threads = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+        
+        
+        Selector selector;
+        Set<SelectionKey> selectedKeys;
+        Iterator<SelectionKey> iter;
         try {
-            ServerThread serverThread = new ServerThread();
-            serverThread.start();
-        } catch (IOException e) {
+            serverSocket = ServerSocketChannel.open();
+            serverSocket.bind(new InetSocketAddress(3333));
+            serverSocket.configureBlocking(false);
+            
+            selector = Selector.open();
+            serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+            
+            
+            System.out.println("Server is running");
+            while(true) { 
+                try {
+                    selector.select();
+                    selectedKeys = selector.selectedKeys();
+                    iter = selectedKeys.iterator();
+                    while(iter.hasNext()){
+                        SelectionKey key = iter.next();
+                        iter.remove();
+                        try {
+                            // Set up connection
+                            if(key.isAcceptable()){
+                                ServerSocketChannel server = (ServerSocketChannel) key.channel();
+                                
+                                System.out.println("Client connected");
+                            } 
+                            // Read from channel
+                            else if(key.isReadable()){
+                                SocketChannel client = (SocketChannel) key.channel();
+                                try {
+                                    threads.execute((clientHandler)key.attachment());
+                                } catch (Exception e) {}
+                                }
+                            } catch(Exception e){
+                                System.out.println("Client closed connection");
+                                key.cancel();
+                                try{ key.channel().close(); } catch(IOException a){}
+                            }
+                            
+                            }
+                } catch (IOException e) {
+                    
+                    }
+                
+
+            }
+        } catch (IOException e) { 
+            System.out.println("Could not start server");
         }
+        
+        
     }
 }
-
-
 
 
