@@ -50,7 +50,7 @@ public class server{
                             // Read from channel
                             else if(key.isReadable()){
                                 
-                                key.interestOps(0);
+                                key.interestOps(SelectionKey.OP_WRITE);
                                 System.out.println("Reading");
                                 threads.execute((clientHandler)key.attachment());
                                
