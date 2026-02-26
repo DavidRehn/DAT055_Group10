@@ -43,13 +43,13 @@ public class server{
                         try {
                             // Set up connection
                             if(key.isAcceptable()){
-                                ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                                
+                                SocketChannel client = server.accept();
+                                new clientHandler(selector, client);
                                 System.out.println("Client connected");
                             } 
                             // Read from channel
                             else if(key.isReadable()){
-                                SocketChannel client = (SocketChannel) key.channel();
+                                
                                 try {
                                     threads.execute((clientHandler)key.attachment());
                                 } catch (Exception e) {}
