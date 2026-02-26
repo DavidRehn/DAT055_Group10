@@ -24,9 +24,9 @@ public class clientHandler implements Runnable{
         
         try {
             
-            UserRequest request = reciveMsg();
-            System.out.println("Received: " + request.getUsername());
-            
+            Object request = receiveObject();
+            System.out.println("Received");
+            sendObject(new UserRequest("a"));
             
             
             
@@ -36,58 +36,46 @@ public class clientHandler implements Runnable{
     }
     
     
-    void sendMsg(Serializable output) throws IOException {
-
+    private void sendObject(Object obj) throws IOException{
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-    
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
-            objOut.writeObject(output);
-            }
-    
+        objOut.writeObject(obj);
+        }
+
         byte[] byteArray = byteStream.toByteArray();
         ByteBuffer lenBuffer = ByteBuffer.allocate(4);
         lenBuffer.putInt(byteArray.length);
         lenBuffer.flip();
-
-    
         while (lenBuffer.hasRemaining()) {
             clientSocket.write(lenBuffer);
-              }
-    
+	    }
         ByteBuffer msgBuffer = ByteBuffer.wrap(byteArray);
-    
         while (msgBuffer.hasRemaining()) {
-              clientSocket.write(msgBuffer);
-              }
-        
+	        clientSocket.write(msgBuffer);
+	    }
     }
     
-    UserRequest reciveMsg() throws IOException, ClassNotFoundException{
-        ByteBuffer lenBuffer = ByteBuffer.allocate(4);
-        while (lenBuffer.hasRemaining()){
-            if(clientSocket.read(lenBuffer)==-1){
-                throw new EOFException("Connection closed prematurely");
-            }
+    private Object receiveObject() throws IOException, ClassNotFoundException {
+        // Get length of object
+        ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
+        while (lengthBuffer.hasRemaining()) {
+            clientSocket.read(lengthBuffer);
         }
-        lenBuffer.flip();
-        int len = lenBuffer.getInt();
-        ByteBuffer msgBuffer = ByteBuffer.allocate(len);
-        while(msgBuffer.hasRemaining()){
-            if(clientSocket.read(msgBuffer)==-1){
-                throw new EOFException("Data transfere incomplete");
-            }
+        lengthBuffer.flip();
+        int length = lengthBuffer.getInt();
+
+        // Get object
+        ByteBuffer dataBuffer = ByteBuffer.allocate(length);
+        while (dataBuffer.hasRemaining()){
+            clientSocket.read(dataBuffer);
         }
-        msgBuffer.flip();
-        byte[] byteStream = new byte[len];
-        msgBuffer.get(byteStream);
-        
-        
-        try(ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(byteStream))){
-            return (UserRequest) objIn.readObject();
+        dataBuffer.flip();
+        byte[] bytes = new byte[length];
+        dataBuffer.get(bytes);
+        try (ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+            return objIn.readObject();
         }
-        
-        
-    }
+        }
     
     
     
