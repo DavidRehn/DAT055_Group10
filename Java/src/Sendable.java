@@ -1,19 +1,13 @@
 package src;
 
-public abstract class Sendable {
+import java.io.Serializable;
+public abstract class Sendable implements Serializable {
     private String messageType;
-    private Object obj;
-
-    public Sendable(String messageType, Object obj){
-        this. messageType = messageType;
-        this.obj = obj;
+    public Sendable(String msgType){
+        messageType=msgType;
     }
-
-    public String GetMessageType(){
+    public String getMsgType(){
         return  messageType;
     }
-
-    public Object GetObject(){
-        return obj;
-    }
+    public abstract Object getObject();
 }
