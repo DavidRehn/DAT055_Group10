@@ -13,6 +13,24 @@ public class ChatDAO {
         this.db = db;
     }
 
+    public List<String> getAllChats() throws SQLException{
+        String sql = """
+                    SELECT  FROM Chats c
+                    ORDER BY c.created_at DESC
+                """;
+        List<String> chats = new ArrayList<>();
+        
+        try (Connection conn = db.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+                try(ResultSet rs = ps.executeQuery()){
+                    while (rs.next()) {
+                      String title = rs.getString("title");
+                      chats.add(title);
+                    }
+                }
+            }
+        return chats;
+    }
     // Metod för att hämta alla chatter för en användares id
     public List<GroupChat> getChatsForUser(int user_id) throws SQLException{
         String sql = """
