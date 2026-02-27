@@ -22,9 +22,10 @@ public class GUI extends JFrame {
                    sendButton, chatButton, cancelButton, confirmButton;;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
+    private ButtonManagement buttonListener;
     
 
-    public GUI (clientModel cmodel) {
+    public GUI (clientModel cModel) {
         //Methods: showLogInScreen
         loginPanel = new JPanel();
         username = new JTextField();
@@ -44,13 +45,13 @@ public class GUI extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         this.cModel = cModel;
+        this.buttonListener = new ButtonManagement(this);
     }
-    
     
     public void showLogInScreen() { //Should be called when initializing the program
         // Create instances of the attributes used in this method
          //loginPanel = new JPanel();
-        loginButton = new JButton("Log in");
+        loginButton = new JButton("Login");
          //username = new JTextField();
         password = new JPasswordField();
         usernameLabel = new JLabel("Username: ");
@@ -61,6 +62,7 @@ public class GUI extends JFrame {
         loginButton.setBounds(1200, 300, 200, 100);
         loginButton.setFont(new Font("Consolas", Font.PLAIN, 35));
         loginButton.setFocusable(false);
+        loginButton.addActionListener(buttonListener);
     
         
         username.setPreferredSize(new Dimension(750, 125));
@@ -84,6 +86,7 @@ public class GUI extends JFrame {
         this.add(loginButton);
         this.add(usernameLabel);
         this.add(passwordLabel);
+
     }
     
 
@@ -134,7 +137,7 @@ public class GUI extends JFrame {
             chatButton.setBounds(0, i*75+10, 400, 75);
             chatButton.setFocusable(false);
             
-            chatButton.addActionListener(new ButtonManagement(cModel));
+            chatButton.addActionListener(buttonListener);
             buttons.add(chatButton);
             
             chatList.add(buttons.get(i));
@@ -203,5 +206,17 @@ public class GUI extends JFrame {
 
     public void removeCreateChatroomWindow() { //Should be called whenever 'cancel' or 'confirm' is pressed in a CreateChatroomWindow"
         this.remove(createChatroomPanel);
+    }
+
+    public clientModel GetClientModel(){
+        return cModel;
+    }
+
+    public String GetPassword(){
+        return new String(password.getPassword());
+    }
+
+    public String GetUsername(){
+        return username.getText();
     }
 }

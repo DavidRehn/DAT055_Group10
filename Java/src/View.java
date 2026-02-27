@@ -4,8 +4,8 @@ import java.util.List;
 public class View {
     private GUI gui;
     
-    public View(){
-        gui = new GUI();
+    public View(clientModel model){
+        gui = new GUI(model);
     }
 
     public void ShowLogin(){

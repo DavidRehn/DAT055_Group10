@@ -51,6 +51,7 @@ public class clientHandler implements Runnable{
                             authenticated=true;
                         }else{
                             System.out.println("User login failed");
+                            // Should create new user?
                         }
                     }else{
                         System.out.println("Invalid user request");
