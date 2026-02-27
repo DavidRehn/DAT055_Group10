@@ -1,4 +1,4 @@
-package src;
+package src.Model.Entities;
 
 import java.time.OffsetDateTime;
 

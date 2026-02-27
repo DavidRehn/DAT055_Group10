@@ -1,4 +1,4 @@
-package src;
+package src.Model.Entities;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;

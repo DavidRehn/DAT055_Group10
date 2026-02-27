@@ -1,5 +1,10 @@
-package src;
+package src.Model;
 import java.sql.*;
+import java.util.List;
+import java.util.Optional;
+
+import src.Model.DAO.*;
+import src.Model.Entities.*;
 
 public class test {
 
@@ -14,42 +19,6 @@ public class test {
         String username = "postgres";
         String password = "postgres";
         return DriverManager.getConnection(url, username, password);
-    }
-
-    // Exempel på hur gruppchatt skulle kunna skapas (utan medlemmar i början)
-    public Chat createGroupChat(String title) throws SQLException{
-        String sql = """
-                INSERT INTO Chats (chat_type, title)
-                VALUES ('group', ?)
-                RETURNING chat_id, chat_type, title, created_at
-                """;
-
-        try(Connection conn = getConnection()){
-            try(PreparedStatement ps = conn.prepareStatement(sql)){
-                ps.setString(1, title);
-
-                try(ResultSet rs = ps.executeQuery()) {
-                    rs.next();
-                    return new Chat(
-                        rs.getInt("chat_id"),
-                        rs.getString("title"),
-                        rs.getObject("created_at", java.time.OffsetDateTime.class)
-                    );
-                }
-            }
-        }
-    }
-
-    // Exempel på hur man lägger till medlemmar till en gruppchatt
-    public void addMember(int chat_id, int user_id) throws SQLException {
-        String sql = "INSERT INTO Chat_Members (chat_id, user_id) VALUES (?,?)";
-        try(Connection conn = getConnection()){
-             try(PreparedStatement ps = conn.prepareStatement(sql)){
-                ps.setInt(1, chat_id);
-                ps.setInt(2, user_id);
-                ps.executeUpdate();
-             }
-        }
     }
 
     // Two functions returning the contents of the user/chat tables. Useful for database testing but shouldnt be used in final.
@@ -74,7 +43,7 @@ public class test {
         }
     }
     public String getAllChats() throws SQLException {
-        String sql = "SELECT * From chats";
+        String sql = "SELECT * From Chats";
         try(Connection conn = getConnection()){
              try(PreparedStatement ps = conn.prepareStatement(sql)){
                 ResultSet rs = ps.executeQuery();
@@ -113,9 +82,45 @@ public class test {
         }
 
         
-        Chat groupchat1 = app.createGroupChat("AwesomeGruppChatt"); 
-        app.addMember(1, 1);
-        app.addMember(1, 2);
+
+        Database db = new Database();               // Måste skapas vid början
+        UserDAO uDAO = new UserDAO(db);             // Måste också skapas och db användas som argument
+        ChatDAO cDAO = new ChatDAO(db);
+
+
+        Optional<ChatUser> userOpt = uDAO.checkIfAccountExists("John","123abc");
+
+        if (userOpt.isPresent()){
+            ChatUser user = userOpt.get();
+            System.out.println("Login success");
+        }
+        else{
+            System.out.println("Login fail");
+        }
+
+        uDAO.createUser("Elliot","haha");
+
+
+        Optional<ChatUser> userOpt2 = uDAO.findById(2);
+
+        if (userOpt2.isPresent()){
+            ChatUser user2 = userOpt2.get();
+            System.out.println("User found");
+            System.out.println(user2.getId());
+        }
+        else{
+            System.out.println("User not found");
+        }
+
+        System.out.println(uDAO.DeleteUser("Elliot"));
+
+        cDAO.createGroupChat("Ny gruppchatt");
+        cDAO.AddMemberToChat(1,2);
+        List<GroupChat> temp = cDAO.getChatsForUser(2);
+        System.out.println(temp.get(0).getChatTitle());
+        
+
+        
     }
 }
 

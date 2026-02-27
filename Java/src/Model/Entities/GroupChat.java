@@ -1,4 +1,4 @@
-package src;
+package src.Model.Entities;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ public class GroupChat extends Chat {
     public ArrayList<User> GetMembers(){
         return members;
     }
+
+    // NEEDS AN ADD USER METHOD TO ADD USER TO THE CHAT, SIMILIAR TO test.java ADDMEMBER
 
     /** Returns the list of sent messages.
      * @return List of messages.

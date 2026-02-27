@@ -1,4 +1,4 @@
-package src;
+package src.Model.Entities;
 
 import java.io.Serializable;
 
@@ -31,6 +31,8 @@ public abstract class User implements Serializable{
     public String toString(){
         return ("[" + name + ", " + login + "]");
     }
+
+    // ADD METHOD TO GET USER ID? OR SAVE IT IN THE CLASS AS WELL 
 };
 
 

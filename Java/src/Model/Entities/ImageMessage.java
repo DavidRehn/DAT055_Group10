@@ -1,5 +1,10 @@
+<<<<<<< HEAD:Java/src/ImageMessage.java
 package src;
 import java.time.OffsetDateTime;
+=======
+package src.Model.Entities;
+
+>>>>>>> 0806e57f536c317900d81c8a20bf3c3c028326a7:Java/src/Model/Entities/ImageMessage.java
 public class ImageMessage extends Message {
     private String imgPath;
 
