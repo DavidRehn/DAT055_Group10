@@ -2,6 +2,7 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import src.Model.Entities.ChatUser;
 //import java.swing.*; 
@@ -18,8 +19,7 @@ public class ButtonManagement implements ActionListener  {
     }
     
     @Override
-    public void actionPerformed(ActionEvent e){
-        System.out.println("    in ButtonManagment");        
+    public void actionPerformed(ActionEvent e){   
         Object obj = e.getSource();
         
 
@@ -29,10 +29,17 @@ public class ButtonManagement implements ActionListener  {
                 try {
                     cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1)));
                     //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
-                    System.out.println("Sent");
+                    System.out.println("Sent login request");
                 } catch (Exception a) {
                     a.printStackTrace();
                 }
+                gui.removeLogInScreen();
+                ArrayList<String> a = new ArrayList<>();
+                a.add("chat1");
+                a.add("chat2");
+                a.add("chat3");
+                a.add("chat4");
+                gui.showHomeScreen(a);
             }
         }
         

@@ -108,10 +108,10 @@ public class GUI extends JFrame {
         //remakes "a" type, into one that ButtonManagement konstruktor can handle.
         String[] b = a.toArray(new String[0]);
         
-         //chatList = new JPanel();
+        chatList = new JPanel();
         
         createChatButton = new JButton("Create Chat");
-         //message = new JTextField();
+        message = new JTextField();
         addImgButton = new JButton("+");
         sendButton = new JButton("Send");
 
@@ -147,6 +147,8 @@ public class GUI extends JFrame {
 
         this.add(chatList);
         this.add(createChatButton);
+        this.revalidate();
+        this.repaint();
         System.out.println("done with funktion");
     }
 
@@ -167,7 +169,8 @@ public class GUI extends JFrame {
         message.setBounds(475, 750, 920, 75);
         message.setFont(new Font("Consolas", Font.PLAIN, 20));
         this.add(message);  
-        
+        this.revalidate();
+        this.repaint();
     }
 
     public void showCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
@@ -204,10 +207,14 @@ public class GUI extends JFrame {
         createChatroomPanel.add(cancelButton);        //JButton
         createChatroomPanel.add(confirmButton);
         this.add(createChatroomPanel);
+        this.revalidate();
+        this.repaint();
     }
 
     public void removeCreateChatroomWindow() { //Should be called whenever 'cancel' or 'confirm' is pressed in a CreateChatroomWindow"
         this.remove(createChatroomPanel);
+        this.revalidate();
+        this.repaint();
     }
 
     public clientModel GetClientModel(){
