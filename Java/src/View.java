@@ -1,10 +1,14 @@
 package src;
-import javax.swing.JFrame;
+import java.util.List;
 
 public class View {
-    private JFrame gui;
+    private GUI gui;
     
     public View(){
         gui = new GUI();
+    }
+
+    public void UpdateChatList(List<String> chatNames){
+        gui.showHomeScreen(chatNames);
     }
 }

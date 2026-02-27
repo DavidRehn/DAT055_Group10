@@ -1,15 +1,7 @@
 package src;
 
-public class messageWrapper implements Sendable{
-    private String messageType;
-    private Object obj;
-
-    @Override
-    public String GetMessageType(){
-        return messageType;
-    }
-
-    public Object GetObject(){
-        return obj;
+public class messageWrapper extends Sendable{
+    public messageWrapper(String messageType, Object obj){
+        super(messageType, obj);
     }
 }

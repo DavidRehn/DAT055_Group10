@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 
 public class client {
     public static void main(String[] args) {
@@ -29,14 +30,19 @@ public class client {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
             String mesasgeType = message.GetMessageType();
+
             if (mesasgeType.equals("GlobalChatList")){
-                
+                view.UpdateChatList((ArrayList<String>) message.GetObject());
             }
         }
         
     }
 
+
+
+    
     private static void SendObject(SocketChannel channel, Object obj) throws IOException{
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
