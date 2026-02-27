@@ -80,32 +80,40 @@ public class GUI extends JFrame {
 
 
     public void showHomeScreen(List<String> a) { // Should be called after successfully logging in and after removing log in screen
+         //remakes "a" type, into one that ButtonManagement konstruktor can handle.
+        String[] b = a.toArray(new String[0]);
+        
         chatList = new JPanel();
-        createChatButton = new JButton("Create Chat");
+        
+                createChatButton = new JButton("Create Chat");
+
         message = new JTextField();
         addImgButton = new JButton("+");
         sendButton = new JButton("Send");
 
-
+        //JPanel settupp.
         chatList.setBounds(0, 100, 400, 1080);
         chatList.setBorder(BorderFactory.createLineBorder(Color.black));
         chatList.setLayout(null);
         
-        
+        // "Add Chat" creation.
         createChatButton.setBounds(0, 0, 400, 100);
         createChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
         createChatButton.setFocusable(false);
         
+        //where the join chat buttons from "a" are stored.
         ArrayList<JButton> buttons;
         buttons = new ArrayList<>();
         
         
         for(int i =0; i < a.size();i++){
             chatButton = new JButton(a.get(i));
+            //The visuals of the chat buttons
             chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
             chatButton.setBounds(0, i*75+10, 400, 75);
             chatButton.setFocusable(false);
-            //chatButton.addActionListener(new chatManagement());
+            
+            chatButton.addActionListener(new ButtonManagement());
             buttons.add(chatButton);
             
             chatList.add(buttons.get(i));
@@ -169,21 +177,5 @@ public class GUI extends JFrame {
     }
 
 
-   public static void main(String[] args) { // Testing
-        GUI gui = new GUI();
-        //gui.showLogInScreen();
-        //gui.removeLogInScreen();
-        List<String> Chats = new ArrayList<>();
-        /*
-        List<String> Chats = new ArrayList<>();
-        Chats.add("Chat 1");
-        Chats.add("Chat 2");
-        Chats.add("Chat 3");
-        Chats.add("Chat 4");
-        gui.showHomeScreen(Chats);
-        */
-        gui.showHomeScreen(Chats);
-        gui.showCreateChatroomWindow();
-        //gui.showChatroom();
-    }
+ 
 }
