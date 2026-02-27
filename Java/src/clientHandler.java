@@ -12,7 +12,7 @@ public class clientHandler implements Runnable{
     final private Selector se;
 	final private SelectionKey sk;
 
-	rivate boolean authenticated;
+	private boolean authenticated;
     private ChatUser user;
 	
     public clientHandler(Selector s, SocketChannel c) throws IOException{
