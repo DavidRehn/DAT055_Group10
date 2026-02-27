@@ -8,6 +8,10 @@ public class View {
         gui = new GUI();
     }
 
+    public void ShowLogin(){
+        gui.showLogInScreen();
+    }
+
     public void UpdateChatList(List<String> chatNames){
         gui.showHomeScreen(chatNames);
     }

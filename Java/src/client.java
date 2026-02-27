@@ -8,13 +8,19 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.ArrayList;
 
 public class client {
     public static void main(String[] args) {
         SocketChannel socketChannel = null;
         clientModel cModel = new clientModel();
         View view = new View();
+        
+        /* ArrayList<String> a = new ArrayList<>();
+        a.add("Chat1");
+        a.add("Chat2");
+        view.UpdateChatList(a);*/
+        view.ShowLogin();
+
         try {
             socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 3333));
@@ -22,6 +28,8 @@ public class client {
         } catch (IOException e){
             System.out.println("Could not connect to server");
         }
+
+        
 
         while (true){
             Sendable message = null;
@@ -31,10 +39,10 @@ public class client {
                 e.printStackTrace();
             }
 
-            String mesasgeType = message.GetMessageType();
+            String mesasgeType = message.getMsgType();
 
-            if (mesasgeType.equals("GlobalChatList")){
-                view.UpdateChatList((ArrayList<String>) message.GetObject());
+            if (mesasgeType.equals("GlobalChatList") && cModel.GetUser() != null){
+                //view.UpdateChatList((ArrayList<String>) (message.GetObject());
             }
         }
         

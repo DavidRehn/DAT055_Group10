@@ -1,11 +1,10 @@
 package src;
 
 import java.io.*;
-import java.net.*;
-import java.nio.channels.*;
 import java.nio.*;
-import java.net.Socket;
-
+import java.nio.channels.*;
+import src.Model.DAO.*;
+import src.Model.Entities.ChatUser;
 
 public class clientHandler implements Runnable{
     final private SocketChannel clientSocket;

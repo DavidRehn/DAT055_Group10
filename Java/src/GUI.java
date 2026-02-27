@@ -1,4 +1,4 @@
-Package src
+package src;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+
 public class GUI extends JFrame {
     private JPanel loginPanel, chatList, /*selectedChat,*/ createChatroomPanel;
     public JTextField username, message, chatroomName;
@@ -20,9 +21,10 @@ public class GUI extends JFrame {
     public JButton loginButton, createChatButton, addImgButton, 
                    sendButton, chatButton, cancelButton, confirmButton;;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
+    private clientModel cModel;
     
 
-    public GUI () {
+    public GUI (clientModel cmodel) {
         //Methods: showLogInScreen
         loginPanel = new JPanel();
         username = new JTextField();
@@ -41,6 +43,7 @@ public class GUI extends JFrame {
         this.setSize(1650, 1080); //Sets the program to full screen by default
         this.setVisible(true);
         this.setResizable(false);
+        this.cModel = cModel;
     }
     
     
@@ -131,7 +134,7 @@ public class GUI extends JFrame {
             chatButton.setBounds(0, i*75+10, 400, 75);
             chatButton.setFocusable(false);
             
-            chatButton.addActionListener(new ButtonManagement());
+            chatButton.addActionListener(new ButtonManagement(cModel));
             buttons.add(chatButton);
             
             chatList.add(buttons.get(i));
