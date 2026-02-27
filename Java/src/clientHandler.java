@@ -28,17 +28,33 @@ public class clientHandler implements Runnable{
     
     @Override
     public void run(){
-        
-        
+        Database SQLJava = new Database();
+        UserDAO userDAO1 = new UserDAO(SQLJava);
+        ChatDAO Chats = new ChatDAO(SQLJava);
         try {
             try {
 				
                 if(authenticated){
-                    
+                    Sendable request = (Sendable)receiveObject();
+                    System.out.println("User sent: "+request.toString());
+                    System.out.println("Server sent: "+Chats.getAllChats());
+
+                    sendObject(Chats.getAllChats());
                 }else{
                     Sendable request = (Sendable)receiveObject();
-                    if(request.getMsgType()=="login"){
-                        
+                    
+                    
+                    if(request.getMsgType().equals("login")){
+                        if(!userDAO1.checkIfAccountExists("A","2").isEmpty()){
+                            authenticated = true;
+                            user=userDAO1.checkIfAccountExists("A","2").get();
+                            System.out.println("User connected: "+user.toString());
+                            authenticated=true;
+                        }else{
+                            System.out.println("User login failed");
+                        }
+                    }else{
+                        System.out.println("Invalid user request");
                     }
                     System.out.println(request.toString());              
                 }
