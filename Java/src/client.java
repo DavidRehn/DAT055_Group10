@@ -12,6 +12,8 @@ import java.nio.channels.SocketChannel;
 public class client {
     public static void main(String[] args) {
         SocketChannel socketChannel = null;
+        clientModel cModel = new clientModel();
+        View view = new View();
         try {
             socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 3333));
@@ -20,16 +22,17 @@ public class client {
             System.out.println("Could not connect to server");
         }
 
-        
-
-
-        // for testing
-        try {
-            SendObject(socketChannel, new ChatUser("Ben", "ABC123"));
-            System.out.println("Object sent");
-            System.out.println((ChatUser)receiveObject(socketChannel));
-        } catch (Exception e) {
-            System.out.println("Something went wrong");
+        while (true){
+            Sendable message = null;
+            try {
+                message = (Sendable) client.receiveObject(socketChannel);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            String mesasgeType = message.GetMessageType();
+            if (mesasgeType.equals("GlobalChatList")){
+                
+            }
         }
         
     }
