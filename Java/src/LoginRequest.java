@@ -1,3 +1,4 @@
+package src;
 import java.io.Serializable;
 public class LoginRequest extends Sendable implements Serializable
 {
