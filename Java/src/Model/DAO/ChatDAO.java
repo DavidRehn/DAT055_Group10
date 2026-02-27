@@ -13,9 +13,9 @@ public class ChatDAO {
         this.db = db;
     }
 
-    public List<String> getAllChats() throws SQLException{
+     public List<String> getAllChats() throws SQLException{
         String sql = """
-                    SELECT  FROM Chats c
+                    SELECT title FROM Chats c
                     ORDER BY c.created_at DESC
                 """;
         List<String> chats = new ArrayList<>();
@@ -24,7 +24,10 @@ public class ChatDAO {
             PreparedStatement ps = conn.prepareStatement(sql)){
                 try(ResultSet rs = ps.executeQuery()){
                     while (rs.next()) {
+    
                       String title = rs.getString("title");
+                      
+
                       chats.add(title);
                     }
                 }
