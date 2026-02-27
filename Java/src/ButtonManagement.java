@@ -2,7 +2,6 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.JButton;
 import src.Model.Entities.ChatUser;
 //import java.swing.*; 
@@ -28,10 +27,10 @@ public class ButtonManagement implements ActionListener  {
             String command = e.getActionCommand();
             if (command.equals("Login")){
                 try {
-                    //cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1)));
-                    cModel.SendObject(new LoginRequest(new ChatUser("Ben", "ABC123", 1)));
+                    cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1)));
+                    //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
                     System.out.println("Sent");
-                } catch (IOException a) {
+                } catch (Exception a) {
                     a.printStackTrace();
                 }
             }

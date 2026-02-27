@@ -50,9 +50,9 @@ public class GUI extends JFrame {
     
     public void showLogInScreen() { //Should be called when initializing the program
         // Create instances of the attributes used in this method
-         //loginPanel = new JPanel();
+        loginPanel = new JPanel();
         loginButton = new JButton("Login");
-         //username = new JTextField();
+         username = new JTextField();
         password = new JPasswordField();
         usernameLabel = new JLabel("Username: ");
         passwordLabel = new JLabel("Password: ");
@@ -74,7 +74,6 @@ public class GUI extends JFrame {
         usernameLabel.setBounds(150, 200, 100, 100);
         passwordLabel.setBounds(150, 325, 100, 100);
 
-
         usernameLabel.setFont(new Font("Consolas", Font.BOLD, 17));
         passwordLabel.setFont(new Font("Consolas", Font.BOLD, 17));
 
@@ -86,6 +85,9 @@ public class GUI extends JFrame {
         this.add(loginButton);
         this.add(usernameLabel);
         this.add(passwordLabel);
+
+        this.revalidate();
+        this.repaint();
 
     }
     
