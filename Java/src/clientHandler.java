@@ -9,11 +9,17 @@ import java.net.Socket;
 
 public class clientHandler implements Runnable{
     final private SocketChannel clientSocket;
-    final private SelectionKey sk;
+    final private Selector se;
+	final private SelectionKey sk;
+
+	rivate boolean authenticated;
+    private ChatUser user;
+	
     public clientHandler(Selector s, SocketChannel c) throws IOException{
         clientSocket = c;
         c.configureBlocking(false);
-        
+        se=s;
+		authenticated = false;
         sk = clientSocket.register(s, 0);
         sk.attach(this);
         sk.interestOps(SelectionKey.OP_READ);
@@ -26,10 +32,22 @@ public class clientHandler implements Runnable{
         
         try {
             try {
-                Object request = receiveObject();
-                System.out.println("Received");
-                sendObject(new UserRequest("a"));
-				sk.interestOps(SelectionKey.OP_READ);
+				
+                if(authenticated){
+                    
+                }else{
+                    Sendable request = (Sendable)receiveObject();
+                    if(request.getMsgType()=="login"){
+                        
+                    }
+                    System.out.println(request.toString());              
+                }
+                
+                
+                
+                
+                sk.interestOps(SelectionKey.OP_READ);
+                se.wakeup();
             }catch (IOException e) {
                 sk.cancel();
                 System.out.println("Connection terminated");
