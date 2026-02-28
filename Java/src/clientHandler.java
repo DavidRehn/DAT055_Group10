@@ -4,7 +4,9 @@ import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import src.Model.DAO.*;
-import src.Model.Entities.*;
+import src.Model.Entities.ChatUser;
+import src.Model.Entities.GroupChat;
+import src.Model.Entities.User;
 
 public class clientHandler implements Runnable{
     final private SocketChannel clientSocket;
@@ -35,6 +37,7 @@ public class clientHandler implements Runnable{
 				
                 
                 Sendable request = (Sendable)receiveObject();	
+                System.out.println("test");
                 if(authenticated){
                     
                     if(request.getMsgType().equals("ChatCreateMsg")){
