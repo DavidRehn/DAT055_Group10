@@ -19,3 +19,10 @@ SET client_min_messages TO NOTICE; -- More talk
 -- \ir is for include relative, it will run files in the same directory as this file
 -- Note that these are not SQL statements but rather Postgres commands (no terminating semicolon). 
 \ir SQL_template.sql
+insert into Users values('A','2');
+insert into Users values('B','3');
+insert into Users values('C','4');
+insert into Users values('D','5');
+insert into Chats values('a');
+insert into Chats values('b');
+insert into Chats values('c');

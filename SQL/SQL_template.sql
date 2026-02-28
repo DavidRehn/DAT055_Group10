@@ -31,10 +31,10 @@ CREATE TABLE Messages(
 );
 
 CREATE TABLE Chat_Members(
-    chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE ,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
-    user TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,       -- Samma för en användare
+    chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
+    name TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,       -- Samma för en användare
     role TEXT NOT NULL DEFAULT 'member',
-    PRIMARY KEY(chat, user)
+    PRIMARY KEY(chat, name)
 );
 
 -- ? Messages kan tillhöra chatten direkt via att man lägger till chat_id i messages istället för att ha en ny tabell
@@ -45,3 +45,4 @@ CREATE TABLE Chat_Members(
     -- FOREIGN KEY (chat_id) REFERENCES Chats(chat_id),
     -- FOREIGN KEY (message_id) REFERENCES Chats(message_id)
 -- )
+
