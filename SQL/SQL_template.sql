@@ -10,10 +10,10 @@ CREATE TABLE Chats(
 
 -- PK sender && message_date (kan ändras vid behov)
 CREATE TABLE Messages(
-    sender_id INT NOT NULL REFERENCES Users(user_id) ON DELETE CASCADE,
+    sender TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,
     message_date TIMESTAMPTZ NOT NULL DEFAULT now(),        -- date+time default till när en insert skapas i tabellen
     message_id SERIAL PRIMARY KEY,
-    chat_id INT NOT NULL REFERENCES Chats(chat_id) ON DELETE CASCADE,       
+    chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE,       
     msg_type TEXT NOT NULL, 
     CHECK (msg_type IN ('text', 'image')),
     text_body TEXT,
@@ -31,11 +31,10 @@ CREATE TABLE Messages(
 );
 
 CREATE TABLE Chat_Members(
-    chat_id INTEGER NOT NULL REFERENCES Chats(chat_id) ON DELETE CASCADE ,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
-    user_id INTEGER NOT NULL REFERENCES Users(user_id) ON DELETE CASCADE,       -- Samma för en användare
+    chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE ,  -- Om en chat raderas, ta bort alla rader i denna tabell som har med den chatten att göra
+    user TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,       -- Samma för en användare
     role TEXT NOT NULL DEFAULT 'member',
-    joined_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY(chat_id, user_id)
+    PRIMARY KEY(chat, user)
 );
 
 -- ? Messages kan tillhöra chatten direkt via att man lägger till chat_id i messages istället för att ha en ny tabell

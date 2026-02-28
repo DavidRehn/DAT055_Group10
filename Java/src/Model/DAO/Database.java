@@ -22,8 +22,9 @@ public class Database implements DataStorage{
         }
     }
 
+    @Override
     public void AddChat(Chat chat){
-        String sql = "INSERT INTO ChatsS VALUES (?) RETURNING chat_id, title, created_at";
+        String sql = "INSERT INTO Chats VALUES (?)";
     }
 
 
