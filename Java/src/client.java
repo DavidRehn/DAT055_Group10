@@ -3,6 +3,7 @@ package src;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
 
 public class client {
     public static void main(String[] args) {
@@ -26,10 +27,7 @@ public class client {
         a.add("Chat2");
         view.UpdateChatList(a);*/
         
-        int i = 1;
         while (true){
-            i++;
-            /* 
             
             Sendable message = null;
             try {
@@ -41,8 +39,8 @@ public class client {
             String mesasgeType = message.getMsgType();
 
             if (mesasgeType.equals("GlobalChatList") && cModel.GetUser() != null){
-                //view.UpdateChatList((ArrayList<String>) (message.GetObject());
-            }*/
+                view.UpdateChatList((ArrayList<String>) (message.getObject()));
+            }
         }
         
     }

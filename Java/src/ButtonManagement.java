@@ -25,22 +25,26 @@ public class ButtonManagement implements ActionListener  {
         if(obj instanceof JButton ){
             String command = e.getActionCommand();
             if (command.equals("Login")){
-                try {
-                    cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword())));
-                    //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
-                    System.out.println("Sent login request");
-                } catch (Exception a) {
-                    a.printStackTrace();
+                String username = gui.GetUsername();
+                String password = gui.GetPassword();
+                if(username.length() > 0 && password.length() > 0){
+                    try {
+                        cModel.SendObject(new LoginRequest(new ChatUser(username, password)));
+                        //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
+                        System.out.println("Sent login request");
+                    } catch (Exception a) {
+                        a.printStackTrace();
+                    }
+
+                    gui.removeLogInScreen();
+                    ArrayList<String> a = new ArrayList<>();
+                    a.add("chat1");
+                    a.add("chat2");
+                    a.add("chat3");
+                    a.add("chat4");
+                    gui.showHomeScreen(a);
+                    gui.showChatroom();
                 }
-                
-                gui.removeLogInScreen();
-                ArrayList<String> a = new ArrayList<>();
-                a.add("chat1");
-                a.add("chat2");
-                a.add("chat3");
-                a.add("chat4");
-                gui.showHomeScreen(a);
-                gui.showChatroom();
             }else if (command.equals("Create Chat")) {
                 gui.showCreateChatroomWindow();
             }else if(command.equals("setChatFocus")){
@@ -55,6 +59,7 @@ public class ButtonManagement implements ActionListener  {
                 }
                 gui.removeCreateChatroomWindow();
             }else if(command.equals("Send")){
+                
 
             }else if(command.equals("addImage")){
 
