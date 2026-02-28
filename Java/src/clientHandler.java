@@ -44,7 +44,6 @@ public class clientHandler implements Runnable{
                     
                     
                     if(request.getMsgType().equals("login")){
-                        System.out.println("test");
                         LoginRequest r = (LoginRequest) request;
                         if(!userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).isEmpty()){
                             authenticated = true;
