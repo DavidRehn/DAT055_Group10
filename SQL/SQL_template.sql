@@ -1,14 +1,11 @@
 -- PK name
-CREATE TABLE Users(
-    user_id SERIAL PRIMARY KEY,         -- Automatisk ökande identifier för varje användare, identifieras av användarnamn, görs så att ifall namn ändras så ändras inte också för många andra tabeller
-    name TEXT NOT NULL UNIQUE,                   
+CREATE TABLE Users(       -- Automatisk ökande identifier för varje användare, identifieras av användarnamn, görs så att ifall namn ändras så ändras inte också för många andra tabeller
+    name TEXT PRIMARY KEY,                   
     login TEXT NOT NULL
 );
 
 CREATE TABLE Chats(
-    chat_id SERIAL PRIMARY KEY,
-    title TEXT, -- If group chat, can have title, otherwise if dm, null
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now() -- Kan vara bra att ha kanske? Annars kan ta bort
+    title TEXT PRIMARY KEY-- If group chat, can have title, otherwise if dm, null
 );
 
 -- PK sender && message_date (kan ändras vid behov)
