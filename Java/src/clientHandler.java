@@ -29,9 +29,7 @@ public class clientHandler implements Runnable{
     
     @Override
     public void run(){
-        Database SQLJava = new Database();
-        UserDAO userDAO1 = new UserDAO(SQLJava);
-        ChatDAO chatDAO1 = new ChatDAO(SQLJava);
+		
         try {
             try {
 				
