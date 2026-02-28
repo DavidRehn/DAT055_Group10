@@ -26,7 +26,7 @@ public class ButtonManagement implements ActionListener  {
             String command = e.getActionCommand();
             if (command.equals("Login")){
                 try {
-                    cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1)));
+                    cModel.SendObject(new LoginRequest(new ChatUser(gui.GetUsername(), gui.GetPassword())));
                     //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
                     System.out.println("Sent login request");
                 } catch (Exception a) {
