@@ -45,7 +45,7 @@ public class server{
                             // Set up connection
                             if(key.isAcceptable()){
                                 SocketChannel client = serverSocket.accept();
-                                new clientHandler(selector, client, SQLDatabas);
+                                new clientHandler(selector, client, SQLDatabase);
                                 System.out.println("Client connected");
                             } 
                             // Read from channel
