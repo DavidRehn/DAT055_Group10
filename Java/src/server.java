@@ -9,11 +9,12 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import src.Model.DAO.*;
 
 public class server{
 
     public static void main(String[] args) {
+        Database SQLDatabase = new Database();
         ServerSocketChannel serverSocket = null;
         SocketChannel clientSocket = null;
         ExecutorService threads = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
@@ -44,7 +45,7 @@ public class server{
                             // Set up connection
                             if(key.isAcceptable()){
                                 SocketChannel client = serverSocket.accept();
-                                new clientHandler(selector, client);
+                                new clientHandler(selector, client, SQLDatabas);
                                 System.out.println("Client connected");
                             } 
                             // Read from channel
