@@ -7,6 +7,7 @@ public class messageWrapper extends Sendable implements Serializable
     ArrayList<String> Chats;
     messageWrapper(ArrayList<String> L){
         super("UI");
+        Chats = new ArrayList();
         Chats.addAll(L);
     }
     public Object getObject(){
