@@ -135,5 +135,24 @@ public class Database implements DataStorage{
         } catch (SQLException e) {
         }
     }
-
+    
+    @Override
+    public ArrayList<String> GetAllChats(){
+        String sql = "SELECT * FROM Chats";
+        ArrayList<String> chats = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            try(ResultSet rs = ps.executeQuery()){
+                while (rs.next()) {
+                      String title = rs.getString("title");
+                      chats.add(title);
+                    }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+            
+        return chats;
+    }
 }
