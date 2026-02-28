@@ -1,6 +1,6 @@
 package src.Model.DAO;
-import src.Model.Entities.*;
 import java.util.ArrayList;
+import src.Model.Entities.*;
 
 public interface DataStorage {
     public void AddChat(Chat chat);
@@ -18,4 +18,6 @@ public interface DataStorage {
     public void AddMessage(Message message);
 
     public ArrayList<String> GetAllChats();
+
+    public boolean ChatExists(String title);
 }

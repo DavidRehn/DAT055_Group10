@@ -1,5 +1,6 @@
 package src;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -178,11 +179,16 @@ public class GUI extends JFrame {
         //JPanel
         createChatroomPanel.setBounds(600, 150, 500, 200);
         createChatroomPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        createChatroomPanel.setLayout(new BorderLayout());
+
+        JPanel top = new JPanel();
+        JPanel bottom = new JPanel();
         
         //JLabel
         createChatroomLabel = new JLabel("Create chatroom");
         createChatroomLabel.setBounds(150, 10, 300, 40);
         createChatroomLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
+        
         
         //JLabel
         chatroomNameLabel = new JLabel("Name: ");
@@ -204,13 +210,20 @@ public class GUI extends JFrame {
         confirmButton = new JButton("Confirm");
         confirmButton.setBounds(400, 150, 75, 20);
         confirmButton.setActionCommand("confirmChatCreation");
-        createChatButton.addActionListener(buttonListener);
+        confirmButton.addActionListener(buttonListener);
 
-        createChatroomPanel.add(createChatroomLabel); //JLabel
-        createChatroomPanel.add(chatroomName);        //JLabel
-        createChatroomPanel.add(chatroomNameLabel);   //JLabel
-        createChatroomPanel.add(cancelButton);        //JButton
-        createChatroomPanel.add(confirmButton);
+        //createChatroomPanel.add(createChatroomLabel, BorderLayout.NORTH); //JLabel
+        createChatroomPanel.add(chatroomName, BorderLayout.CENTER);        //JLabel
+        //createChatroomPanel.add(chatroomNameLabel, BorderLayout.NORTH);   //JLabel
+        //createChatroomPanel.add(cancelButton, BorderLayout.SOUTH);        //JButton
+        //createChatroomPanel.add(confirmButton, BorderLayout.SOUTH);
+
+        top.add(createChatroomLabel);
+        createChatroomPanel.add(chatroomNameLabel, BorderLayout.CENTER);
+        bottom.add(cancelButton);
+        bottom.add(confirmButton);
+        createChatroomPanel.add(top, BorderLayout.NORTH);
+        createChatroomPanel.add(bottom, BorderLayout.SOUTH);
         
     }
 

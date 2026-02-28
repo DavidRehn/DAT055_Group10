@@ -23,6 +23,7 @@ public class ButtonManagement implements ActionListener  {
 
         if(obj instanceof JButton ){
             String command = e.getActionCommand();
+            System.out.println(command);
             if (command.equals("Login")){
                 String username = gui.GetUsername();
                 String password = gui.GetPassword();
@@ -52,10 +53,11 @@ public class ButtonManagement implements ActionListener  {
             }else if (command.equals("confirmChatCreation")){
                 try {
                     cModel.SendObject(new ChatCreateMsg(gui.GetChatTitle()));
+                    System.out.println("Chat sent");
+                    gui.removeCreateChatroomWindow();
                 } catch (Exception a) {
                     a.printStackTrace();
                 }
-                gui.removeCreateChatroomWindow();
             }else if(command.equals("Send")){
                 
 

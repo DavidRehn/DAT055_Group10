@@ -1,11 +1,11 @@
 package src.Model.DAO;
 
-import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import src.Model.Entities.*;
 
 public class Database implements DataStorage{
@@ -34,6 +34,21 @@ public class Database implements DataStorage{
             ps.executeQuery();
         } catch (SQLException e) {
         }
+    }
+
+    public boolean ChatExists(String title){
+        String sql = "SELECT EXISTS(SELECT FROM Chats WHERE title = ?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, title);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next())
+                    return rs.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

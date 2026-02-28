@@ -40,9 +40,11 @@ public class clientHandler implements Runnable{
                 System.out.println("test");
                 if(authenticated){
                     
-                    if(request.getMsgType().equals("ChatCreateMsg")){
+                    if(request.getMsgType().equals("createChat")){
                         ChatCreateMsg r = (ChatCreateMsg) request;
-                        if(D_CON.GetChat((String)r.getObject())!=null){
+                        System.out.println(D_CON.ChatExists((String)r.getObject()));
+                        if(!D_CON.ChatExists((String)r.getObject())){
+                            System.out.println("a");
                             D_CON.AddChat(new GroupChat((String)r.getObject()));
                             D_CON.AddUserToChat((String)r.getObject(), user.getUserName());
                             System.out.println("Created chat: " + (String)r.getObject());                            
@@ -59,6 +61,7 @@ public class clientHandler implements Runnable{
                         LoginRequest r = (LoginRequest) request;
                         if(D_CON.UserExists((User)r.getObject())){
                             authenticated=true;
+                            user = (ChatUser) r.getObject();
                             System.out.println("User logged in: " + r.GetUsername());
                             sendObject(new messageWrapper(D_CON.GetAllChats()));
                         }
