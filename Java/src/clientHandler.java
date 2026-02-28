@@ -13,11 +13,13 @@ public class clientHandler implements Runnable{
 
 	private boolean authenticated;
     private ChatUser user;
+	final private DataStorage D_CON;
 	
-    public clientHandler(Selector s, SocketChannel c) throws IOException{
+    public clientHandler(Selector s, SocketChannel c, DataStorage d) throws IOException{
         clientSocket = c;
         c.configureBlocking(false);
         se=s;
+		D_CON = d;
 		authenticated = false;
         sk = clientSocket.register(s, 0);
         sk.attach(this);
@@ -33,39 +35,42 @@ public class clientHandler implements Runnable{
         try {
             try {
 				
+                
+                Sendable request = (Sendable)receiveObject();	
                 if(authenticated){
-                    Sendable request = (Sendable)receiveObject();
-                    System.out.println("User sent: "+request.toString());
-                    System.out.println("Server sent: "+chatDAO1.getAllChats());
-
-                    sendObject(chatDAO1.getAllChats());
+                    
+                    if(request.getMsgType().equals("ChatCreateMsg")){
+                        ChatCreateMsg r = (ChatCreateMsg) request;
+                        if(D_CON.GetChat((String)r.getObject())!=null){
+                            D_CON.AddChat(new GroupChat((String)r.getObject()));
+                            D_CON.AddUserToChat((String)r.getObject(), user.getUserName());
+                            System.out.println("Created chat: " + (String)r.getObject());                            
+                        }
+                        
+                    }
+                    
+                    
                 }else{
-                    Sendable request = (Sendable)receiveObject();
+                    
                     
                     
                     if(request.getMsgType().equals("login")){
                         LoginRequest r = (LoginRequest) request;
-                        if(!userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).isEmpty()){
-                            authenticated = true;
-                            user=userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).get();
-                            System.out.println("User connected: "+user.toString());
-                        }else{
-                            userDAO1.createUser(r.GetUsername(), r.GetLogin());
-                            System.out.println("Added new user: " + r.GetUser());
+                        if(D_CON.UserExists((User)r.getObject())){
+                            authenticated=true;
+                            System.out.println("User logged in: " + r.GetUsername());
+                            sendObject(D_CON.GetAllChats());
                         }
-                        //
-                        //  Skicka tilbaka lista med chat-namn 
-                        //
-                    }else if (request.getMsgType().equals("createChat")){
-                        ChatCreateMsg r = (ChatCreateMsg) request;
-                        //chatDAO1.createGroupChat(r.GetTitle());
-                        System.out.println("Created chat: " + (String)r.getObject());
+                        
+                    
                     }else{
                         System.out.println("Invalid user request");
                     }
                     System.out.println(request.toString());              
                 }
-                
+
+                sk.interestOps(SelectionKey.OP_READ);
+                se.wakeup();
                 
                 
                 
