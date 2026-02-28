@@ -5,8 +5,8 @@ import java.time.OffsetDateTime;
 public class ImageMessage extends Message {
     private String imgPath;
 
-    public ImageMessage(int senderId, OffsetDateTime timestamp, int chatId, int messageId, String imgPath){
-        super(senderId, timestamp, messageId, chatId);
+    public ImageMessage(String sender, OffsetDateTime timestamp, String chat, int messageId, String imgPath, String type){
+        super(sender, timestamp, messageId, chat, type);
         this.imgPath = imgPath;
     }
 

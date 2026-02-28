@@ -11,13 +11,13 @@ CREATE TABLE Chats(
 -- PK sender && message_date (kan ändras vid behov)
 CREATE TABLE Messages(
     sender TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,
-    message_date TIMESTAMPTZ NOT NULL DEFAULT now(),        -- date+time default till när en insert skapas i tabellen
     message_id SERIAL PRIMARY KEY,
     chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE,       
     msg_type TEXT NOT NULL, 
     CHECK (msg_type IN ('text', 'image')),
     text_body TEXT,
     image_url TEXT,
+    message_date TIMESTAMPTZ NOT NULL DEFAULT now(),        -- date+time default till när en insert skapas i tabellen
     -- Antingen består ett meddelande av text, eller en image, inte både och samt inte inga av dem
     CONSTRAINT msg_type_check CHECK(
         (msg_type = 'text' 

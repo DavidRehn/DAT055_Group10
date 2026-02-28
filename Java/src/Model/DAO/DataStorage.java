@@ -8,9 +8,9 @@ public interface DataStorage {
 
     public void AddUser(User user);
 
-    public void RemoveUser(String username);
+    public int RemoveUser(String username);
 
-    public boolean ValidateLogin(User user);
+    public boolean UserExists(User user);
 
     public Chat GetChat(String title);
 

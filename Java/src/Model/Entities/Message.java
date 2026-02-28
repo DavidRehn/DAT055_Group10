@@ -6,23 +6,25 @@ import java.time.OffsetDateTime;
  *  Message does not have any content fields.
  */
 public abstract class Message implements Serializable{
-    private int sender_id;
+    private String sender;
     private OffsetDateTime timestamp;
     private int message_id;
-    private int chat_id;
+    private String chat;
+    private String msgType;
 
-    public Message(int senderId, OffsetDateTime time, int messageId, int chatId){
-        this.sender_id = senderId;
+    public Message(String sender, OffsetDateTime time, int messageId, String chat, String type){
+        this.sender = sender;
         this.timestamp = time;
         this.message_id = messageId;
-        this.chat_id = chatId;
+        this.chat = chat;
+        this.msgType = type;
     }
 
     /** Returns the sender of the message.
      * @return Sender id.
     */
-    public int GetSenderID(){
-        return sender_id;
+    public String GetSender(){
+        return sender;
     }
 
     /** Returns the timestamp when the message was sent.
@@ -42,7 +44,11 @@ public abstract class Message implements Serializable{
     /** Returns the chat the message belongs to.
      * @return Chat ID.
      */
-    public int GetChatID(){
-        return chat_id;
+    public String GetChat(){
+        return chat;
+    }
+
+    public String GetType(){
+        return msgType;
     }
 };
