@@ -29,6 +29,7 @@ public class clientHandler implements Runnable{
     public void run(){
         Database SQLJava = new Database();
         UserDAO userDAO1 = new UserDAO(SQLJava);
+        ChatDAO chatDAO1 = new ChatDAO(SQLJava);
         ChatDAO Chats = new ChatDAO(SQLJava);
         try {
             try {
@@ -54,6 +55,10 @@ public class clientHandler implements Runnable{
                             userDAO1.createUser(r.GetUsername(), r.GetLogin());
                             System.out.println("Added new user: " + r.GetUser());
                         }
+                    }else if (request.getMsgType().equals("createChat")){
+                        ChatCreateMsg r = (ChatCreateMsg) request;
+                        chatDAO1.createGroupChat(r.GetTitle());
+                        System.out.println("Created chat: " + r.GetTitle());
                     }else{
                         System.out.println("Invalid user request");
                     }
