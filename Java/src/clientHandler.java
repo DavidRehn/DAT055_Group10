@@ -30,16 +30,15 @@ public class clientHandler implements Runnable{
         Database SQLJava = new Database();
         UserDAO userDAO1 = new UserDAO(SQLJava);
         ChatDAO chatDAO1 = new ChatDAO(SQLJava);
-        ChatDAO Chats = new ChatDAO(SQLJava);
         try {
             try {
 				
                 if(authenticated){
                     Sendable request = (Sendable)receiveObject();
                     System.out.println("User sent: "+request.toString());
-                    System.out.println("Server sent: "+Chats.getAllChats());
+                    System.out.println("Server sent: "+chatDAO1.getAllChats());
 
-                    sendObject(Chats.getAllChats());
+                    sendObject(chatDAO1.getAllChats());
                 }else{
                     Sendable request = (Sendable)receiveObject();
                     
@@ -50,7 +49,6 @@ public class clientHandler implements Runnable{
                             authenticated = true;
                             user=userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).get();
                             System.out.println("User connected: "+user.toString());
-                            authenticated=true;
                         }else{
                             userDAO1.createUser(r.GetUsername(), r.GetLogin());
                             System.out.println("Added new user: " + r.GetUser());
