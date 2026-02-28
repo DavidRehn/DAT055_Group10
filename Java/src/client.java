@@ -32,17 +32,13 @@ public class client {
             Sendable message = null;
             try {
                 message = (Sendable) cModel.receiveObject();
+                view.RemoveLoginScreen();
+                view.UpdateChatList((ArrayList<String>) (message.getObject()));
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
-            String mesasgeType = message.getMsgType();
-
-            if (mesasgeType.equals("GlobalChatList") && cModel.GetUser() != null){
-                view.RemoveLoginScreen();
-                view.UpdateChatList((ArrayList<String>) (message.getObject()));
-                
-            }
+            
         }
         
     }
