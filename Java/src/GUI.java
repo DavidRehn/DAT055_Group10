@@ -232,4 +232,8 @@ public class GUI extends JFrame {
     public String GetUsername(){
         return username.getText();
     }
+
+    public String GetChatTitle(){
+        return chatroomName.getText();
+    }
 }

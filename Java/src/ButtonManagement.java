@@ -4,11 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import src.Model.Entities.ChatUser;
+import src.Model.Entities.*;
 //import java.swing.*; 
 
 public class ButtonManagement implements ActionListener  {
-    //private List<String> chatNames;// = new ArrayList<>();
     private String[] chatJoinButtons;
     private GUI gui;
     private clientModel cModel;
@@ -45,15 +44,15 @@ public class ButtonManagement implements ActionListener  {
             }else if (command.equals("Create Chat")) {
                 gui.showCreateChatroomWindow();
             }else if(command.equals("setChatFocus")){
-
+                
             }else if(command.equals("{cancelChatCreation}")){
                 gui.removeCreateChatroomWindow();
             }else if (command.equals("confirmChatCreation")){
-                /* 
                 try {
-                    cModel.SendObject(new ChatCreateMsg(new Chat()));
-                } catch (Exception e) {
-                }*/
+                    cModel.SendObject(new ChatCreateMsg(gui.GetChatTitle()));
+                } catch (Exception a) {
+                    a.printStackTrace();
+                }
                 gui.removeCreateChatroomWindow();
             }else if(command.equals("Send")){
 

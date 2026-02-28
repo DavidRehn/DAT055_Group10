@@ -56,12 +56,12 @@ public class clientHandler implements Runnable{
                             System.out.println("Added new user: " + r.GetUser());
                         }
                         //
-                        //  Skicka tilbaka lista med chat-namn här
+                        //  Skicka tilbaka lista med chat-namn 
                         //
                     }else if (request.getMsgType().equals("createChat")){
                         ChatCreateMsg r = (ChatCreateMsg) request;
-                        chatDAO1.createGroupChat(r.GetTitle());
-                        System.out.println("Created chat: " + r.GetTitle());
+                        //chatDAO1.createGroupChat(r.GetTitle());
+                        System.out.println("Created chat: " + (String)r.getObject());
                     }else{
                         System.out.println("Invalid user request");
                     }
