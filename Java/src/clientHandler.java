@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import src.Model.DAO.*;
-import src.Model.Entities.ChatUser;
+import src.Model.Entities.*;
 
 public class clientHandler implements Runnable{
     final private SocketChannel clientSocket;
