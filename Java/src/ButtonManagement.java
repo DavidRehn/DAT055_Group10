@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import src.Model.Entities.*;
+import src.Model.Entities.ChatUser;
 //import java.swing.*; 
 
 public class ButtonManagement implements ActionListener  {
@@ -45,7 +45,7 @@ public class ButtonManagement implements ActionListener  {
                 gui.showCreateChatroomWindow();
             }else if(command.equals("setChatFocus")){
                 
-            }else if(command.equals("{cancelChatCreation}")){
+            }else if(command.equals("cancelChatCreation")){
                 gui.removeCreateChatroomWindow();
             }else if (command.equals("confirmChatCreation")){
                 try {

@@ -140,8 +140,9 @@ public class GUI extends JFrame {
             buttons.add(chatButton);
             
             chatList.add(buttons.get(i));
+            
         }
-
+        createCreateChatroomWindow();
         this.add(chatList);
         this.add(createChatButton);
         this.revalidate();
@@ -172,7 +173,7 @@ public class GUI extends JFrame {
         this.repaint();
     }
 
-    public void showCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
+    public void createCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
                                              // Might need to add something to make it so you cant click anywhere else in the JFrame outside the panel when this window is showing
         //JPanel
         createChatroomPanel.setBounds(600, 150, 500, 200);
@@ -210,6 +211,10 @@ public class GUI extends JFrame {
         createChatroomPanel.add(chatroomNameLabel);   //JLabel
         createChatroomPanel.add(cancelButton);        //JButton
         createChatroomPanel.add(confirmButton);
+        
+    }
+
+    public void showCreateChatroomWindow(){
         this.add(createChatroomPanel);
         this.revalidate();
         this.repaint();
