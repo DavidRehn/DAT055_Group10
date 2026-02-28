@@ -44,14 +44,16 @@ public class clientHandler implements Runnable{
                     
                     
                     if(request.getMsgType().equals("login")){
-                        if(!userDAO1.checkIfAccountExists("A","2").isEmpty()){
+                        System.out.println("test");
+                        LoginRequest r = (LoginRequest) request;
+                        if(!userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).isEmpty()){
                             authenticated = true;
-                            user=userDAO1.checkIfAccountExists("A","2").get();
+                            user=userDAO1.checkIfAccountExists(r.GetUsername(),r.GetLogin()).get();
                             System.out.println("User connected: "+user.toString());
                             authenticated=true;
                         }else{
-                            System.out.println("User login failed");
-                            // Should create new user?
+                            userDAO1.createUser(r.GetUsername(), r.GetLogin());
+                            System.out.println("Added new user: " + r.GetUser());
                         }
                     }else{
                         System.out.println("Invalid user request");

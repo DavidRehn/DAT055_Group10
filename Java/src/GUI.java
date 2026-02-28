@@ -103,11 +103,8 @@ public class GUI extends JFrame {
     }
     
 
-    public void showHomeScreen(List<String> a) { // Should be called after successfully logging in and after removing log in screen
-        System.out.println("in funktion");
+    public void showHomeScreen(List<String> chatNames) { // Should be called after successfully logging in and after removing log in screen
         //remakes "a" type, into one that ButtonManagement konstruktor can handle.
-        String[] b = a.toArray(new String[0]);
-        
         chatList = new JPanel();
         
         createChatButton = new JButton("Create Chat");
@@ -130,10 +127,10 @@ public class GUI extends JFrame {
         buttons = new ArrayList<>();
         
         
-        for(int i =0; i < a.size();i++){
+        for(int i =0; i < chatNames.size();i++){
             System.out.println(i+" ooo");
             
-            chatButton = new JButton(a.get(i));
+            chatButton = new JButton(chatNames.get(i));
             //The visuals of the chat buttons
             chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
             chatButton.setBounds(0, i*75+10, 400, 75);

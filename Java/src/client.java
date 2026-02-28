@@ -28,6 +28,9 @@ public class client {
         
 
         while (true){
+            System.out.println("test");
+            /* 
+            
             Sendable message = null;
             try {
                 message = (Sendable) cModel.receiveObject();
@@ -39,7 +42,7 @@ public class client {
 
             if (mesasgeType.equals("GlobalChatList") && cModel.GetUser() != null){
                 //view.UpdateChatList((ArrayList<String>) (message.GetObject());
-            }
+            }*/
         }
         
     }

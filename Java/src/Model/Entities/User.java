@@ -24,6 +24,10 @@ public abstract class User implements Serializable{
         return this.name;
     }
 
+    public String GetLogin(){
+        return login;
+    }
+
     /** Returns a string containing the users name ans password.
      * @return String.
      */

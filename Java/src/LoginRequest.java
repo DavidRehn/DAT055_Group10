@@ -14,4 +14,15 @@ public class LoginRequest extends Sendable implements Serializable
     public String toString(){
         return user.toString();
     }
+    public String GetUsername(){
+        return user.getUserName();
+    }
+
+    public String GetLogin(){
+        return user.GetLogin();
+    }
+
+    public ChatUser GetUser(){
+        return user;
+    }
 }
