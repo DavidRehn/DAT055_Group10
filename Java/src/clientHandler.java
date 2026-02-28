@@ -60,7 +60,7 @@ public class clientHandler implements Runnable{
                         if(D_CON.UserExists((User)r.getObject())){
                             authenticated=true;
                             System.out.println("User logged in: " + r.GetUsername());
-                            sendObject(D_CON.GetAllChats());
+                            sendObject(new messageWrapper(D_CON.GetAllChats()));
                         }
                         
                     
