@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 
@@ -24,6 +25,7 @@ public class GUI extends JFrame {
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
     private ButtonManagement buttonListener;
+    private JScrollPane chatScroll; 
     
 
     public GUI (clientModel cModel) {
@@ -34,6 +36,9 @@ public class GUI extends JFrame {
         //Method: showHomeScreen(List<String> a)
         chatList = new JPanel();
         message = new JTextField();
+
+        chatScroll = new JScrollPane(chatList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
         
         //Methods: showCreateChatroomWindow()
         createChatroomPanel = new JPanel();
@@ -114,9 +119,13 @@ public class GUI extends JFrame {
         sendButton = new JButton("Send");
 
         //JPanel settupp.
-        chatList.setBounds(0, 100, 400, 1080);
+        chatList.setBounds(0, 100, 400, 900);
         chatList.setBorder(BorderFactory.createLineBorder(Color.black));
         chatList.setLayout(null);
+
+        chatScroll.setBounds(0, 100, 400, 900);
+        chatList.setLayout(null);
+        chatScroll.setViewportView(chatList);
         
         // "Add Chat" creation.
         createChatButton.setBounds(0, 0, 400, 100);
@@ -125,26 +134,16 @@ public class GUI extends JFrame {
         createChatButton.addActionListener(buttonListener);
         
         //where the join chat buttons from "a" are stored.
-        ArrayList<JButton> buttons;
-        buttons = new ArrayList<>();
+        UpdateChats(chatNames);
+
+        chatScroll.setViewportView(chatList);
+        JScrollBar bar = chatScroll.getVerticalScrollBar();
+        
+
         
         
-        for(int i =0; i < chatNames.size();i++){
-            chatButton = new JButton(chatNames.get(i));
-            //The visuals of the chat buttons
-            chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
-            chatButton.setBounds(0, i*75+10, 400, 75);
-            chatButton.setFocusable(false);
-            chatButton.setActionCommand("setChatFocus");
-            
-            chatButton.addActionListener(buttonListener);
-            buttons.add(chatButton);
-            
-            chatList.add(buttons.get(i));
-            
-        }
         createCreateChatroomWindow();
-        this.add(chatList);
+        this.add(chatScroll);
         this.add(createChatButton);
         this.revalidate();
         this.repaint();
@@ -225,6 +224,27 @@ public class GUI extends JFrame {
         createChatroomPanel.add(top, BorderLayout.NORTH);
         createChatroomPanel.add(bottom, BorderLayout.SOUTH);
         
+    }
+
+    public void UpdateChats(List<String> chats){
+        chatList.removeAll();
+        for (int i = 0; i < chats.size(); i++){
+            chatButton = new JButton(chats.get(i));
+            //The visuals of the chat buttons
+            chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
+            chatButton.setBounds(0, i*75+10, 400, 75);
+            chatButton.setFocusable(false);
+            chatButton.setActionCommand("setChatFocus");
+            chatButton.setName(chats.get(i));
+            
+            chatButton.addActionListener(buttonListener);
+            
+            chatList.add(chatButton);
+        }
+        int totalHeight = chats.size() * 75 + 10;
+        chatList.setPreferredSize(new Dimension(400, totalHeight));
+        chatList.revalidate();
+        chatList.repaint();
     }
 
     public void showCreateChatroomWindow(){

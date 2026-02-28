@@ -17,6 +17,12 @@ public class View {
     }
 
     public void UpdateChatList(List<String> chatNames){
+        gui.UpdateChats(chatNames);
+        gui.revalidate();
+        gui.repaint();
+    }
+
+    public void ShowHomeScreen(List<String> chatNames){
         gui.showHomeScreen(chatNames);
     }
 }

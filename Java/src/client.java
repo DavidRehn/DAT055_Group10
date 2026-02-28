@@ -26,13 +26,22 @@ public class client {
         a.add("Chat1");
         a.add("Chat2");
         view.UpdateChatList(a);*/
-        
+        Sendable message = null;
+        try {
+            message = (Sendable) cModel.receiveObject();
+            view.RemoveLoginScreen();
+            view.ShowHomeScreen((ArrayList<String>) (message.getObject()));
+            System.out.println("Logged in");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
         while (true){
             
-            Sendable message = null;
+            message = null;
             try {
                 message = (Sendable) cModel.receiveObject();
-                view.RemoveLoginScreen();
+                System.out.println("received message");
                 view.UpdateChatList((ArrayList<String>) (message.getObject()));
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

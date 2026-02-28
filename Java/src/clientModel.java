@@ -6,24 +6,36 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import src.Model.Entities.User;
+import java.util.ArrayList;
 
 public class clientModel {
-    private User currentUser;
-    private int currentChat;
+    private String currentChat;
     private SocketChannel channel;
+    private ArrayList<String> chats;
 
     public clientModel(SocketChannel channel){
-        currentUser = null;
-        currentChat = 0;
+        currentChat = null;
         this.channel = channel;
+        chats = new ArrayList<>();
     }
 
-    public User GetUser(){
-        return currentUser;
+    public void AddChat(String name){
+        chats.add(name);
     }
 
-    public int GetCurrentChat(){
+    public void RemoveChat(String name){
+        chats.remove(name);
+    }
+
+    public ArrayList<String> GetChats(){
+        return chats;
+    }
+
+    public void SetCurrentChat(String chatName){
+        this.currentChat =chatName;
+    }
+
+    public String GetCurrentChat(){
         return currentChat;
     }
 
