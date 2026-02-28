@@ -121,6 +121,7 @@ public class GUI extends JFrame {
         createChatButton.setBounds(0, 0, 400, 100);
         createChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
         createChatButton.setFocusable(false);
+        createChatButton.addActionListener(buttonListener);
         
         //where the join chat buttons from "a" are stored.
         ArrayList<JButton> buttons;
@@ -128,13 +129,12 @@ public class GUI extends JFrame {
         
         
         for(int i =0; i < chatNames.size();i++){
-            System.out.println(i+" ooo");
-            
             chatButton = new JButton(chatNames.get(i));
             //The visuals of the chat buttons
             chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
             chatButton.setBounds(0, i*75+10, 400, 75);
             chatButton.setFocusable(false);
+            chatButton.setActionCommand("setChatFocus");
             
             chatButton.addActionListener(buttonListener);
             buttons.add(chatButton);
@@ -146,7 +146,6 @@ public class GUI extends JFrame {
         this.add(createChatButton);
         this.revalidate();
         this.repaint();
-        System.out.println("done with funktion");
     }
 
     public void showChatroom() { // Should be called when a chatroom (button) is pressed, might need a param
@@ -154,11 +153,14 @@ public class GUI extends JFrame {
         addImgButton.setBounds(400, 750, 75, 75);
         addImgButton.setFont(new Font("Consolas", Font.BOLD, 35));
         addImgButton.setFocusable(false);
+        addImgButton.setActionCommand("addImage");
+        addImgButton.addActionListener(buttonListener);
         this.add(addImgButton);
 
         sendButton.setBounds(1395, 750, 75, 75);
         sendButton.setFont(new Font("Consolas", Font.BOLD, 15));
         sendButton.setFocusable(false);
+        sendButton.addActionListener(buttonListener);
         this.add(sendButton);
         
         
@@ -193,10 +195,15 @@ public class GUI extends JFrame {
         //JButton
         cancelButton = new JButton("Cancel");
         cancelButton.setBounds(25, 150, 75, 20);
+        cancelButton.setActionCommand("cancelChatCreation");
+        cancelButton.addActionListener(buttonListener);
+
         
         //JButton
         confirmButton = new JButton("Confirm");
         confirmButton.setBounds(400, 150, 75, 20);
+        confirmButton.setActionCommand("confirmChatCreation");
+        createChatButton.addActionListener(buttonListener);
 
         createChatroomPanel.add(createChatroomLabel); //JLabel
         createChatroomPanel.add(chatroomName);        //JLabel

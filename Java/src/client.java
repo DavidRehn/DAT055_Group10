@@ -26,9 +26,9 @@ public class client {
         a.add("Chat2");
         view.UpdateChatList(a);*/
         
-
+        int i = 1;
         while (true){
-            System.out.println("test");
+            i++;
             /* 
             
             Sendable message = null;

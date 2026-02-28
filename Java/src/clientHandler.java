@@ -55,6 +55,9 @@ public class clientHandler implements Runnable{
                             userDAO1.createUser(r.GetUsername(), r.GetLogin());
                             System.out.println("Added new user: " + r.GetUser());
                         }
+                        //
+                        //  Skicka tilbaka lista med chat-namn här
+                        //
                     }else if (request.getMsgType().equals("createChat")){
                         ChatCreateMsg r = (ChatCreateMsg) request;
                         chatDAO1.createGroupChat(r.GetTitle());
