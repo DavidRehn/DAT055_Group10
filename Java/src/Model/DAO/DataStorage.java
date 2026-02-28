@@ -1,5 +1,6 @@
 package src.Model.DAO;
 import src.Model.Entities.*;
+import java.util.ArrayList;
 
 public interface DataStorage {
     public void AddChat(Chat chat);
