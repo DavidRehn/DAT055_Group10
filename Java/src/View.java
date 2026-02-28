@@ -12,6 +12,10 @@ public class View {
         gui.showLogInScreen();
     }
 
+    public void RemoveLoginScreen(){
+        gui.removeLogInScreen();
+    }
+
     public void UpdateChatList(List<String> chatNames){
         gui.showHomeScreen(chatNames);
     }

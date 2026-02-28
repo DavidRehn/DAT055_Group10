@@ -2,7 +2,6 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import src.Model.Entities.ChatUser;
 //import java.swing.*; 
@@ -30,12 +29,11 @@ public class ButtonManagement implements ActionListener  {
                 if(username.length() > 0 && password.length() > 0){
                     try {
                         cModel.SendObject(new LoginRequest(new ChatUser(username, password)));
-                        //System.out.println(new ChatUser(gui.GetUsername(), gui.GetPassword(), 1));
                         System.out.println("Sent login request");
                     } catch (Exception a) {
                         a.printStackTrace();
                     }
-
+                    /* 
                     gui.removeLogInScreen();
                     ArrayList<String> a = new ArrayList<>();
                     a.add("chat1");
@@ -43,7 +41,7 @@ public class ButtonManagement implements ActionListener  {
                     a.add("chat3");
                     a.add("chat4");
                     gui.showHomeScreen(a);
-                    gui.showChatroom();
+                    gui.showChatroom();*/
                 }
             }else if (command.equals("Create Chat")) {
                 gui.showCreateChatroomWindow();

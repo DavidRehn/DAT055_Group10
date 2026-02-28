@@ -39,7 +39,9 @@ public class client {
             String mesasgeType = message.getMsgType();
 
             if (mesasgeType.equals("GlobalChatList") && cModel.GetUser() != null){
+                view.RemoveLoginScreen();
                 view.UpdateChatList((ArrayList<String>) (message.getObject()));
+                
             }
         }
         
