@@ -46,7 +46,8 @@ public class clientHandler implements Runnable{
                             D_CON.AddChat(new GroupChat((String)r.getObject()));
                             D_CON.AddUserToChat((String)r.getObject(), user.getUserName());
                             System.out.println("Created chat: " + (String)r.getObject());                            
-                        }
+                        	sendObject(new messageWrapper(D_CON.GetAllChats()));
+						}
                         
                     }
                     
