@@ -15,4 +15,6 @@ public interface DataStorage {
     public Chat GetChat(String title);
 
     public void AddMessage(Message message);
+
+    public ArrayList<String> GetAllChats();
 }
