@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.TextMessage;
 
@@ -276,6 +279,7 @@ public class GUI extends JFrame {
             JPanel message = new JPanel();
             message.setLayout(new BorderLayout());
             message.setPreferredSize(new Dimension(1000, 100));
+            message.setMaximumSize(new Dimension(1000, 500));
             message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
             // Panel containing sender name and time
@@ -305,13 +309,21 @@ public class GUI extends JFrame {
             // For text messages
             if(msgType.equals("text")){
                 TextMessage t = (TextMessage)m;
-                
+
                 // Main text content
                 message.add(new JLabel(t.GetContent()), BorderLayout.CENTER);
             }
             // For image messages
             else if (msgType.equals("image")){
-                
+                ImageMessage t = (ImageMessage)m;
+                ImageIcon img = new ImageIcon(t.GetImgPath());
+                if (img.getIconWidth() == -1) {
+                    System.out.println("Image not found: " + t.GetImgPath());
+                }
+                Image scaledImage = img.getImage().getScaledInstance(300, -1, Image.SCALE_SMOOTH);
+                ImageIcon scaledIcon = new ImageIcon(scaledImage);
+                JLabel l = new JLabel(scaledIcon);
+                message.add(l, BorderLayout.CENTER);
             }
             message.add(top, BorderLayout.NORTH);
             messageWindow.add(message);
