@@ -26,3 +26,5 @@ insert into Users values('D','5');
 insert into Chats values('a');
 insert into Chats values('b');
 insert into Chats values('c');
+insert into Messages values ('A', 1, 'a', 'text', 'Hello');
+insert into Messages values ('B', 2, 'a', 'text', 'Hi!');

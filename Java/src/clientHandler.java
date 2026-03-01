@@ -3,9 +3,11 @@ package src;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
+import java.util.ArrayList;
 import src.Model.DAO.*;
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.GroupChat;
+import src.Model.Entities.Message;
 import src.Model.Entities.User;
 
 public class clientHandler implements Runnable{
@@ -42,15 +44,17 @@ public class clientHandler implements Runnable{
                     
                     if(request.getMsgType().equals("createChat")){
                         ChatCreateMsg r = (ChatCreateMsg) request;
-                        System.out.println(D_CON.ChatExists((String)r.getObject()));
                         if(!D_CON.ChatExists((String)r.getObject())){
-                            System.out.println("a");
                             D_CON.AddChat(new GroupChat((String)r.getObject()));
                             D_CON.AddUserToChat((String)r.getObject(), user.getUserName());
                             System.out.println("Created chat: " + (String)r.getObject());                            
-                        	sendObject(new messageWrapper(D_CON.GetAllChats()));
+                        	sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
 						}
                         
+                    }else if(request.getMsgType().equals("getMessages")){
+                        GetMessagesRequest r = (GetMessagesRequest) request;
+                        ArrayList<Message> messages = D_CON.GetMessages((String)r.getObject());
+                        sendObject(new messageWrapper(messages, "MSG"));
                     }
                     
                     
@@ -64,7 +68,7 @@ public class clientHandler implements Runnable{
                             authenticated=true;
                             user = (ChatUser) r.getObject();
                             System.out.println("User logged in: " + r.GetUsername());
-                            sendObject(new messageWrapper(D_CON.GetAllChats()));
+                            sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
                         }
                         
                     

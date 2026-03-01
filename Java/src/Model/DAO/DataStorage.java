@@ -20,4 +20,6 @@ public interface DataStorage {
     public ArrayList<String> GetAllChats();
 
     public boolean ChatExists(String title);
+
+    public ArrayList<Message> GetMessages(String chat);
 }

@@ -2,6 +2,7 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.JButton;
 import src.Model.Entities.ChatUser;
 //import java.swing.*; 
@@ -47,8 +48,14 @@ public class ButtonManagement implements ActionListener  {
                 gui.showCreateChatroomWindow();
             }else if(command.equals("setChatFocus")){
                 JButton b = (JButton)obj;
-                cModel.SetCurrentChat(b.getName());
-                System.out.println("Set focus to " + b.getName());
+                String name = b.getName();
+                cModel.SetCurrentChat(name);
+                try {
+                    cModel.SendObject(new GetMessagesRequest(name));
+                } catch (IOException a) {
+                    System.out.println("Could not send message");
+                }
+                System.out.println("Set focus to " + name);
             }else if(command.equals("cancelChatCreation")){
                 gui.removeCreateChatroomWindow();
             }else if (command.equals("confirmChatCreation")){

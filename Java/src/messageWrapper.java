@@ -1,19 +1,20 @@
 package src;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.Serializable;
 public class messageWrapper extends Sendable implements Serializable
 {
-    ArrayList<String> Chats;
-    messageWrapper(ArrayList<String> L){
-        super("UI");
-        Chats = new ArrayList();
-        Chats.addAll(L);
+    Object obj;
+    messageWrapper(Object obj, String msgType){
+        super(msgType);
+        this.obj = obj;
     }
+
+    @Override
     public Object getObject(){
-        return Chats;
+        return obj;
     }
+
+    @Override
     public String toString(){
-        return Chats.toString();
+        return ("[" + getMsgType() + ", " +  obj.toString() + "]");
     }
 }

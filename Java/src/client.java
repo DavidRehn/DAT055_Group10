@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import src.Model.Entities.Message;
 
 public class client {
     public static void main(String[] args) {
@@ -31,6 +32,7 @@ public class client {
             message = (Sendable) cModel.receiveObject();
             view.RemoveLoginScreen();
             view.ShowHomeScreen((ArrayList<String>) (message.getObject()));
+            System.out.println((ArrayList<String>) (message.getObject()));
             System.out.println("Logged in");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -42,7 +44,15 @@ public class client {
             try {
                 message = (Sendable) cModel.receiveObject();
                 System.out.println("received message");
-                view.UpdateChatList((ArrayList<String>) (message.getObject()));
+                String msgType = message.getMsgType();
+                if(msgType.equals("UI")){
+                    view.UpdateChatList((ArrayList<String>) (message.getObject()));
+                    System.out.println("Received chats");
+                    System.out.println((ArrayList<String>) (message.getObject()));
+                }else if(msgType.equals("MSG")){
+                    System.out.println((ArrayList<Message>) message.getObject());
+                }
+                
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

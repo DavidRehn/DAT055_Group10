@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import src.Model.Entities.*;
 
@@ -170,5 +171,38 @@ public class Database implements DataStorage{
         
             
         return chats;
+    }
+
+    @Override
+    public ArrayList<Message> GetMessages(String chat){
+        String sql = "SELECT * FROM Messages WHERE chat = ?";
+        ArrayList<Message> messages = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, chat);
+            try(ResultSet rs = ps.executeQuery()){
+                while (rs.next()) {
+                    String sender = rs.getString(1);
+                    int id = rs.getInt(2);
+                    String chatName = rs.getString(3);
+                    String msgType = rs.getString(4);
+                    OffsetDateTime time = (OffsetDateTime)rs.getObject(6, OffsetDateTime.class);
+                    if(msgType.equals("text")){
+                      String text = rs.getString(5);
+                      Message m = new TextMessage(sender, time, id, chatName, text, msgType);
+                      messages.add(m);
+                    }else if(msgType.equals("image")){
+                      String imageUrl = rs.getString(5);
+                      Message m = new ImageMessage(sender, time, chatName, id, imageUrl, msgType);
+                      messages.add(m);
+                    }
+                }
+            }catch(SQLException a){
+                a.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return messages;
     }
 }
