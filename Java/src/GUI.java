@@ -270,34 +270,48 @@ public class GUI extends JFrame {
     }
 
     public void UpdateMessages(List<Message> messages){
-        System.out.println(messages);
-        int mesasgeHeight = 0;
-        messageWindow.removeAll();
+        messageWindow.removeAll();  // Clear before adding again
         for (int i = 0; i < messages.size(); i++){
+            // Panel containing the whole message
             JPanel message = new JPanel();
             message.setLayout(new BorderLayout());
-            JPanel top = new JPanel();
             message.setPreferredSize(new Dimension(1000, 100));
+            message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            // Panel containing sender name and time
+            JPanel top = new JPanel();
             top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
             top.setPreferredSize(new Dimension(messageWindow.getWidth(), 25));
             top.setMinimumSize(new Dimension(messageWindow.getWidth(), 25));
             top.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-            String msgType = messages.get(i).GetType();
+
+            String msgType = messages.get(i).GetType(); 
+            Message m = messages.get(i);
+
+            // Sender name
+            JLabel sender = new JLabel(m.GetSender());  
+
+            // Panel containing sender name and time
+            top.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            top.add(sender);
+            top.add(Box.createHorizontalGlue());
+
+            // Time of creation
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"); 
+            JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter));
+            timeLabel.setHorizontalAlignment(JLabel.RIGHT);
+            top.add(timeLabel);
+
+            // For text messages
             if(msgType.equals("text")){
-                System.out.println(messages.get(i).GetTimestamp());
-                TextMessage m = (TextMessage)messages.get(i);
-                JLabel sender = new JLabel(m.GetSender());
-                top.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                top.add(sender);
-                top.add(Box.createHorizontalGlue());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"); 
-                JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter));
-                timeLabel.setHorizontalAlignment(JLabel.RIGHT);
-                top.add(timeLabel);
-                message.add(new JLabel(m.GetContent()), BorderLayout.CENTER);
-                message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            }else if (msgType.equals("image")){
-                mesasgeHeight = 400;
+                TextMessage t = (TextMessage)m;
+                
+                // Main text content
+                message.add(new JLabel(t.GetContent()), BorderLayout.CENTER);
+            }
+            // For image messages
+            else if (msgType.equals("image")){
+                
             }
             message.add(top, BorderLayout.NORTH);
             messageWindow.add(message);
