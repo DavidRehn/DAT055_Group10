@@ -194,7 +194,7 @@ public class Database implements DataStorage{
 
     @Override
     public ArrayList<Message> GetMessages(String chat){
-        String sql = "SELECT * FROM Messages WHERE chat = ?";
+        String sql = "SELECT * FROM Messages WHERE chat = ? ORDER BY message_date ASC";
         ArrayList<Message> messages = new ArrayList<>();
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
