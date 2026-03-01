@@ -59,6 +59,7 @@ public class clientHandler implements Runnable{
                         Message r = (Message)request.getObject();
                         if(D_CON.ChatUserExists(user,r.GetChat())){
                             D_CON.AddMessage(r);
+							sendObject(new messageWrapper(D_CON.GetMessages(r), "MSG"));
                         }
                     }
                     
