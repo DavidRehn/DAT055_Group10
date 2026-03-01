@@ -13,6 +13,8 @@ public interface DataStorage {
 
     public boolean UserExists(User user);
 
+    public boolean ChatUserExists(User user, String chat);
+
     public Chat GetChat(String title);
 
     public void AddMessage(Message message);
