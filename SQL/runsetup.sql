@@ -27,6 +27,6 @@ insert into Chats values('a');
 insert into Chats values('b');
 insert into Chats values('c');
 insert into Messages values ('A', 1, 'a', 'text', 'Hello');
-insert into Messages(sender, message_id, chat, msg_type, image_url) values ('B', 15, 'a', 'image','Java\src\Images\test.jpg');
+insert into Messages(sender, message_id, chat, msg_type, image_url) values ('B', 15, 'a', 'image','C:\Users\david\Documents\Utbildning\Objektorienterade Aplikationer\Project\dat055_group10\java\src\image\test.jpg');
 
 SELECT * From messages;

@@ -212,7 +212,7 @@ public class Database implements DataStorage{
                       Message m = new TextMessage(sender, time, id, chatName, text, msgType);
                       messages.add(m);
                     }else if(msgType.equals("image")){
-                      String imageUrl = rs.getString(5);
+                      String imageUrl = rs.getString(6);
                       Message m = new ImageMessage(sender, time, chatName, id, imageUrl, msgType);
                       messages.add(m);
                     }

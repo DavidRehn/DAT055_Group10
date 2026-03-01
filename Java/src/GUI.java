@@ -316,7 +316,8 @@ public class GUI extends JFrame {
             // For image messages
             else if (msgType.equals("image")){
                 ImageMessage t = (ImageMessage)m;
-                ImageIcon img = new ImageIcon(t.GetImgPath());
+                String fullPath = System.getProperty("user.dir") + "/Images/" + "test.jpg";
+                ImageIcon img = new ImageIcon(fullPath);
                 if (img.getIconWidth() == -1) {
                     System.out.println("Image not found: " + t.GetImgPath());
                 }
