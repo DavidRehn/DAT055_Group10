@@ -52,9 +52,14 @@ public class clientHandler implements Runnable{
 						}
                         
                     }else if(request.getMsgType().equals("getMessages")){
-                        GetMessagesRequest r = (GetMessagesRequest) request;
-                        ArrayList<Message> messages = D_CON.GetMessages((String)r.getObject());
+                        String r = (String)request.getObject();
+                        ArrayList<Message> messages = D_CON.GetMessages(r);
                         sendObject(new messageWrapper(messages, "MSG"));
+                    }else if(request.getMsgType().equals("AddMsg")){
+                        Message r = (Message)request.getObject();
+                        if(D_CON.ChatUserExists(user,r.GetChat())){
+                            D_CON.AddMessage(r);
+                        }
                     }
                     
                     
