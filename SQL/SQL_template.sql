@@ -11,7 +11,6 @@ CREATE TABLE Chats(
 -- PK sender && message_date (kan ändras vid behov)
 CREATE TABLE Messages(
     sender TEXT NOT NULL REFERENCES Users(name) ON DELETE CASCADE,
-    message_id SERIAL PRIMARY KEY,
     chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE,       
     msg_type TEXT NOT NULL, 
     CHECK (msg_type IN ('text', 'image')),

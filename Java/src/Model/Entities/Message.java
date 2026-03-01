@@ -9,14 +9,12 @@ import java.time.LocalDateTime;
 public abstract class Message implements Serializable{
     private String sender;
     private LocalDateTime timestamp;
-    private int message_id;
     private String chat;
     private String msgType;
 
-    public Message(String sender, LocalDateTime time, int messageId, String chat, String type){
+    public Message(String sender, LocalDateTime time, String chat, String type){
         this.sender = sender;
         this.timestamp = time;
-        this.message_id = messageId;
         this.chat = chat;
         this.msgType = type;
     }
@@ -33,13 +31,6 @@ public abstract class Message implements Serializable{
      */
     public LocalDateTime GetTimestamp(){
         return timestamp;
-    }
-
-    /** Returns the ID of the message.
-     * @return Message ID.
-     */
-    public int GetMessageID(){
-        return message_id;
     }
 
     /** Returns the chat the message belongs to.

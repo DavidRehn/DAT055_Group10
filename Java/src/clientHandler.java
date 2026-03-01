@@ -16,7 +16,7 @@ public class clientHandler implements Runnable{
 	final private SelectionKey sk;
 
 	private boolean authenticated;
-    private ChatUser user;
+    private User user;
 	final private DataStorage D_CON;
 	
     public clientHandler(Selector s, SocketChannel c, DataStorage d) throws IOException{
