@@ -192,7 +192,7 @@ public class GUI extends JFrame {
         JScrollBar mScrollBar = messagePane.getVerticalScrollBar();
 
 
-
+        
         this.add(message);  
         this.add(messagePane);
         this.revalidate();

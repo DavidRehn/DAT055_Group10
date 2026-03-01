@@ -1,6 +1,7 @@
 package src.Model.Entities;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /** Abstract class to represent a message in a chat system.
@@ -32,6 +33,10 @@ public abstract class Message implements Serializable{
         return timestamp;
     }
 
+    public Timestamp GetTime(){
+        return Timestamp.valueOf(timestamp);
+    }
+
     /** Returns the chat the message belongs to.
      * @return Chat ID.
      */
@@ -46,4 +51,6 @@ public abstract class Message implements Serializable{
     public void SetSender(String sender){
         this.sender = sender;
     }
+
+
 };

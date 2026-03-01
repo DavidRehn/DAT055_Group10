@@ -135,21 +135,20 @@ public class Database implements DataStorage{
     
     @Override
     public boolean ChatUserExists(User user, String chat){
-        String sql = "SELECT * FROM Chat_members WHERE chat = ? And name = ?";
-        boolean temp = false;
+        String sql = "SELECT EXISTS(SELECT FROM Chat_Members WHERE user = ? AND chat = ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, user.getUserName());
             ps.setString(2, chat);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
-                    temp = true;
+                    return rs.getBoolean(1);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return temp;
+        return false;
     }
     @Override
     public void AddMessage(Message message){
@@ -159,18 +158,25 @@ public class Database implements DataStorage{
             ps.setString(1, message.GetSender());
             ps.setString(2, message.GetChat());
             ps.setString(3, message.GetType());
+            ps.setTimestamp(5, message.GetTime());
+            System.out.println("sdfgh");
             if(message.GetType().equals("text")){
                 TextMessage temp = (TextMessage) message;
                 ps.setString(4, temp.GetContent());
             } else if(message.GetType().equals("image")){
                 ImageMessage temp = (ImageMessage) message;
-                ps.setString(5, temp.GetImgPath());
+                ps.setString(4, temp.GetImgPath());
             }
-            ps.executeQuery();
+            
+            System.out.println("a");
+            ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to add message");
         }
     }
     
+
     @Override
     public ArrayList<String> GetAllChats(){
         String sql = "SELECT * FROM Chats";
@@ -201,17 +207,19 @@ public class Database implements DataStorage{
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()) {
                     String sender = rs.getString(1);
-                    String chatName = rs.getString(3);
-                    String msgType = rs.getString(4);
-                    Timestamp ts = rs.getTimestamp(7);
+                    String chatName = rs.getString(2);
+                    String msgType = rs.getString(3);
+                    Timestamp ts = rs.getTimestamp(5);
                     LocalDateTime time = ts.toLocalDateTime();
                     if(msgType.equals("text")){
-                      String text = rs.getString(5);
+                      String text = rs.getString(4);
                       Message m = new TextMessage(time, chatName, text, msgType);
+                      m.SetSender(sender);
                       messages.add(m);
                     }else if(msgType.equals("image")){
-                      String imageUrl = rs.getString(6);
+                      String imageUrl = rs.getString(4);
                       Message m = new ImageMessage(time, chatName, imageUrl, msgType);
+                      m.SetSender(sender);
                       messages.add(m);
                     }
                 }

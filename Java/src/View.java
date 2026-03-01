@@ -30,4 +30,11 @@ public class View {
     public void ShowChatroom(List<Message> messages){
         gui.showChatroom(messages);
     }
+
+    public void UpdateMessages(List<Message> messages){
+        gui.UpdateMessages(messages);
+        gui.revalidate();
+        gui.repaint();
+        System.out.println(messages.size());
+    }
 }

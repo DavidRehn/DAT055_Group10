@@ -60,12 +60,17 @@ public class clientHandler implements Runnable{
                         sendObject(new messageWrapper(messages, "MSG"));
 
                     }else if(request.getMsgType().equals("AddMsg")){
-                        System.out.println("test");
+                        System.out.println(user);
+                        
                         Message r = (Message)request.getObject();
-                        if(D_CON.ChatUserExists(user,r.GetChat())){
+                        System.out.println(r.GetChat());
+                        System.out.println(D_CON.ChatUserExists(user,r.GetChat()));
+                        System.out.println(this);
+                        if(!D_CON.ChatUserExists(user,r.GetChat())){
                             System.out.println("a");
                             r.SetSender(user.getUserName());
                             D_CON.AddMessage(r);
+                            System.out.println(D_CON.GetMessages(r.GetChat()));
 							sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
                             System.out.println("Added message");
                         }
@@ -92,8 +97,6 @@ public class clientHandler implements Runnable{
                     System.out.println(request.toString());              
                 }
 
-                sk.interestOps(SelectionKey.OP_READ);
-                se.wakeup();
                 
                 
                 

@@ -3,8 +3,6 @@ package src;
 import java.io.*;
 import java.net.*;
 import java.nio.channels.*;
-import java.nio.*;
-import java.net.Socket;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -51,7 +49,7 @@ public class server{
                             // Read from channel
                             else if(key.isReadable()){
                                 
-                                key.interestOps(SelectionKey.OP_WRITE);
+                                key.interestOps(0);
                                 System.out.println("Reading");
                                 threads.execute((clientHandler)key.attachment());
                                

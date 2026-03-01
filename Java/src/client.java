@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
-import java.util.List;
 import src.Model.Entities.Message;
 
 public class client {
@@ -38,10 +37,11 @@ public class client {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        boolean firstMsgUpdate = true;
         while (true){
             
             message = null;
+            
             try {
                 message = (Sendable) cModel.receiveObject();
                 System.out.println("received message");
@@ -49,10 +49,16 @@ public class client {
                 if(msgType.equals("UI")){
                     view.UpdateChatList((ArrayList<String>) (message.getObject()));
                     System.out.println("Received chats");
-                    System.out.println((ArrayList<String>) (message.getObject()));
                 }else if(msgType.equals("MSG")){
-                    List<Message> messages = (ArrayList<Message>)message.getObject();
-                    view.ShowChatroom(messages);
+                    
+                    ArrayList<Message> messages = (ArrayList<Message>)message.getObject();
+                    System.out.println(messages);
+                    if(firstMsgUpdate){
+                        view.ShowChatroom(messages);
+                        firstMsgUpdate = false;
+                    }
+                    
+                    view.UpdateMessages(messages);
                 }
                 
             } catch (IOException | ClassNotFoundException e) {

@@ -14,19 +14,9 @@ CREATE TABLE Messages(
     chat TEXT NOT NULL REFERENCES Chats(title) ON DELETE CASCADE,       
     msg_type TEXT NOT NULL, 
     CHECK (msg_type IN ('text', 'image')),
-    text_body TEXT,
-    image_url TEXT,
-    message_date TIMESTAMPTZ NOT NULL DEFAULT now(),        -- date+time default till när en insert skapas i tabellen
-    -- Antingen består ett meddelande av text, eller en image, inte både och samt inte inga av dem
-    CONSTRAINT msg_type_check CHECK(
-        (msg_type = 'text' 
-        AND text_body IS NOT NULL
-        AND image_url IS NULL)
-        OR
-        (msg_type = 'image'
-        AND image_url IS NOT NULL
-        AND text_body IS NULL)
-    )
+    content TEXT,
+    message_date TIMESTAMP NOT NULL DEFAULT now()        -- date+time default till när en insert skapas i tabellen
+
 );
 
 CREATE TABLE Chat_Members(
