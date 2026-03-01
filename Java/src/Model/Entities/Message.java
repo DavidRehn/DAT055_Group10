@@ -1,18 +1,19 @@
 package src.Model.Entities;
 
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+
 /** Abstract class to represent a message in a chat system.
  *  Message does not have any content fields.
  */
 public abstract class Message implements Serializable{
     private String sender;
-    private OffsetDateTime timestamp;
+    private LocalDateTime timestamp;
     private int message_id;
     private String chat;
     private String msgType;
 
-    public Message(String sender, OffsetDateTime time, int messageId, String chat, String type){
+    public Message(String sender, LocalDateTime time, int messageId, String chat, String type){
         this.sender = sender;
         this.timestamp = time;
         this.message_id = messageId;
@@ -30,7 +31,7 @@ public abstract class Message implements Serializable{
     /** Returns the timestamp when the message was sent.
      * @return timestamp.
      */
-    public OffsetDateTime GetTimestamp(){
+    public LocalDateTime GetTimestamp(){
         return timestamp;
     }
 

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -275,20 +276,30 @@ public class GUI extends JFrame {
         for (int i = 0; i < messages.size(); i++){
             JPanel message = new JPanel();
             message.setLayout(new BorderLayout());
+            JPanel top = new JPanel();
+            message.setPreferredSize(new Dimension(1000, 100));
+            top.setLayout(new BoxLayout(top, BoxLayout.X_AXIS));
+            top.setPreferredSize(new Dimension(messageWindow.getWidth(), 25));
+            top.setMinimumSize(new Dimension(messageWindow.getWidth(), 25));
+            top.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
             String msgType = messages.get(i).GetType();
             if(msgType.equals("text")){
+                System.out.println(messages.get(i).GetTimestamp());
                 TextMessage m = (TextMessage)messages.get(i);
-                message.setMaximumSize(new Dimension(1500, 100));
-                message.setPreferredSize(new Dimension(1500, 100));
                 JLabel sender = new JLabel(m.GetSender());
-                sender.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                message.add(sender, BorderLayout.NORTH);
-                //message.add(new JLabel(m.GetTimestamp().toString()), BorderLayout.NORTH);
+                top.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                top.add(sender);
+                top.add(Box.createHorizontalGlue());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"); 
+                JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter));
+                timeLabel.setHorizontalAlignment(JLabel.RIGHT);
+                top.add(timeLabel);
                 message.add(new JLabel(m.GetContent()), BorderLayout.CENTER);
                 message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             }else if (msgType.equals("image")){
                 mesasgeHeight = 400;
             }
+            message.add(top, BorderLayout.NORTH);
             messageWindow.add(message);
             messageWindow.add(Box.createVerticalStrut(15));
         }

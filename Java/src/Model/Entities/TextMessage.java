@@ -1,11 +1,11 @@
 package src.Model.Entities;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 public class TextMessage extends Message{
     private String contentText;
 
-    public TextMessage(String sender, OffsetDateTime time, int messageId, String chat, String text, String type){
+    public TextMessage(String sender, LocalDateTime time, int messageId, String chat, String text, String type){
         super(sender, time, messageId, chat, type);
         this.contentText = text;
     }

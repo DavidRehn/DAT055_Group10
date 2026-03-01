@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import src.Model.Entities.*;
 
@@ -204,7 +205,8 @@ public class Database implements DataStorage{
                     int id = rs.getInt(2);
                     String chatName = rs.getString(3);
                     String msgType = rs.getString(4);
-                    OffsetDateTime time = (OffsetDateTime)rs.getObject(6, OffsetDateTime.class);
+                    Timestamp ts = rs.getTimestamp(7);
+                    LocalDateTime time = ts.toLocalDateTime();
                     if(msgType.equals("text")){
                       String text = rs.getString(5);
                       Message m = new TextMessage(sender, time, id, chatName, text, msgType);
