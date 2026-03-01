@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.List;
 import src.Model.Entities.Message;
 
 public class client {
@@ -50,7 +51,9 @@ public class client {
                     System.out.println("Received chats");
                     System.out.println((ArrayList<String>) (message.getObject()));
                 }else if(msgType.equals("MSG")){
-                    System.out.println((ArrayList<Message>) message.getObject());
+                    List<Message> messages = (ArrayList<Message>)message.getObject();
+                    System.out.println(messages);
+                    view.ShowChatroom(messages);
                 }
                 
             } catch (IOException | ClassNotFoundException e) {

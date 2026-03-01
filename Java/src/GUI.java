@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,10 +16,12 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import src.Model.Entities.Message;
+import src.Model.Entities.TextMessage;
 
 
 public class GUI extends JFrame {
-    private JPanel loginPanel, chatList, /*selectedChat,*/ createChatroomPanel;
+    private JPanel loginPanel, chatList, createChatroomPanel, messageWindow;
     public JTextField username, message, chatroomName;
     public JPasswordField password;
     public JButton loginButton, createChatButton, addImgButton, 
@@ -26,6 +30,7 @@ public class GUI extends JFrame {
     private clientModel cModel;
     private ButtonManagement buttonListener;
     private JScrollPane chatScroll; 
+    private JScrollPane messagePane;
     
 
     public GUI (clientModel cModel) {
@@ -37,8 +42,11 @@ public class GUI extends JFrame {
         chatList = new JPanel();
         message = new JTextField();
 
-        chatScroll = new JScrollPane(chatList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        messageWindow = new JPanel();
 
+        chatScroll = new JScrollPane(chatList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        messagePane = new JScrollPane(messageWindow, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        messageWindow.setLayout(new BoxLayout(messageWindow, BoxLayout.Y_AXIS));
         
         //Methods: showCreateChatroomWindow()
         createChatroomPanel = new JPanel();
@@ -145,20 +153,21 @@ public class GUI extends JFrame {
         createCreateChatroomWindow();
         this.add(chatScroll);
         this.add(createChatButton);
+        
         this.revalidate();
         this.repaint();
     }
 
-    public void showChatroom() { // Should be called when a chatroom (button) is pressed, might need a param
+    public void showChatroom(List<Message> messages) { // Should be called when a chatroom (button) is pressed, might need a param
         // JButton
-        addImgButton.setBounds(400, 750, 75, 75);
+        addImgButton.setBounds(400, 925, 75, 75);
         addImgButton.setFont(new Font("Consolas", Font.BOLD, 35));
         addImgButton.setFocusable(false);
         addImgButton.setActionCommand("addImage");
         addImgButton.addActionListener(buttonListener);
         this.add(addImgButton);
 
-        sendButton.setBounds(1395, 750, 75, 75);
+        sendButton.setBounds(1395, 925, 75, 75);
         sendButton.setFont(new Font("Consolas", Font.BOLD, 15));
         sendButton.setFocusable(false);
         sendButton.addActionListener(buttonListener);
@@ -166,9 +175,21 @@ public class GUI extends JFrame {
         
         
         // JTextField
-        message.setBounds(475, 750, 920, 75);
+        message.setBounds(475, 925, 920, 75);
         message.setFont(new Font("Consolas", Font.PLAIN, 20));
+
+    
+        System.out.println(messageWindow.getPreferredSize());
+        messagePane.setBounds(401, 0, 1250, 924);
+        messagePane.getVerticalScrollBar().setUnitIncrement(20);
+        UpdateMessages(messages);
+        messagePane.setViewportView(messageWindow);
+        JScrollBar mScrollBar = messagePane.getVerticalScrollBar();
+
+
+
         this.add(message);  
+        this.add(messagePane);
         this.revalidate();
         this.repaint();
     }
@@ -245,6 +266,34 @@ public class GUI extends JFrame {
         chatList.setPreferredSize(new Dimension(400, totalHeight));
         chatList.revalidate();
         chatList.repaint();
+    }
+
+    public void UpdateMessages(List<Message> messages){
+        System.out.println(messages);
+        int mesasgeHeight = 0;
+        messageWindow.removeAll();
+        for (int i = 0; i < messages.size(); i++){
+            JPanel message = new JPanel();
+            message.setLayout(new BorderLayout());
+            String msgType = messages.get(i).GetType();
+            if(msgType.equals("text")){
+                TextMessage m = (TextMessage)messages.get(i);
+                message.setMaximumSize(new Dimension(1500, 100));
+                message.setPreferredSize(new Dimension(1500, 100));
+                JLabel sender = new JLabel(m.GetSender());
+                sender.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                message.add(sender, BorderLayout.NORTH);
+                //message.add(new JLabel(m.GetTimestamp().toString()), BorderLayout.NORTH);
+                message.add(new JLabel(m.GetContent()), BorderLayout.CENTER);
+                message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            }else if (msgType.equals("image")){
+                mesasgeHeight = 400;
+            }
+            messageWindow.add(message);
+            messageWindow.add(Box.createVerticalStrut(15));
+        }
+        messageWindow.revalidate();
+        messageWindow.repaint();
     }
 
     public void showCreateChatroomWindow(){

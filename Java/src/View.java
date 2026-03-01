@@ -1,5 +1,6 @@
 package src;
 import java.util.List;
+import src.Model.Entities.Message;
 
 public class View {
     private GUI gui;
@@ -24,5 +25,9 @@ public class View {
 
     public void ShowHomeScreen(List<String> chatNames){
         gui.showHomeScreen(chatNames);
+    }
+
+    public void ShowChatroom(List<Message> messages){
+        gui.showChatroom(messages);
     }
 }
