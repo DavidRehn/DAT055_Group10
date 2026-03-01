@@ -135,7 +135,7 @@ public class Database implements DataStorage{
     
     @Override
     public boolean ChatUserExists(User user, String chat){
-        String sql = "SELECT * FROM Chat_members WHERE title = ? And name = ?";
+        String sql = "SELECT * FROM Chat_members WHERE chat = ? And name = ?";
         boolean temp = false;
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -207,11 +207,11 @@ public class Database implements DataStorage{
                     LocalDateTime time = ts.toLocalDateTime();
                     if(msgType.equals("text")){
                       String text = rs.getString(5);
-                      Message m = new TextMessage(sender, time, chatName, text, msgType);
+                      Message m = new TextMessage(time, chatName, text, msgType);
                       messages.add(m);
                     }else if(msgType.equals("image")){
                       String imageUrl = rs.getString(6);
-                      Message m = new ImageMessage(sender, time, chatName, imageUrl, msgType);
+                      Message m = new ImageMessage(time, chatName, imageUrl, msgType);
                       messages.add(m);
                     }
                 }

@@ -39,7 +39,6 @@ public class clientHandler implements Runnable{
 				
                 
                 Sendable request = (Sendable)receiveObject();	
-                System.out.println("test");
                 if(authenticated){
                     
                     if(request.getMsgType().equals("createChat")){
@@ -52,14 +51,23 @@ public class clientHandler implements Runnable{
 						}
                         
                     }else if(request.getMsgType().equals("getMessages")){
-                        String r = (String)request.getObject();
-                        ArrayList<Message> messages = D_CON.GetMessages(r);
+                        String chat = (String)request.getObject();
+                        if (!D_CON.ChatUserExists(user, chat)){
+                            D_CON.AddUserToChat(chat, user.getUserName());
+                            System.out.println("Added user " + user.getUserName() + " to chat " + chat);
+                        }
+                        ArrayList<Message> messages = D_CON.GetMessages(chat);
                         sendObject(new messageWrapper(messages, "MSG"));
+
                     }else if(request.getMsgType().equals("AddMsg")){
+                        System.out.println("test");
                         Message r = (Message)request.getObject();
                         if(D_CON.ChatUserExists(user,r.GetChat())){
+                            System.out.println("a");
+                            r.SetSender(user.getUserName());
                             D_CON.AddMessage(r);
-							//sendObject(new messageWrapper(D_CON.GetMessages(r), "MSG"));
+							sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
+                            System.out.println("Added message");
                         }
                     }
                     

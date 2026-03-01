@@ -12,8 +12,7 @@ public abstract class Message implements Serializable{
     private String chat;
     private String msgType;
 
-    public Message(String sender, LocalDateTime time, String chat, String type){
-        this.sender = sender;
+    public Message(LocalDateTime time, String chat, String type){
         this.timestamp = time;
         this.chat = chat;
         this.msgType = type;
@@ -42,5 +41,9 @@ public abstract class Message implements Serializable{
 
     public String GetType(){
         return msgType;
+    }
+
+    public void SetSender(String sender){
+        this.sender = sender;
     }
 };

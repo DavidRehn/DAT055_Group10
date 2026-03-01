@@ -3,8 +3,10 @@ package src;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import javax.swing.JButton;
 import src.Model.Entities.ChatUser;
+import src.Model.Entities.TextMessage;
 //import java.swing.*; 
 
 public class ButtonManagement implements ActionListener  {
@@ -67,7 +69,18 @@ public class ButtonManagement implements ActionListener  {
                     a.printStackTrace();
                 }
             }else if(command.equals("Send")){
-                
+                try {
+                    LocalDateTime time = LocalDateTime.now();
+                    String msg = gui.message.getText();
+                    if (msg.length() > 0){
+                        cModel.SendObject(new AddMessageRequest(new TextMessage(time, cModel.GetCurrentChat(), msg, "text")));
+                        System.out.println("Sent text mesage");
+                    }
+                    //Lägg till kod för bilder
+                    //
+                } catch (IOException a) {
+                    a.printStackTrace();
+                }
 
             }else if(command.equals("addImage")){
 
