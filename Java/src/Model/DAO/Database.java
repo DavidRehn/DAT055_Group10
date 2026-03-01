@@ -153,19 +153,18 @@ public class Database implements DataStorage{
     }
     @Override
     public void AddMessage(Message message){
-        String sql = "INSERT INTO Messages VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Messages VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, message.GetSender());
-            ps.setInt(2, message.GetMessageID());
-            ps.setString(3, message.GetChat());
-            ps.setString(4, message.GetType());
+            ps.setString(2, message.GetChat());
+            ps.setString(3, message.GetType());
             if(message.GetType().equals("text")){
                 TextMessage temp = (TextMessage) message;
-                ps.setString(5, temp.GetContent());
+                ps.setString(4, temp.GetContent());
             } else if(message.GetType().equals("image")){
                 ImageMessage temp = (ImageMessage) message;
-                ps.setString(5, temp.GetImgPath());
+                ps.setString(4, temp.GetImgPath());
             }
             ps.executeQuery();
         } catch (SQLException e) {
@@ -202,18 +201,17 @@ public class Database implements DataStorage{
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()) {
                     String sender = rs.getString(1);
-                    int id = rs.getInt(2);
-                    String chatName = rs.getString(3);
-                    String msgType = rs.getString(4);
-                    Timestamp ts = rs.getTimestamp(7);
+                    String chatName = rs.getString(2);
+                    String msgType = rs.getString(3);
+                    Timestamp ts = rs.getTimestamp(6);
                     LocalDateTime time = ts.toLocalDateTime();
                     if(msgType.equals("text")){
-                      String text = rs.getString(5);
-                      Message m = new TextMessage(sender, time, id, chatName, text, msgType);
+                      String text = rs.getString(4);
+                      Message m = new TextMessage(sender, time, chatName, text, msgType);
                       messages.add(m);
                     }else if(msgType.equals("image")){
-                      String imageUrl = rs.getString(5);
-                      Message m = new ImageMessage(sender, time, chatName, id, imageUrl, msgType);
+                      String imageUrl = rs.getString(4);
+                      Message m = new ImageMessage(sender, time, chatName, imageUrl, msgType);
                       messages.add(m);
                     }
                 }
