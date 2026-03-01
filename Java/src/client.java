@@ -52,7 +52,6 @@ public class client {
                     System.out.println((ArrayList<String>) (message.getObject()));
                 }else if(msgType.equals("MSG")){
                     List<Message> messages = (ArrayList<Message>)message.getObject();
-                    System.out.println(messages);
                     view.ShowChatroom(messages);
                 }
                 

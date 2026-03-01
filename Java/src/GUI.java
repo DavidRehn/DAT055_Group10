@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
@@ -278,8 +279,10 @@ public class GUI extends JFrame {
             // Panel containing the whole message
             JPanel message = new JPanel();
             message.setLayout(new BorderLayout());
-            message.setPreferredSize(new Dimension(1000, 100));
-            message.setMaximumSize(new Dimension(1000, 500));
+            message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            // Remove preferredSize and maximumSize
+            // message.setPreferredSize(new Dimension(1000, 100));
+            // message.setMaximumSize(new Dimension(1000, 500));
             message.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
             // Panel containing sender name and time
@@ -311,18 +314,23 @@ public class GUI extends JFrame {
                 TextMessage t = (TextMessage)m;
 
                 // Main text content
-                message.add(new JLabel(t.GetContent()), BorderLayout.CENTER);
+                JTextArea textArea = new JTextArea(t.GetContent());
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setEditable(false);
+                textArea.setOpaque(false);
+                message.add(textArea, BorderLayout.CENTER);
+                message.setMaximumSize(new Dimension(Integer.MAX_VALUE, textArea.getPreferredSize().height + top.getPreferredSize().height));
             }
             // For image messages
             else if (msgType.equals("image")){
                 ImageMessage t = (ImageMessage)m;
-                String fullPath = System.getProperty("user.dir") + "/Images/" + "test.jpg";
-                ImageIcon img = new ImageIcon(fullPath);
-                if (img.getIconWidth() == -1) {
-                    System.out.println("Image not found: " + t.GetImgPath());
-                }
-                Image scaledImage = img.getImage().getScaledInstance(300, -1, Image.SCALE_SMOOTH);
+                ImageIcon img = new ImageIcon(t.GetImgPath());
+                int width = 750; // max width for all images
+                int height = (int) ((double) img.getIconHeight() / img.getIconWidth() * width); // preserve aspect ratio
+                Image scaledImage = img.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
                 ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
                 JLabel l = new JLabel(scaledIcon);
                 message.add(l, BorderLayout.CENTER);
             }
