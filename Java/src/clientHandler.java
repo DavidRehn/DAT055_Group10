@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import src.Model.DAO.*;
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.GroupChat;
+import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.User;
 
@@ -78,12 +79,17 @@ public class clientHandler implements Runnable{
                         }
                     }else if(request.getMsgType().equals("AddImage")){
                         AddImageRequest r = (AddImageRequest)request;
-                        byte[] img = (byte[])r.getObject();
+                        ImageMessage m = (ImageMessage)r.getObject();
+                        m.SetSender(user.getUserName());
+                        byte[] img = (byte[])r.GetImage();
                         String fileName = r.GetFileName();
                         ByteArrayInputStream b = new ByteArrayInputStream(img);
                         BufferedImage image = ImageIO.read(b);
-                        File outputFile = new File(new File("src/ServerImages"), fileName + "." + "png");
+                        File outputFile = new File(new File("src/ServerImages/"), fileName + ".png");
                         ImageIO.write(image, "png", outputFile);
+                        System.out.println("saved image");
+                        m.SetImagePath("src/ClientImages/" + fileName + ".png");
+                        D_CON.AddMessage(m);
                         System.out.println("Added image");
                     }
                     

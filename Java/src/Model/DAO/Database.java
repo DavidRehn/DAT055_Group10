@@ -8,8 +8,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import src.Model.Entities.*;
-
+import src.Model.Entities.Chat;
+import src.Model.Entities.ChatUser;
+import src.Model.Entities.GroupChat;
+import src.Model.Entities.ImageMessage;
+import src.Model.Entities.Message;
+import src.Model.Entities.TextMessage;
+import src.Model.Entities.User;
 public class Database implements DataStorage{
     private final String URL;
     private final String USER;
@@ -218,7 +223,8 @@ public class Database implements DataStorage{
                       messages.add(m);
                     }else if(msgType.equals("image")){
                       String imageUrl = rs.getString(4);
-                      Message m = new ImageMessage(time, chatName, imageUrl, msgType);
+                      ImageMessage m = new ImageMessage(time, chatName, msgType);
+                      m.SetImagePath(imageUrl);
                       m.SetSender(sender);
                       messages.add(m);
                     }

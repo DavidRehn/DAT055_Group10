@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import src.Model.Entities.ChatUser;
+import src.Model.Entities.ImageMessage;
 import src.Model.Entities.TextMessage;
 //import java.swing.*; 
 
@@ -108,7 +109,7 @@ public class ButtonManagement implements ActionListener  {
                         ImageIO.write(img, "png", baos);    // Automaticly converts all valid image formats to png
                         byte[] imageBytes = baos.toByteArray();
                         if (img != null) {
-                            cModel.SendObject(new AddImageRequest(imageBytes, fileName));
+                            cModel.SendObject(new AddImageRequest(imageBytes, fileName, new ImageMessage(LocalDateTime.now(), cModel.GetCurrentChat(), "image")));
                             System.out.println("Sent image");
                         } else {
                             System.out.println("Not a supported image format.");
