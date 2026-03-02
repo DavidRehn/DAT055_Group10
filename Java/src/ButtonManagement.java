@@ -3,6 +3,7 @@ package src;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -101,13 +102,18 @@ public class ButtonManagement implements ActionListener  {
 
                     try {
                         BufferedImage img = ImageIO.read(selectedFile);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(img, "png", baos);    // Automaticly converts all valid image formats to png
+                        byte[] imageBytes = baos.toByteArray();
                         if (img != null) {
-                            
+                            cModel.SendObject(new AddImageRequest(imageBytes));
+                            System.out.println("Sent image");
                         } else {
                             System.out.println("Not a supported image format.");
                         }
                     } catch (IOException a) {
                         System.out.println("Error reading file.");
+                        a.printStackTrace();
                     }
 
                 }else if (result == JFileChooser.CANCEL_OPTION){
