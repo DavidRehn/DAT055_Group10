@@ -66,7 +66,7 @@ public class clientHandler implements Runnable{
                         System.out.println(r.GetChat());
                         System.out.println(D_CON.ChatUserExists(user,r.GetChat()));
                         System.out.println(this);
-                        if(!D_CON.ChatUserExists(user,r.GetChat())){
+                        if(D_CON.ChatUserExists(user,r.GetChat())){
                             System.out.println("a");
                             r.SetSender(user.getUserName());
                             D_CON.AddMessage(r);
