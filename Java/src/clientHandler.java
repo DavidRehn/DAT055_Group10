@@ -54,6 +54,7 @@ public class clientHandler implements Runnable{
 						}
                         
                     }else if(request.getMsgType().equals("getMessages")){
+
                         String chat = (String)request.getObject();
                         if (!D_CON.ChatUserExists(user, chat)){
                             D_CON.AddUserToChat(chat, user.getUserName());
@@ -87,10 +88,17 @@ public class clientHandler implements Runnable{
                         BufferedImage image = ImageIO.read(b);
                         File outputFile = new File(new File("src/ServerImages/"), fileName + ".png");
                         ImageIO.write(image, "png", outputFile);
-                        System.out.println("saved image");
                         m.SetImagePath("src/ClientImages/" + fileName + ".png");
                         D_CON.AddMessage(m);
-                        System.out.println("Added image");
+                        System.out.println("saved image");
+
+                        // Send back the image to be saved at client side (Should be done by observable)
+                        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+                        ImageIO.write(image, "png", bOut);    // Automaticly converts all valid image formats to png (should already be png if sent from client)
+                        byte[] imageBytes = bOut.toByteArray();
+                        sendObject(new messageWrapper(new imageWrapper(imageBytes, fileName), "addImg"));
+                        sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
+                        System.out.println("Sent image response");
                     }
                     
                     

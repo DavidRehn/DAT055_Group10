@@ -19,6 +19,7 @@ public class ButtonManagement implements ActionListener  {
     private String[] chatJoinButtons;
     private GUI gui;
     private clientModel cModel;
+    private AddImageRequest msgRequest = null;
 
     public ButtonManagement(GUI gui){
         this.gui = gui;
@@ -42,15 +43,6 @@ public class ButtonManagement implements ActionListener  {
                     } catch (Exception a) {
                         a.printStackTrace();
                     }
-                    /* 
-                    gui.removeLogInScreen();
-                    ArrayList<String> a = new ArrayList<>();
-                    a.add("chat1");
-                    a.add("chat2");
-                    a.add("chat3");
-                    a.add("chat4");
-                    gui.showHomeScreen(a);
-                    gui.showChatroom();*/
                 }
             }else if (command.equals("Create Chat")) {
                 gui.showCreateChatroomWindow();
@@ -83,8 +75,12 @@ public class ButtonManagement implements ActionListener  {
                         gui.message.setText("");
                         System.out.println("Sent text mesage");
                     }
-                    //Lägg till kod för bilder
-                    //
+                    if (msgRequest != null){
+                        msgRequest.UpdateTimestamp();
+                        cModel.SendObject(msgRequest);
+                        msgRequest = null;
+                        System.out.println("Sent image mesage");
+                    }
                 } catch (IOException a) {
                     a.printStackTrace();
                 }
@@ -105,12 +101,11 @@ public class ButtonManagement implements ActionListener  {
                     System.out.println(fileName);
                     try {
                         BufferedImage img = ImageIO.read(selectedFile);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(img, "png", baos);    // Automaticly converts all valid image formats to png
-                        byte[] imageBytes = baos.toByteArray();
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        ImageIO.write(img, "png", b);    // Automaticly converts all valid image formats to png
+                        byte[] imageBytes = b.toByteArray();
                         if (img != null) {
-                            cModel.SendObject(new AddImageRequest(imageBytes, fileName, new ImageMessage(LocalDateTime.now(), cModel.GetCurrentChat(), "image")));
-                            System.out.println("Sent image");
+                            msgRequest = new AddImageRequest(imageBytes, fileName, new ImageMessage(LocalDateTime.now(), cModel.GetCurrentChat(), "image"), cModel.GetCurrentChat());
                         } else {
                             System.out.println("Not a supported image format.");
                         }

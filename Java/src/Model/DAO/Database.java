@@ -164,7 +164,6 @@ public class Database implements DataStorage{
             ps.setString(2, message.GetChat());
             ps.setString(3, message.GetType());
             ps.setTimestamp(5, message.GetTime());
-            System.out.println("sdfgh");
             if(message.GetType().equals("text")){
                 TextMessage temp = (TextMessage) message;
                 ps.setString(4, temp.GetContent());
@@ -173,7 +172,7 @@ public class Database implements DataStorage{
                 ps.setString(4, temp.GetImgPath());
             }
             
-            System.out.println("a");
+            
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

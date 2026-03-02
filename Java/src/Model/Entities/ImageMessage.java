@@ -17,4 +17,5 @@ public class ImageMessage extends Message {
     public void SetImagePath(String path){
         this.imgPath = path;
     }
+
 }

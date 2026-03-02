@@ -52,5 +52,7 @@ public abstract class Message implements Serializable{
         this.sender = sender;
     }
 
-
+    public void UpdateTimestamp(){
+        timestamp = LocalDateTime.now();
+    }
 };

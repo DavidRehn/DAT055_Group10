@@ -1,9 +1,13 @@
 package src;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import src.Model.Entities.Message;
 
 public class client {
@@ -43,22 +47,30 @@ public class client {
             
             try {
                 message = (Sendable) cModel.receiveObject();
-                System.out.println("received message");
                 String msgType = message.getMsgType();
+
                 if(msgType.equals("UI")){
                     view.UpdateChatList((ArrayList<String>) (message.getObject()));
                     System.out.println("Received chats");
+
                 }else if(msgType.equals("MSG")){
-                    
                     ArrayList<Message> messages = (ArrayList<Message>)message.getObject();
+                    System.out.println(messages);
                     if(firstMsgUpdate){
                         view.ShowChatroom(messages);
                         firstMsgUpdate = false;
                     }
                     view.UpdateMessages(messages);
                     System.out.println("Received Messages");
+                }else if(msgType.equals("addImg")){
+                    imageWrapper imgWrapper = (imageWrapper)message.getObject();
+                    byte[] imageBytes = imgWrapper.GetImage();
+                    ByteArrayInputStream b = new ByteArrayInputStream(imageBytes);
+                    BufferedImage image = ImageIO.read(b);
+                    String filename = imgWrapper.GetFilename();
+                    File outputFile = new File(new File("src/ClientImages/"), filename + ".png");
+                    ImageIO.write(image, "png", outputFile);
                 }
-                
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
