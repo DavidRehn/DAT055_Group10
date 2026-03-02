@@ -32,7 +32,6 @@ public class client {
             message = (Sendable) cModel.receiveObject();
             view.RemoveLoginScreen();
             view.ShowHomeScreen((ArrayList<String>) (message.getObject()));
-            System.out.println((ArrayList<String>) (message.getObject()));
             System.out.println("Logged in");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -52,13 +51,12 @@ public class client {
                 }else if(msgType.equals("MSG")){
                     
                     ArrayList<Message> messages = (ArrayList<Message>)message.getObject();
-                    System.out.println(messages);
                     if(firstMsgUpdate){
                         view.ShowChatroom(messages);
                         firstMsgUpdate = false;
                     }
-                    
                     view.UpdateMessages(messages);
+                    System.out.println("Received Messages");
                 }
                 
             } catch (IOException | ClassNotFoundException e) {

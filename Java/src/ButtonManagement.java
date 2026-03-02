@@ -2,9 +2,15 @@ package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.TextMessage;
 //import java.swing.*; 
@@ -74,6 +80,7 @@ public class ButtonManagement implements ActionListener  {
                     String msg = gui.message.getText();
                     if (msg.length() > 0){
                         cModel.SendObject(new AddMessageRequest(new TextMessage(time, cModel.GetCurrentChat(), msg, "text")));
+                        gui.message.setText("");
                         System.out.println("Sent text mesage");
                     }
                     //Lägg till kod för bilder
@@ -83,7 +90,29 @@ public class ButtonManagement implements ActionListener  {
                 }
 
             }else if(command.equals("addImage")){
+                System.out.println("add image");
+                JFileChooser fileChooser = new JFileChooser();
+                int result = fileChooser.showOpenDialog(gui);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    Path workingPath = Paths.get(System.getProperty("user.dir"));
+                    Path selectedPath = selectedFile.toPath();
+                    Path relativePath = workingPath.relativize(selectedPath);
 
+                    try {
+                        BufferedImage img = ImageIO.read(selectedFile);
+                        if (img != null) {
+                            
+                        } else {
+                            System.out.println("Not a supported image format.");
+                        }
+                    } catch (IOException a) {
+                        System.out.println("Error reading file.");
+                    }
+
+                }else if (result == JFileChooser.CANCEL_OPTION){
+                    System.out.println("Canceled file upload");
+                }
             }else{
                 System.out.println("Invalid command");
             }

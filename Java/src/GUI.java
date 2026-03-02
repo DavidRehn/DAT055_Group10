@@ -184,8 +184,7 @@ public class GUI extends JFrame {
         message.setFont(new Font("Consolas", Font.PLAIN, 20));
 
     
-        System.out.println(messageWindow.getPreferredSize());
-        messagePane.setBounds(401, 0, 1250, 924);
+        messagePane.setBounds(401, 0, 1200, 924);
         messagePane.getVerticalScrollBar().setUnitIncrement(20);
         UpdateMessages(messages);
         messagePane.setViewportView(messageWindow);
@@ -305,7 +304,7 @@ public class GUI extends JFrame {
 
             // Time of creation
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"); 
-            JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter));
+            JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter) + "        ");
             timeLabel.setHorizontalAlignment(JLabel.RIGHT);
             top.add(timeLabel);
 

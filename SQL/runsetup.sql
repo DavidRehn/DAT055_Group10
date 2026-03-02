@@ -27,11 +27,11 @@ insert into Chats values('a');
 insert into Chats values('b');
 insert into Chats values('c');
 insert into Messages values ('A', 'a', 'text', 'Hello');
-insert into Messages(sender, chat, msg_type, content) values ('B', 'a', 'image','src/Images/test.jpg');
+insert into Messages(sender, chat, msg_type, content) values ('B', 'a', 'image','src/ClientImages/test.jpg');
 insert into Messages values ('A', 'a', 'text', 'Hello');
 insert into Messages values ('A', 'a', 'text', 'Hello');
 insert into Messages values ('A', 'a', 'text', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-insert into Messages(sender, chat, msg_type, content) values ('B', 'a', 'image','src/Images/test.jpg');
+insert into Messages(sender, chat, msg_type, content) values ('B', 'a', 'image','src/ClientImages/test.jpg');
 insert into Chat_Members values ('a', 'A');
 insert into Chat_Members values ('b', 'B');
 

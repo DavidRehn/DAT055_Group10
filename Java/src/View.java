@@ -35,6 +35,5 @@ public class View {
         gui.UpdateMessages(messages);
         gui.revalidate();
         gui.repaint();
-        System.out.println(messages.size());
     }
 }
