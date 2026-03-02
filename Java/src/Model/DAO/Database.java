@@ -135,7 +135,7 @@ public class Database implements DataStorage{
     
     @Override
     public boolean ChatUserExists(User user, String chat){
-        String sql = "SELECT EXISTS(SELECT FROM Chat_Members WHERE user = ? AND chat = ?)";
+        String sql = "SELECT EXISTS(SELECT FROM Chat_Members WHERE name = ? AND chat = ?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, user.getUserName());
