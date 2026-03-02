@@ -57,12 +57,16 @@ public class ButtonManagement implements ActionListener  {
                 }
                 System.out.println("Set focus to " + name);
             }else if(command.equals("cancelChatCreation")){
+                gui.chatroomName.setText("");
                 gui.removeCreateChatroomWindow();
             }else if (command.equals("confirmChatCreation")){
                 try {
-                    cModel.SendObject(new ChatCreateMsg(gui.GetChatTitle()));
-                    System.out.println("Added chat " + gui.GetChatTitle());
-                    gui.removeCreateChatroomWindow();
+                    if (gui.GetChatTitle().length() > 0){
+                        cModel.SendObject(new ChatCreateMsg(gui.GetChatTitle()));
+                        System.out.println("Added chat " + gui.GetChatTitle());
+                        gui.chatroomName.setText("");
+                        gui.removeCreateChatroomWindow();
+                    }
                 } catch (Exception a) {
                     a.printStackTrace();
                 }

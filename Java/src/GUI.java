@@ -20,6 +20,8 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.TextMessage;
@@ -36,6 +38,7 @@ public class GUI extends JFrame {
     private ButtonManagement buttonListener;
     private JScrollPane chatScroll; 
     private JScrollPane messagePane;
+    public Popup createChat;
     
 
     public GUI (clientModel cModel) {
@@ -200,8 +203,10 @@ public class GUI extends JFrame {
 
     public void createCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
                                              // Might need to add something to make it so you cant click anywhere else in the JFrame outside the panel when this window is showing
+        
+        
         //JPanel
-        createChatroomPanel.setBounds(600, 150, 500, 200);
+        createChatroomPanel.setPreferredSize(new Dimension(500, 200));
         createChatroomPanel.setBorder(BorderFactory.createLineBorder(Color.black));
         createChatroomPanel.setLayout(new BorderLayout());
 
@@ -236,11 +241,8 @@ public class GUI extends JFrame {
         confirmButton.setActionCommand("confirmChatCreation");
         confirmButton.addActionListener(buttonListener);
 
-        //createChatroomPanel.add(createChatroomLabel, BorderLayout.NORTH); //JLabel
-        createChatroomPanel.add(chatroomName, BorderLayout.CENTER);        //JLabel
-        //createChatroomPanel.add(chatroomNameLabel, BorderLayout.NORTH);   //JLabel
-        //createChatroomPanel.add(cancelButton, BorderLayout.SOUTH);        //JButton
-        //createChatroomPanel.add(confirmButton, BorderLayout.SOUTH);
+        createChatroomPanel.add(chatroomName, BorderLayout.CENTER);     
+
 
         top.add(createChatroomLabel);
         createChatroomPanel.add(chatroomNameLabel, BorderLayout.CENTER);
@@ -342,13 +344,18 @@ public class GUI extends JFrame {
     }
 
     public void showCreateChatroomWindow(){
-        this.add(createChatroomPanel);
+        if (createChat != null){
+            createChat.hide();  // To remove the old one if button is pressed twice
+        }
+        PopupFactory pf = new PopupFactory();
+        createChat = pf.getPopup(this, createChatroomPanel, 550, 400);
+        createChat.show();
         this.revalidate();
         this.repaint();
     }
 
     public void removeCreateChatroomWindow() { //Should be called whenever 'cancel' or 'confirm' is pressed in a CreateChatroomWindow"
-        this.remove(createChatroomPanel);
+        createChat.hide();
         this.revalidate();
         this.repaint();
     }
