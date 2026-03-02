@@ -1,9 +1,11 @@
 package src;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import src.Model.DAO.*;
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.GroupChat;
@@ -74,6 +76,15 @@ public class clientHandler implements Runnable{
 							sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
                             System.out.println("Added message");
                         }
+                    }else if(request.getMsgType().equals("AddImage")){
+                        AddImageRequest r = (AddImageRequest)request;
+                        byte[] img = (byte[])r.getObject();
+                        String fileName = r.GetFileName();
+                        ByteArrayInputStream b = new ByteArrayInputStream(img);
+                        BufferedImage image = ImageIO.read(b);
+                        File outputFile = new File(new File("src/ServerImages"), fileName + "." + "png");
+                        ImageIO.write(image, "png", outputFile);
+                        System.out.println("Added image");
                     }
                     
                     

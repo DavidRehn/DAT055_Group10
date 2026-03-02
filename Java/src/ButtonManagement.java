@@ -6,8 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -96,17 +94,21 @@ public class ButtonManagement implements ActionListener  {
                 int result = fileChooser.showOpenDialog(gui);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    Path workingPath = Paths.get(System.getProperty("user.dir"));
-                    Path selectedPath = selectedFile.toPath();
-                    Path relativePath = workingPath.relativize(selectedPath);
+                    String fileName = selectedFile.getName();
 
+                    // Removes the format from the filename (because all valid files are converted to png)
+                    int dotIndex = fileName.lastIndexOf('.');
+                    if (dotIndex > 0) {
+                        fileName = fileName.substring(0, dotIndex);
+                    }
+                    System.out.println(fileName);
                     try {
                         BufferedImage img = ImageIO.read(selectedFile);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ImageIO.write(img, "png", baos);    // Automaticly converts all valid image formats to png
                         byte[] imageBytes = baos.toByteArray();
                         if (img != null) {
-                            cModel.SendObject(new AddImageRequest(imageBytes));
+                            cModel.SendObject(new AddImageRequest(imageBytes, fileName));
                             System.out.println("Sent image");
                         } else {
                             System.out.println("Not a supported image format.");
