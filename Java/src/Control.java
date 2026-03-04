@@ -15,13 +15,13 @@ import src.Model.Entities.ImageMessage;
 import src.Model.Entities.TextMessage;
 //import java.swing.*; 
 
-public class ButtonManagement implements ActionListener  {
+public class Control implements ActionListener  {
     private String[] chatJoinButtons;
     private GUI gui;
     private clientModel cModel;
     private AddImageRequest msgRequest = null;
 
-    public ButtonManagement(GUI gui){
+    public Control(GUI gui){
         this.gui = gui;
         this.cModel = gui.GetClientModel();
     }

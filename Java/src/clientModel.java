@@ -8,7 +8,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-public class clientModel {
+public class clientModel extends Observable {
     private String currentChat;
     private SocketChannel channel;
     private ArrayList<String> chats;

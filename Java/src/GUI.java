@@ -35,7 +35,7 @@ public class GUI extends JFrame {
                    sendButton, chatButton, cancelButton, confirmButton;;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
-    private ButtonManagement buttonListener;
+    private Control buttonListener;
     private JScrollPane chatScroll; 
     private JScrollPane messagePane;
     public Popup createChat;
@@ -67,7 +67,7 @@ public class GUI extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         this.cModel = cModel;
-        this.buttonListener = new ButtonManagement(this);
+        this.buttonListener = new Control(this);
     }
     
     public void showLogInScreen() { //Should be called when initializing the program
