@@ -32,7 +32,7 @@ public class GUI extends JFrame {
     public JTextField username, message, chatroomName;
     public JPasswordField password;
     public JButton loginButton, createChatButton, addImgButton, 
-                   sendButton, chatButton, cancelButton, confirmButton;;
+                   sendButton, chatButton, cancelButton, confirmButton;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
     private Control buttonListener;
@@ -126,7 +126,7 @@ public class GUI extends JFrame {
     
 
     public void showHomeScreen(List<String> chatNames) { // Should be called after successfully logging in and after removing log in screen
-        //remakes "a" type, into one that ButtonManagement konstruktor can handle.
+        //remakes "a" type, into one that Control constructor can handle.
         chatList = new JPanel();
         
         createChatButton = new JButton("Create Chat");

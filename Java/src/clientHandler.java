@@ -5,6 +5,7 @@ import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.imageio.ImageIO;
 import src.Model.DAO.*;
 import src.Model.Entities.ChatUser;
@@ -14,12 +15,17 @@ import src.Model.Entities.Message;
 import src.Model.Entities.User;
 
 public class clientHandler implements Runnable{
+    private static final CopyOnWriteArrayList<clientHandler> CONNECTED_HANDLERS = new CopyOnWriteArrayList<>();
+    private static final String SERVER_IMAGE_DIR = "Java/src/ServerImages/";
+    private static final String CLIENT_IMAGE_DIR = "Java/src/ClientImages/";
+
     final private SocketChannel clientSocket;
     final private Selector se;
 	final private SelectionKey sk;
 
 	private boolean authenticated;
     private User user;
+    private String currentChatFocus;
 	final private DataStorage D_CON;
 	
     public clientHandler(Selector s, SocketChannel c, DataStorage d) throws IOException{
@@ -28,114 +34,125 @@ public class clientHandler implements Runnable{
         se=s;
 		D_CON = d;
 		authenticated = false;
+        currentChatFocus = null;
         sk = clientSocket.register(s, 0);
         sk.attach(this);
         sk.interestOps(SelectionKey.OP_READ);
+        CONNECTED_HANDLERS.add(this);
         s.wakeup();
     }
     
     @Override
     public void run(){
-		
         try {
-            try {
-				
-                
-                Sendable request = (Sendable)receiveObject();	
-                if(authenticated){
+            Sendable request = (Sendable) receiveObject();
+            System.out.println("Received request: " + request.getMsgType());
+            if (authenticated) {
                     
-                    if(request.getMsgType().equals("createChat")){
-                        ChatCreateMsg r = (ChatCreateMsg) request;
-                        if(!D_CON.ChatExists((String)r.getObject())){
-                            D_CON.AddChat(new GroupChat((String)r.getObject()));
-                            D_CON.AddUserToChat((String)r.getObject(), user.getUserName());
-                            System.out.println("Created chat: " + (String)r.getObject());                            
-                        	sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
-						}
-                        
-                    }else if(request.getMsgType().equals("getMessages")){
-
-                        String chat = (String)request.getObject();
-                        if (!D_CON.ChatUserExists(user, chat)){
-                            D_CON.AddUserToChat(chat, user.getUserName());
-                            System.out.println("Added user " + user.getUserName() + " to chat " + chat);
+                if (request.getMsgType().equals("createChat")) {
+                    ChatCreateMsg r = (ChatCreateMsg) request;
+                    if (!D_CON.ChatExists((String) r.getObject())) {
+                        try {
+                            D_CON.AddChat(new GroupChat((String) r.getObject()));
+                            D_CON.AddUserToChat((String) r.getObject(), user.getUserName());
+                            broadcastChatsToUser();
+                        } catch (RuntimeException ex) {
+                            sendObject(new messageWrapper("Could not create chat.", "AUTH_FAIL"));
                         }
-                        ArrayList<Message> messages = D_CON.GetMessages(chat);
-                        sendObject(new messageWrapper(messages, "MSG"));
-
-                    }else if(request.getMsgType().equals("AddMsg")){
-                        System.out.println(user);
-                        
-                        Message r = (Message)request.getObject();
-                        System.out.println(r.GetChat());
-                        System.out.println(D_CON.ChatUserExists(user,r.GetChat()));
-                        System.out.println(this);
-                        if(D_CON.ChatUserExists(user,r.GetChat())){
-                            System.out.println("a");
-                            r.SetSender(user.getUserName());
-                            D_CON.AddMessage(r);
-                            System.out.println(D_CON.GetMessages(r.GetChat()));
-							sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
-                            System.out.println("Added message");
-                        }
-                    }else if(request.getMsgType().equals("AddImage")){
-                        AddImageRequest r = (AddImageRequest)request;
-                        ImageMessage m = (ImageMessage)r.getObject();
-                        m.SetSender(user.getUserName());
-                        byte[] img = (byte[])r.GetImage();
-                        String fileName = r.GetFileName();
-                        ByteArrayInputStream b = new ByteArrayInputStream(img);
-                        BufferedImage image = ImageIO.read(b);
-                        File outputFile = new File(new File("src/ServerImages/"), fileName + ".png");
-                        ImageIO.write(image, "png", outputFile);
-                        m.SetImagePath("src/ClientImages/" + fileName + ".png");
-                        D_CON.AddMessage(m);
-                        System.out.println("saved image");
-
-                        // Send back the image to be saved at client side (Should be done by observable)
-                        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-                        ImageIO.write(image, "png", bOut);    // Automaticly converts all valid image formats to png (should already be png if sent from client)
-                        byte[] imageBytes = bOut.toByteArray();
-                        sendObject(new messageWrapper(new imageWrapper(imageBytes, fileName), "addImg"));
-                        sendObject(new messageWrapper(D_CON.GetMessages(r.GetChat()), "MSG"));
-                        System.out.println("Sent image response");
+                    } else {
+                        sendObject(new messageWrapper("Chat already exists", "AUTH_FAIL"));
                     }
-                    
-                    
-                }else{
-                    
-                    
-                    
-                    if(request.getMsgType().equals("login")){
-                        LoginRequest r = (LoginRequest) request;
-                        if(D_CON.UserExists((User)r.getObject())){
-                            authenticated=true;
-                            user = (ChatUser) r.getObject();
-                            System.out.println("User logged in: " + r.GetUsername());
-                            sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
-                        }
                         
-                    
-                    }else{
-                        System.out.println("Invalid user request");
+                } else if (request.getMsgType().equals("getMessages")) {
+
+                    String chat = (String) request.getObject();
+                    currentChatFocus = chat;
+                    if (!D_CON.ChatUserExists(user, chat)) {
+                        D_CON.AddUserToChat(chat, user.getUserName());
+                        System.out.println("Added user " + user.getUserName() + " to chat " + chat);
                     }
-                    System.out.println(request.toString());              
+                    ArrayList<Message> messages = D_CON.GetMessages(chat);
+                    sendObject(new messageWrapper(messages, "MSG"));
+
+                } else if (request.getMsgType().equals("AddMsg")) {
+                    System.out.println(user);
+                        
+                    Message r = (Message) request.getObject();
+                    System.out.println(r.GetChat());
+                    System.out.println(D_CON.ChatUserExists(user, r.GetChat()));
+                    System.out.println(this);
+                    if (D_CON.ChatUserExists(user, r.GetChat())) {
+                        System.out.println("a");
+                        r.SetSender(user.getUserName());
+                        D_CON.AddMessage(r);
+                        broadcastMessages(r.GetChat());
+                        System.out.println("Added message");
+                    }
+                } else if (request.getMsgType().equals("AddImage")) {
+                    AddImageRequest r = (AddImageRequest) request;
+                    ImageMessage m = (ImageMessage) r.getObject();
+                    m.SetSender(user.getUserName());
+                    byte[] img = (byte[]) r.GetImage();
+                    String fileName = r.GetFileName();
+                    ByteArrayInputStream b = new ByteArrayInputStream(img);
+                    BufferedImage image = ImageIO.read(b);
+                    File outputDir = new File(SERVER_IMAGE_DIR);
+                    if (!outputDir.exists()) {
+                        outputDir.mkdirs();
+                    }
+                    File outputFile = new File(outputDir, fileName + ".png");
+                    ImageIO.write(image, "png", outputFile);
+                    m.SetImagePath(CLIENT_IMAGE_DIR + fileName + ".png");
+                    D_CON.AddMessage(m);
+                    System.out.println("saved image");
+
+                    // Send back the image to be saved at client side (Should be done by observable)
+                    ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+                    ImageIO.write(image, "png", bOut);    // Automaticly converts all valid image formats to png (should already be png if sent from client)
+                    byte[] imageBytes = bOut.toByteArray();
+                    broadcastImage(r.GetChat(), imageBytes, fileName);
+                    broadcastMessages(r.GetChat());
+                    System.out.println("Sent image response");
                 }
+                    
+                    
+            } else {
+                if (request.getMsgType().equals("login")) {
+                    LoginRequest r = (LoginRequest) request;
+                    if (D_CON.UserExists((User) r.getObject())) {
+                        authenticated = true;
+                        user = (ChatUser) r.getObject();
+                        System.out.println("User logged in: " + r.GetUsername());
+                        sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
+                    } else {
+                        sendObject(new messageWrapper("Invalid username or password", "AUTH_FAIL"));
+                    }
 
-                
-                
-                
+                } else {
+                    System.out.println("Invalid user request");
+                }
+                System.out.println(request.toString());
+            }
+
+        } catch (IOException e) {
+            sk.cancel();
+            CONNECTED_HANDLERS.remove(this);
+            System.out.println("Connection terminated");
+        } catch (Exception e) {
+            System.out.println("Error while handling request");
+            e.printStackTrace();
+            try {
+                sendObject(new messageWrapper("Server error: " + e.getClass().getSimpleName(), "AUTH_FAIL"));
+            } catch (IOException ignored) {
+            }
+        } finally {
+            if (!sk.isValid()) {
+                CONNECTED_HANDLERS.remove(this);
+            }
+            if (sk.isValid()) {
                 sk.interestOps(SelectionKey.OP_READ);
                 se.wakeup();
-            }catch (IOException e) {
-                sk.cancel();
-                System.out.println("Connection terminated");
             }
-            
-            
-        } catch (Exception e) {
-            
-            System.out.println("Server could not print object: "+e.toString());
         }
     }
     
@@ -156,6 +173,48 @@ public class clientHandler implements Runnable{
         ByteBuffer msgBuffer = ByteBuffer.wrap(byteArray);
         while (msgBuffer.hasRemaining()) {
             clientSocket.write(msgBuffer);
+        }
+    }
+
+    private void broadcastMessages(String chat) {
+        ArrayList<Message> messages = D_CON.GetMessages(chat);
+        for (clientHandler handler : CONNECTED_HANDLERS) {
+            if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
+                try {
+                    handler.sendObject(new messageWrapper(messages, "MSG"));
+                } catch (IOException e) {
+                    handler.sk.cancel();
+                    CONNECTED_HANDLERS.remove(handler);
+                }
+            }
+        }
+    }
+
+    private void broadcastChatsToUser() {
+        ArrayList<String> chats = D_CON.GetAllChats();
+        for (clientHandler handler : CONNECTED_HANDLERS) {
+            if (handler.authenticated) {
+                try {
+                    handler.sendObject(new messageWrapper(chats, "UI"));
+                } catch (IOException e) {
+                    handler.sk.cancel();
+                    CONNECTED_HANDLERS.remove(handler);
+                }
+            }
+        }
+    }
+
+    private void broadcastImage(String chat, byte[] imageBytes, String fileName) {
+        messageWrapper wrapper = new messageWrapper(new imageWrapper(imageBytes, fileName), "addImg");
+        for (clientHandler handler : CONNECTED_HANDLERS) {
+            if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
+                try {
+                    handler.sendObject(wrapper);
+                } catch (IOException e) {
+                    handler.sk.cancel();
+                    CONNECTED_HANDLERS.remove(handler);
+                }
+            }
         }
     }
     

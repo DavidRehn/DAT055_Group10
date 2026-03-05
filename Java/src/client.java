@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import src.Model.Entities.Message;
 
 public class client {
+    private static final String CLIENT_IMAGE_DIR = "Java/src/ClientImages/";
+
     public static void main(String[] args) {
         SocketChannel socketChannel = null;
 
@@ -32,15 +34,6 @@ public class client {
         a.add("Chat2");
         view.UpdateChatList(a);*/
         Sendable message = null;
-        try {
-            message = (Sendable) cModel.receiveObject();
-            view.RemoveLoginScreen();
-            view.ShowHomeScreen((ArrayList<String>) (message.getObject()));
-            System.out.println("Logged in");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        boolean firstMsgUpdate = true;
         while (true){
             
             message = null;
@@ -50,25 +43,34 @@ public class client {
                 String msgType = message.getMsgType();
 
                 if(msgType.equals("UI")){
-                    view.UpdateChatList((ArrayList<String>) (message.getObject()));
-                    System.out.println("Received chats");
+                    ArrayList<String> chats = (ArrayList<String>) (message.getObject());
+                    System.out.println("Received chats: " + chats);
+                    if (!cModel.IsLoggedIn()) {
+                        cModel.HandleLoginSuccess(chats);
+                        System.out.println("Authenticated");
+                    } else {
+                        cModel.HandleChatListUpdate(chats);
+                        System.out.println("Received chats");
+                    }
 
                 }else if(msgType.equals("MSG")){
                     ArrayList<Message> messages = (ArrayList<Message>)message.getObject();
                     System.out.println(messages);
-                    if(firstMsgUpdate){
-                        view.ShowChatroom(messages);
-                        firstMsgUpdate = false;
-                    }
-                    view.UpdateMessages(messages);
+                    cModel.HandleMessagesUpdate(messages);
                     System.out.println("Received Messages");
+                }else if(msgType.equals("AUTH_FAIL")){
+                    cModel.HandleAuthFailed((String) message.getObject());
                 }else if(msgType.equals("addImg")){
                     imageWrapper imgWrapper = (imageWrapper)message.getObject();
                     byte[] imageBytes = imgWrapper.GetImage();
                     ByteArrayInputStream b = new ByteArrayInputStream(imageBytes);
                     BufferedImage image = ImageIO.read(b);
                     String filename = imgWrapper.GetFilename();
-                    File outputFile = new File(new File("src/ClientImages/"), filename + ".png");
+                    File outputDir = new File(CLIENT_IMAGE_DIR);
+                    if (!outputDir.exists()) {
+                        outputDir.mkdirs();
+                    }
+                    File outputFile = new File(outputDir, filename + ".png");
                     ImageIO.write(image, "png", outputFile);
                 }
             } catch (IOException | ClassNotFoundException e) {

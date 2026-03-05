@@ -7,16 +7,26 @@ import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.List;
+import src.Model.Entities.Message;
 
 public class clientModel extends Observable {
     private String currentChat;
     private SocketChannel channel;
     private ArrayList<String> chats;
+    private ArrayList<Message> messages;
+    private String uiEvent;
+    private boolean loggedIn;
+    private String authError;
 
     public clientModel(SocketChannel channel){
         currentChat = null;
         this.channel = channel;
         chats = new ArrayList<>();
+        messages = new ArrayList<>();
+        uiEvent = "";
+        loggedIn = false;
+        authError = "";
     }
 
     public void AddChat(String name){
@@ -37,6 +47,52 @@ public class clientModel extends Observable {
 
     public String GetCurrentChat(){
         return currentChat;
+    }
+
+    public List<Message> GetMessages() {
+        return messages;
+    }
+
+    public String GetUIEvent() {
+        return uiEvent;
+    }
+
+    public boolean IsLoggedIn() {
+        return loggedIn;
+    }
+
+    public String GetAuthError() {
+        return authError;
+    }
+
+    public void HandleLoginSuccess(List<String> chatNames) {
+        chats = new ArrayList<>(chatNames);
+        loggedIn = true;
+        authError = "";
+        uiEvent = "LOGIN_SUCCESS";
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void HandleChatListUpdate(List<String> chatNames) {
+        chats = new ArrayList<>(chatNames);
+        uiEvent = "CHAT_LIST_UPDATED";
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void HandleMessagesUpdate(List<Message> newMessages) {
+        messages = new ArrayList<>(newMessages);
+        uiEvent = "MESSAGES_UPDATED";
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void HandleAuthFailed(String errorMessage) {
+        authError = errorMessage;
+        uiEvent = "AUTH_FAILED";
+        setChanged();
+        notifyObservers(this);
     }
 
     public void SendObject(Object obj) throws IOException{

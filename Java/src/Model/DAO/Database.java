@@ -15,42 +15,46 @@ import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.TextMessage;
 import src.Model.Entities.User;
-public class Database implements DataStorage{
+
+public class Database implements DataStorage {
     private final String URL;
     private final String USER;
     private final String PASSWORD;
-    private Connection conn;
 
     public Database(){
         this.URL = "jdbc:postgresql://localhost:5432/postgres";
         this.USER = "postgres";
         this.PASSWORD = "postgres";
-        try {
-            this.conn = DriverManager.getConnection(this.URL, this.USER, this.PASSWORD);
+        try (Connection ignored = openConnection()) {
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private Connection openConnection() throws SQLException {
+        return DriverManager.getConnection(this.URL, this.USER, this.PASSWORD);
+    }
+
     @Override
     public void AddChat(Chat chat){
         String sql = "INSERT INTO Chats VALUES (?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, chat.getChatTitle());
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to add chat: " + chat.getChatTitle(), e);
         }
     }
 
     public boolean ChatExists(String title){
         String sql = "SELECT EXISTS(SELECT FROM Chats WHERE title = ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, title);
-            try(ResultSet rs = ps.executeQuery()){
-                if(rs.next())
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
                     return rs.getBoolean(1);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,12 +66,10 @@ public class Database implements DataStorage{
     public Chat GetChat(String title){
         String sql = "SELECT * FROM Chats WHERE title = ?";
         Chat temp = null;
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, title);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
-                    String resultTitle = rs.getString("title");
                     temp = new GroupChat(title);
                 }
             }
@@ -76,28 +78,27 @@ public class Database implements DataStorage{
         }
         return temp;
     }
-    
+
     @Override
     public void AddUser(User user){
         String sql = "INSERT INTO Users VALUES (?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUserName());
             ps.setString(2, user.GetLogin());
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to add user: " + user.getUserName(), e);
         }
     }
 
     public User GetUser(String name){
         String sql = "SELECT * FROM Users WHERE name = ?";
         User temp = null;
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
-                    String resultName = rs.getString("name");
                     String login = rs.getString("login");
                     temp = new ChatUser(name, login);
                 }
@@ -111,12 +112,13 @@ public class Database implements DataStorage{
     @Override
     public void AddUserToChat(String chatTitle, String username){
         String sql = "INSERT INTO Chat_Members VALUES (?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, chatTitle);
             ps.setString(2, username);
-            ps.executeQuery();
+            ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to add user " + username + " to chat " + chatTitle, e);
         }
     }
 
@@ -124,25 +126,25 @@ public class Database implements DataStorage{
     public int RemoveUser(String username){
         String sql = "DELETE FROM Users WHERE name = ?";
         int rowsAffected = 0;
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,username);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
             rowsAffected = ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
         }
         return rowsAffected;
     }
 
     @Override
     public boolean UserExists(User user){
-        return !(GetUser(user.getUserName()) == null);
+        User found = GetUser(user.getUserName());
+        return found != null && found.GetLogin().equals(user.GetLogin());
     }
-    
+
     @Override
     public boolean ChatUserExists(User user, String chat){
         String sql = "SELECT EXISTS(SELECT FROM Chat_Members WHERE name = ? AND chat = ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUserName());
             ps.setString(2, chat);
             try(ResultSet rs = ps.executeQuery()){
@@ -155,11 +157,11 @@ public class Database implements DataStorage{
         }
         return false;
     }
+
     @Override
     public void AddMessage(Message message){
         String sql = "INSERT INTO Messages VALUES (?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, message.GetSender());
             ps.setString(2, message.GetChat());
             ps.setString(3, message.GetType());
@@ -171,33 +173,26 @@ public class Database implements DataStorage{
                 ImageMessage temp = (ImageMessage) message;
                 ps.setString(4, temp.GetImgPath());
             }
-            
-            
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Failed to add message");
         }
     }
-    
 
     @Override
     public ArrayList<String> GetAllChats(){
         String sql = "SELECT * FROM Chats";
         ArrayList<String> chats = new ArrayList<>();
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()) {
-                      String title = rs.getString("title");
-                      chats.add(title);
-                    }
+                    String title = rs.getString("title");
+                    chats.add(title);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-            
         return chats;
     }
 
@@ -205,8 +200,7 @@ public class Database implements DataStorage{
     public ArrayList<Message> GetMessages(String chat){
         String sql = "SELECT * FROM Messages WHERE chat = ? ORDER BY message_date ASC";
         ArrayList<Message> messages = new ArrayList<>();
-        try {
-            PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection conn = openConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, chat);
             try(ResultSet rs = ps.executeQuery()){
                 while (rs.next()) {
@@ -216,20 +210,18 @@ public class Database implements DataStorage{
                     Timestamp ts = rs.getTimestamp(5);
                     LocalDateTime time = ts.toLocalDateTime();
                     if(msgType.equals("text")){
-                      String text = rs.getString(4);
-                      Message m = new TextMessage(time, chatName, text, msgType);
-                      m.SetSender(sender);
-                      messages.add(m);
+                        String text = rs.getString(4);
+                        Message m = new TextMessage(time, chatName, text, msgType);
+                        m.SetSender(sender);
+                        messages.add(m);
                     }else if(msgType.equals("image")){
-                      String imageUrl = rs.getString(4);
-                      ImageMessage m = new ImageMessage(time, chatName, msgType);
-                      m.SetImagePath(imageUrl);
-                      m.SetSender(sender);
-                      messages.add(m);
+                        String imageUrl = rs.getString(4);
+                        ImageMessage m = new ImageMessage(time, chatName, msgType);
+                        m.SetImagePath(imageUrl);
+                        m.SetSender(sender);
+                        messages.add(m);
                     }
                 }
-            }catch(SQLException a){
-                a.printStackTrace();
             }
         } catch (SQLException e) {
             e.printStackTrace();
