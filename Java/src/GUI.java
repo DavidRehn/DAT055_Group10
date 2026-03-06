@@ -22,6 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
+
 import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.TextMessage;
@@ -31,21 +32,21 @@ public class GUI extends JFrame {
     private JPanel loginPanel, chatList, createChatroomPanel, messageWindow;
     public JTextField username, message, chatroomName;
     public JPasswordField password;
-    public JButton loginButton, createChatButton, addImgButton, 
-                   sendButton, chatButton, cancelButton, confirmButton;
+    public JButton loginButton, createChatButton, addImgButton,
+            sendButton, chatButton, cancelButton, confirmButton;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
     private Control buttonListener;
-    private JScrollPane chatScroll; 
+    private JScrollPane chatScroll;
     private JScrollPane messagePane;
     public Popup createChat;
-    
 
-    public GUI (clientModel cModel) {
+
+    public GUI(clientModel cModel) {
         //Methods: showLogInScreen
         loginPanel = new JPanel();
         username = new JTextField();
-        
+
         //Method: showHomeScreen(List<String> a)
         chatList = new JPanel();
         message = new JTextField();
@@ -55,11 +56,11 @@ public class GUI extends JFrame {
         chatScroll = new JScrollPane(chatList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         messagePane = new JScrollPane(messageWindow, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         messageWindow.setLayout(new BoxLayout(messageWindow, BoxLayout.Y_AXIS));
-        
+
         //Methods: showCreateChatroomWindow()
         createChatroomPanel = new JPanel();
         chatroomName = new JTextField();
-        
+
         this.setTitle("Chat program");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -69,24 +70,24 @@ public class GUI extends JFrame {
         this.cModel = cModel;
         this.buttonListener = new Control(this);
     }
-    
+
     public void showLogInScreen() { //Should be called when initializing the program
         // Create instances of the attributes used in this method
         loginPanel = new JPanel();
         loginButton = new JButton("Login");
-         username = new JTextField();
+        username = new JTextField();
         password = new JPasswordField();
         usernameLabel = new JLabel("Username: ");
         passwordLabel = new JLabel("Password: ");
-        
+
 
         loginPanel.setBounds(375, 200, 750, 250);
         loginButton.setBounds(1200, 300, 200, 100);
         loginButton.setFont(new Font("Consolas", Font.PLAIN, 35));
         loginButton.setFocusable(false);
         loginButton.addActionListener(buttonListener);
-    
-        
+
+
         username.setPreferredSize(new Dimension(750, 125));
         username.setFont(new Font("Consolas", Font.PLAIN, 35));
 
@@ -99,10 +100,10 @@ public class GUI extends JFrame {
         usernameLabel.setFont(new Font("Consolas", Font.BOLD, 17));
         passwordLabel.setFont(new Font("Consolas", Font.BOLD, 17));
 
-        
+
         loginPanel.add(username);
         loginPanel.add(password);
-        
+
         this.add(loginPanel);
         this.add(loginButton);
         this.add(usernameLabel);
@@ -112,9 +113,8 @@ public class GUI extends JFrame {
         this.repaint();
 
     }
-    
 
-    
+
     public void removeLogInScreen() { // Should be called when successfully logging in from the log in screen
         this.remove(loginPanel);
         this.remove(loginButton);
@@ -123,12 +123,12 @@ public class GUI extends JFrame {
         this.remove(usernameLabel);
         this.remove(passwordLabel);
     }
-    
+
 
     public void showHomeScreen(List<String> chatNames) { // Should be called after successfully logging in and after removing log in screen
         //remakes "a" type, into one that Control constructor can handle.
         chatList = new JPanel();
-        
+
         createChatButton = new JButton("Create Chat");
         message = new JTextField();
         addImgButton = new JButton("+");
@@ -142,26 +142,24 @@ public class GUI extends JFrame {
         chatScroll.setBounds(0, 100, 400, 900);
         chatList.setLayout(null);
         chatScroll.setViewportView(chatList);
-        
+
         // "Add Chat" creation.
         createChatButton.setBounds(0, 0, 400, 100);
         createChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
         createChatButton.setFocusable(false);
         createChatButton.addActionListener(buttonListener);
-        
+
         //where the join chat buttons from "a" are stored.
         UpdateChats(chatNames);
 
         chatScroll.setViewportView(chatList);
         JScrollBar bar = chatScroll.getVerticalScrollBar();
-        
 
-        
-        
+
         createCreateChatroomWindow();
         this.add(chatScroll);
         this.add(createChatButton);
-        
+
         this.revalidate();
         this.repaint();
     }
@@ -180,13 +178,13 @@ public class GUI extends JFrame {
         sendButton.setFocusable(false);
         sendButton.addActionListener(buttonListener);
         this.add(sendButton);
-        
-        
+
+
         // JTextField
         message.setBounds(475, 925, 920, 75);
         message.setFont(new Font("Consolas", Font.PLAIN, 20));
 
-    
+
         messagePane.setBounds(401, 0, 1200, 924);
         messagePane.getVerticalScrollBar().setUnitIncrement(20);
         UpdateMessages(messages);
@@ -194,17 +192,16 @@ public class GUI extends JFrame {
         JScrollBar mScrollBar = messagePane.getVerticalScrollBar();
 
 
-        
-        this.add(message);  
+        this.add(message);
         this.add(messagePane);
         this.revalidate();
         this.repaint();
     }
 
     public void createCreateChatroomWindow() { // Should be called whenever the 'Create Chat' button is pressed"
-                                             // Might need to add something to make it so you cant click anywhere else in the JFrame outside the panel when this window is showing
-        
-        
+        // Might need to add something to make it so you cant click anywhere else in the JFrame outside the panel when this window is showing
+
+
         //JPanel
         createChatroomPanel.setPreferredSize(new Dimension(500, 200));
         createChatroomPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -212,18 +209,18 @@ public class GUI extends JFrame {
 
         JPanel top = new JPanel();
         JPanel bottom = new JPanel();
-        
+
         //JLabel
         createChatroomLabel = new JLabel("Create chatroom");
         createChatroomLabel.setBounds(150, 10, 300, 40);
         createChatroomLabel.setFont(new Font("Consolas", Font.PLAIN, 25));
-        
-        
+
+
         //JLabel
         chatroomNameLabel = new JLabel("Name: ");
         chatroomNameLabel.setBounds(25, 80, 75, 20);
         chatroomNameLabel.setFont(new Font("Consolas", Font.BOLD, 15));
-        
+
         //JTextField
         chatroomName.setBounds(100, 70, 300, 50);
         chatroomName.setFont(new Font("Consolas", Font.PLAIN, 15));
@@ -234,14 +231,14 @@ public class GUI extends JFrame {
         cancelButton.setActionCommand("cancelChatCreation");
         cancelButton.addActionListener(buttonListener);
 
-        
+
         //JButton
         confirmButton = new JButton("Confirm");
         confirmButton.setBounds(400, 150, 75, 20);
         confirmButton.setActionCommand("confirmChatCreation");
         confirmButton.addActionListener(buttonListener);
 
-        createChatroomPanel.add(chatroomName, BorderLayout.CENTER);     
+        createChatroomPanel.add(chatroomName, BorderLayout.CENTER);
 
 
         top.add(createChatroomLabel);
@@ -250,22 +247,22 @@ public class GUI extends JFrame {
         bottom.add(confirmButton);
         createChatroomPanel.add(top, BorderLayout.NORTH);
         createChatroomPanel.add(bottom, BorderLayout.SOUTH);
-        
+
     }
 
-    public void UpdateChats(List<String> chats){
+    public void UpdateChats(List<String> chats) {
         chatList.removeAll();
-        for (int i = 0; i < chats.size(); i++){
+        for (int i = 0; i < chats.size(); i++) {
             chatButton = new JButton(chats.get(i));
             //The visuals of the chat buttons
             chatButton.setFont(new Font("Consolas", Font.PLAIN, 20));
-            chatButton.setBounds(0, i*75+10, 400, 75);
+            chatButton.setBounds(0, i * 75 + 10, 400, 75);
             chatButton.setFocusable(false);
             chatButton.setActionCommand("setChatFocus");
             chatButton.setName(chats.get(i));
-            
+
             chatButton.addActionListener(buttonListener);
-            
+
             chatList.add(chatButton);
         }
         int totalHeight = chats.size() * 75 + 10;
@@ -274,9 +271,9 @@ public class GUI extends JFrame {
         chatList.repaint();
     }
 
-    public void UpdateMessages(List<Message> messages){
+    public void UpdateMessages(List<Message> messages) {
         messageWindow.removeAll();  // Clear before adding again
-        for (int i = 0; i < messages.size(); i++){
+        for (int i = 0; i < messages.size(); i++) {
             // Panel containing the whole message
             JPanel message = new JPanel();
             message.setLayout(new BorderLayout());
@@ -293,11 +290,11 @@ public class GUI extends JFrame {
             top.setMinimumSize(new Dimension(messageWindow.getWidth(), 25));
             top.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
 
-            String msgType = messages.get(i).GetType(); 
+            String msgType = messages.get(i).GetType();
             Message m = messages.get(i);
 
             // Sender name
-            JLabel sender = new JLabel(m.GetSender());  
+            JLabel sender = new JLabel(m.GetSender());
 
             // Panel containing sender name and time
             top.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -305,14 +302,14 @@ public class GUI extends JFrame {
             top.add(Box.createHorizontalGlue());
 
             // Time of creation
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"); 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm");
             JLabel timeLabel = new JLabel(m.GetTimestamp().format(formatter) + "        ");
             timeLabel.setHorizontalAlignment(JLabel.RIGHT);
             top.add(timeLabel);
 
             // For text messages
-            if(msgType.equals("text")){
-                TextMessage t = (TextMessage)m;
+            if (msgType.equals("text")) {
+                TextMessage t = (TextMessage) m;
 
                 // Main text content
                 JTextArea textArea = new JTextArea(t.GetContent());
@@ -324,8 +321,8 @@ public class GUI extends JFrame {
                 message.setMaximumSize(new Dimension(Integer.MAX_VALUE, textArea.getPreferredSize().height + top.getPreferredSize().height));
             }
             // For image messages
-            else if (msgType.equals("image")){
-                ImageMessage t = (ImageMessage)m;
+            else if (msgType.equals("image")) {
+                ImageMessage t = (ImageMessage) m;
                 ImageIcon img = new ImageIcon(t.GetImgPath());
                 int width = 750; // max width for all images
                 int height = (int) ((double) img.getIconHeight() / img.getIconWidth() * width); // preserve aspect ratio
@@ -343,8 +340,8 @@ public class GUI extends JFrame {
         messageWindow.repaint();
     }
 
-    public void showCreateChatroomWindow(){
-        if (createChat != null){
+    public void showCreateChatroomWindow() {
+        if (createChat != null) {
             createChat.hide();  // To remove the old one if button is pressed twice
         }
         PopupFactory pf = new PopupFactory();
@@ -360,19 +357,19 @@ public class GUI extends JFrame {
         this.repaint();
     }
 
-    public clientModel GetClientModel(){
+    public clientModel GetClientModel() {
         return cModel;
     }
 
-    public String GetPassword(){
+    public String GetPassword() {
         return new String(password.getPassword());
     }
 
-    public String GetUsername(){
+    public String GetUsername() {
         return username.getText();
     }
 
-    public String GetChatTitle(){
+    public String GetChatTitle() {
         return chatroomName.getText();
     }
 }

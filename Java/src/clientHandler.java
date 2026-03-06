@@ -7,6 +7,7 @@ import java.nio.channels.*;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.imageio.ImageIO;
+
 import src.Model.DAO.*;
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.GroupChat;
@@ -14,26 +15,26 @@ import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.User;
 
-public class clientHandler implements Runnable{
+public class clientHandler implements Runnable {
     private static final CopyOnWriteArrayList<clientHandler> CONNECTED_HANDLERS = new CopyOnWriteArrayList<>();
     private static final String SERVER_IMAGE_DIR = "Java/src/ServerImages/";
     private static final String CLIENT_IMAGE_DIR = "Java/src/ClientImages/";
 
     final private SocketChannel clientSocket;
     final private Selector se;
-	final private SelectionKey sk;
+    final private SelectionKey sk;
 
-	private boolean authenticated;
+    private boolean authenticated;
     private User user;
     private String currentChatFocus;
-	final private DataStorage D_CON;
-	
-    public clientHandler(Selector s, SocketChannel c, DataStorage d) throws IOException{
+    final private DataStorage D_CON;
+
+    public clientHandler(Selector s, SocketChannel c, DataStorage d) throws IOException {
         clientSocket = c;
         c.configureBlocking(false);
-        se=s;
-		D_CON = d;
-		authenticated = false;
+        se = s;
+        D_CON = d;
+        authenticated = false;
         currentChatFocus = null;
         sk = clientSocket.register(s, 0);
         sk.attach(this);
@@ -41,14 +42,14 @@ public class clientHandler implements Runnable{
         CONNECTED_HANDLERS.add(this);
         s.wakeup();
     }
-    
+
     @Override
-    public void run(){
+    public void run() {
         try {
             Sendable request = (Sendable) receiveObject();
             System.out.println("Received request: " + request.getMsgType());
             if (authenticated) {
-                    
+
                 if (request.getMsgType().equals("createChat")) {
                     ChatCreateMsg r = (ChatCreateMsg) request;
                     if (!D_CON.ChatExists((String) r.getObject())) {
@@ -62,7 +63,7 @@ public class clientHandler implements Runnable{
                     } else {
                         sendObject(new messageWrapper("Chat already exists", "AUTH_FAIL"));
                     }
-                        
+
                 } else if (request.getMsgType().equals("getMessages")) {
 
                     String chat = (String) request.getObject();
@@ -76,7 +77,7 @@ public class clientHandler implements Runnable{
 
                 } else if (request.getMsgType().equals("AddMsg")) {
                     System.out.println(user);
-                        
+
                     Message r = (Message) request.getObject();
                     System.out.println(r.GetChat());
                     System.out.println(D_CON.ChatUserExists(user, r.GetChat()));
@@ -114,8 +115,8 @@ public class clientHandler implements Runnable{
                     broadcastMessages(r.GetChat());
                     System.out.println("Sent image response");
                 }
-                    
-                    
+
+
             } else {
                 if (request.getMsgType().equals("login")) {
                     LoginRequest r = (LoginRequest) request;
@@ -155,12 +156,12 @@ public class clientHandler implements Runnable{
             }
         }
     }
-    
-    
-    private void sendObject(Object obj) throws IOException{
+
+
+    private void sendObject(Object obj) throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
-        objOut.writeObject(obj);
+            objOut.writeObject(obj);
         }
 
         byte[] byteArray = byteStream.toByteArray();
@@ -217,24 +218,24 @@ public class clientHandler implements Runnable{
             }
         }
     }
-    
+
     private Object receiveObject() throws IOException, ClassNotFoundException {
         // Get length of object
         ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
         while (lengthBuffer.hasRemaining()) {
-            if(clientSocket.read(lengthBuffer)==-1){
-			throw new EOFException("Connection closed early");
-			}
+            if (clientSocket.read(lengthBuffer) == -1) {
+                throw new EOFException("Connection closed early");
+            }
         }
         lengthBuffer.flip();
         int length = lengthBuffer.getInt();
 
         // Get object
         ByteBuffer dataBuffer = ByteBuffer.allocate(length);
-        while (dataBuffer.hasRemaining()){
-            if(clientSocket.read(dataBuffer)==-1){
-			throw new EOFException("Data transfere incomplete");
-			}
+        while (dataBuffer.hasRemaining()) {
+            if (clientSocket.read(dataBuffer) == -1) {
+                throw new EOFException("Data transfere incomplete");
+            }
         }
         dataBuffer.flip();
         byte[] bytes = new byte[length];
@@ -242,9 +243,7 @@ public class clientHandler implements Runnable{
         try (ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return objIn.readObject();
         }
-        }
-    
-    
-    
-    
+    }
+
+
 }

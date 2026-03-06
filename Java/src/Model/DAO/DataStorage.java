@@ -1,5 +1,7 @@
 package src.Model.DAO;
+
 import java.util.ArrayList;
+
 import src.Model.Entities.*;
 
 public interface DataStorage {

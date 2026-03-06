@@ -1,4 +1,5 @@
 package src;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
+
 import src.Model.Entities.Message;
 
 public class clientModel extends Observable {
@@ -19,7 +21,7 @@ public class clientModel extends Observable {
     private boolean loggedIn;
     private String authError;
 
-    public clientModel(SocketChannel channel){
+    public clientModel(SocketChannel channel) {
         currentChat = null;
         this.channel = channel;
         chats = new ArrayList<>();
@@ -29,23 +31,23 @@ public class clientModel extends Observable {
         authError = "";
     }
 
-    public void AddChat(String name){
+    public void AddChat(String name) {
         chats.add(name);
     }
 
-    public void RemoveChat(String name){
+    public void RemoveChat(String name) {
         chats.remove(name);
     }
 
-    public ArrayList<String> GetChats(){
+    public ArrayList<String> GetChats() {
         return chats;
     }
 
-    public void SetCurrentChat(String chatName){
-        this.currentChat =chatName;
+    public void SetCurrentChat(String chatName) {
+        this.currentChat = chatName;
     }
 
-    public String GetCurrentChat(){
+    public String GetCurrentChat() {
         return currentChat;
     }
 
@@ -95,10 +97,10 @@ public class clientModel extends Observable {
         notifyObservers(this);
     }
 
-    public void SendObject(Object obj) throws IOException{
+    public void SendObject(Object obj) throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
-        objOut.writeObject(obj);
+            objOut.writeObject(obj);
         }
 
         byte[] byteArray = byteStream.toByteArray();
@@ -107,11 +109,11 @@ public class clientModel extends Observable {
         lenBuffer.flip();
         while (lenBuffer.hasRemaining()) {
             channel.write(lenBuffer);
-	    }
+        }
         ByteBuffer msgBuffer = ByteBuffer.wrap(byteArray);
         while (msgBuffer.hasRemaining()) {
-	        channel.write(msgBuffer);
-	    }
+            channel.write(msgBuffer);
+        }
     }
 
     public Object receiveObject() throws IOException, ClassNotFoundException {
@@ -125,7 +127,7 @@ public class clientModel extends Observable {
 
         // Get object
         ByteBuffer dataBuffer = ByteBuffer.allocate(length);
-        while (dataBuffer.hasRemaining()){
+        while (dataBuffer.hasRemaining()) {
             channel.read(dataBuffer);
         }
         dataBuffer.flip();

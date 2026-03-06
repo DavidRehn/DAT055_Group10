@@ -7,8 +7,8 @@ public class AddImageRequest extends Sendable {
     private byte[] image;
     private String imageName;
     private String chat;
-    
-    public AddImageRequest(byte[] image, String name, ImageMessage message, String chat){
+
+    public AddImageRequest(byte[] image, String name, ImageMessage message, String chat) {
         super("AddImage");
         this.image = image;
         this.imageName = name;
@@ -17,23 +17,23 @@ public class AddImageRequest extends Sendable {
     }
 
     @Override
-    public Object getObject(){
+    public Object getObject() {
         return message;
     }
 
-    public byte[] GetImage(){
+    public byte[] GetImage() {
         return image;
     }
 
-    public String GetFileName(){
+    public String GetFileName() {
         return imageName;
     }
 
-    public void UpdateTimestamp(){
+    public void UpdateTimestamp() {
         message.UpdateTimestamp();
     }
 
-    public String GetChat(){
+    public String GetChat() {
         return chat;
     }
 }

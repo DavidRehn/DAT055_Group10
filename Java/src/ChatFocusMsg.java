@@ -1,15 +1,15 @@
 package src;
 
-public class ChatFocusMsg extends Sendable{
+public class ChatFocusMsg extends Sendable {
     private String chatTitle;
 
-    public ChatFocusMsg(String title){
+    public ChatFocusMsg(String title) {
         super("chatFocus");
         this.chatTitle = title;
     }
 
     @Override
-    public Object getObject(){
+    public Object getObject() {
         return chatTitle;
     }
 }

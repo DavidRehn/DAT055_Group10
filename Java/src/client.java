@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
+
 import src.Model.Entities.Message;
 
 public class client {
@@ -20,10 +21,10 @@ public class client {
             socketChannel = SocketChannel.open();
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 3333));
             System.out.println("Connected to server");
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Could not connect to server");
         }
-        
+
 
         clientModel cModel = new clientModel(socketChannel);
         View view = new View(cModel);
@@ -34,15 +35,15 @@ public class client {
         a.add("Chat2");
         view.UpdateChatList(a);*/
         Sendable message = null;
-        while (true){
-            
+        while (true) {
+
             message = null;
-            
+
             try {
                 message = (Sendable) cModel.receiveObject();
                 String msgType = message.getMsgType();
 
-                if(msgType.equals("UI")){
+                if (msgType.equals("UI")) {
                     ArrayList<String> chats = (ArrayList<String>) (message.getObject());
                     System.out.println("Received chats: " + chats);
                     if (!cModel.IsLoggedIn()) {
@@ -53,15 +54,15 @@ public class client {
                         System.out.println("Received chats");
                     }
 
-                }else if(msgType.equals("MSG")){
-                    ArrayList<Message> messages = (ArrayList<Message>)message.getObject();
+                } else if (msgType.equals("MSG")) {
+                    ArrayList<Message> messages = (ArrayList<Message>) message.getObject();
                     System.out.println(messages);
                     cModel.HandleMessagesUpdate(messages);
                     System.out.println("Received Messages");
-                }else if(msgType.equals("AUTH_FAIL")){
+                } else if (msgType.equals("AUTH_FAIL")) {
                     cModel.HandleAuthFailed((String) message.getObject());
-                }else if(msgType.equals("addImg")){
-                    imageWrapper imgWrapper = (imageWrapper)message.getObject();
+                } else if (msgType.equals("addImg")) {
+                    imageWrapper imgWrapper = (imageWrapper) message.getObject();
                     byte[] imageBytes = imgWrapper.GetImage();
                     ByteArrayInputStream b = new ByteArrayInputStream(imageBytes);
                     BufferedImage image = ImageIO.read(b);
@@ -77,13 +78,10 @@ public class client {
                 e.printStackTrace();
             }
 
-            
+
         }
-        
+
     }
 
 
-
-    
-    
 }

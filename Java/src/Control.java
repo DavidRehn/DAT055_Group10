@@ -10,33 +10,34 @@ import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+
 import src.Model.Entities.ChatUser;
 import src.Model.Entities.ImageMessage;
 import src.Model.Entities.TextMessage;
 //import java.swing.*; 
 
-public class Control implements ActionListener  {
+public class Control implements ActionListener {
     private String[] chatJoinButtons;
     private GUI gui;
     private clientModel cModel;
     private AddImageRequest msgRequest = null;
 
-    public Control(GUI gui){
+    public Control(GUI gui) {
         this.gui = gui;
         this.cModel = gui.GetClientModel();
     }
-    
-    @Override
-    public void actionPerformed(ActionEvent e){   
-        Object obj = e.getSource();
-        
 
-        if(obj instanceof JButton ){
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
+
+
+        if (obj instanceof JButton) {
             String command = e.getActionCommand();
-            if (command.equals("Login")){
+            if (command.equals("Login")) {
                 String username = gui.GetUsername();
                 String password = gui.GetPassword();
-                if(username.length() > 0 && password.length() > 0){
+                if (username.length() > 0 && password.length() > 0) {
                     try {
                         cModel.SendObject(new LoginRequest(new ChatUser(username, password)));
                         System.out.println("Sent login request");
@@ -44,10 +45,10 @@ public class Control implements ActionListener  {
                         a.printStackTrace();
                     }
                 }
-            }else if (command.equals("Create Chat")) {
+            } else if (command.equals("Create Chat")) {
                 gui.showCreateChatroomWindow();
-            }else if(command.equals("setChatFocus")){
-                JButton b = (JButton)obj;
+            } else if (command.equals("setChatFocus")) {
+                JButton b = (JButton) obj;
                 String name = b.getName();
                 cModel.SetCurrentChat(name);
                 try {
@@ -56,12 +57,12 @@ public class Control implements ActionListener  {
                     System.out.println("Could not send message");
                 }
                 System.out.println("Set focus to " + name);
-            }else if(command.equals("cancelChatCreation")){
+            } else if (command.equals("cancelChatCreation")) {
                 gui.chatroomName.setText("");
                 gui.removeCreateChatroomWindow();
-            }else if (command.equals("confirmChatCreation")){
+            } else if (command.equals("confirmChatCreation")) {
                 try {
-                    if (gui.GetChatTitle().length() > 0){
+                    if (gui.GetChatTitle().length() > 0) {
                         cModel.SendObject(new ChatCreateMsg(gui.GetChatTitle()));
                         System.out.println("Added chat " + gui.GetChatTitle());
                         gui.chatroomName.setText("");
@@ -70,16 +71,16 @@ public class Control implements ActionListener  {
                 } catch (Exception a) {
                     a.printStackTrace();
                 }
-            }else if(command.equals("Send")){
+            } else if (command.equals("Send")) {
                 try {
                     LocalDateTime time = LocalDateTime.now();
                     String msg = gui.message.getText();
-                    if (msg.length() > 0){
+                    if (msg.length() > 0) {
                         cModel.SendObject(new AddMessageRequest(new TextMessage(time, cModel.GetCurrentChat(), msg, "text")));
                         gui.message.setText("");
                         System.out.println("Sent text mesage");
                     }
-                    if (msgRequest != null){
+                    if (msgRequest != null) {
                         msgRequest.UpdateTimestamp();
                         cModel.SendObject(msgRequest);
                         msgRequest = null;
@@ -89,7 +90,7 @@ public class Control implements ActionListener  {
                     a.printStackTrace();
                 }
 
-            }else if(command.equals("addImage")){
+            } else if (command.equals("addImage")) {
                 System.out.println("add image");
                 JFileChooser fileChooser = new JFileChooser();
                 int result = fileChooser.showOpenDialog(gui);
@@ -118,13 +119,13 @@ public class Control implements ActionListener  {
                         a.printStackTrace();
                     }
 
-                }else if (result == JFileChooser.CANCEL_OPTION){
+                } else if (result == JFileChooser.CANCEL_OPTION) {
                     System.out.println("Canceled file upload");
                 }
-            }else{
+            } else {
                 System.out.println("Invalid command");
             }
         }
-        
+
     }
 }
