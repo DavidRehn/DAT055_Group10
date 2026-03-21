@@ -48,7 +48,9 @@ public class clientHandler implements Runnable {
         try {
             Sendable request = (Sendable) receiveObject();
             System.out.println("Received request: " + request.getMsgType());
-            if (authenticated) {
+            ((RunnableRequest)request).runRequest(D_CON,this);
+            
+            /*if (authenticated) {
 
                 if (request.getMsgType().equals("createChat")) {
                     ChatCreateMsg r = (ChatCreateMsg) request;
@@ -134,7 +136,7 @@ public class clientHandler implements Runnable {
                 }
                 System.out.println(request.toString());
             }
-
+        */
         } catch (IOException e) {
             sk.cancel();
             CONNECTED_HANDLERS.remove(this);
