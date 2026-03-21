@@ -244,6 +244,30 @@ public class clientHandler implements Runnable {
             return objIn.readObject();
         }
     }
+public User getUser(){
+    return this.user;
+}
+public Boolean getAuthenticated(){
+    return this.authenticated;
+}
+public String getFocus(){
+    return this.currentChatFocus;
+}
+public String getServerImageDir(){
+    return SERVER_IMAGE_DIR;
+}
+public String getClientImageDir(){
+    return CLIENT_IMAGE_DIR;
+}
+public void setUser(User u){
+    this.user=u;
+}
+public void setAuthenticated(Boolean a){
+    this.authenticated=a;
+}
+public void setFocus(String c){
+    this.currentChatFocus;
+}
 
 
 }
