@@ -1,6 +1,6 @@
 package src;
 
-public class GetMessagesRequest extends Sendable {
+public class GetMessagesRequest extends Sendable implements RunnableRequest{
     private String chat;
 
     public GetMessagesRequest(String chat) {
@@ -11,5 +11,18 @@ public class GetMessagesRequest extends Sendable {
     @Override
     public Object getObject() {
         return chat;
+    }
+    @Override
+    public void runRequest(DataStorage D_CON, HandlerInterface h){
+        try {
+        String chat = (String) this.getObject();
+        h.setFocus = chat;
+        if (!D_CON.ChatUserExists(h.getUser(), chat)) {
+            D_CON.AddUserToChat(chat, h.getUser().getUserName());
+            System.out.println("Added user " + h.getUser().getUserName() + " to chat " + chat);
+            }
+        ArrayList<Message> messages = D_CON.GetMessages(chat);
+        h.sendObject(new messageWrapper(messages, "MSG"));
+        } catch (IOException e) {}
     }
 }
