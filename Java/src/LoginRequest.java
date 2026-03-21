@@ -3,7 +3,7 @@ package src;
 import java.io.Serializable;
 import src.Model.Entities.ChatUser;
 
-public class LoginRequest extends Sendable implements Serializable {
+public class LoginRequest extends Sendable implements RunnableRequest {
     ChatUser user;
 
     public LoginRequest(ChatUser u) {
@@ -29,5 +29,17 @@ public class LoginRequest extends Sendable implements Serializable {
 
     public ChatUser GetUser() {
         return user;
+    }
+    public void runRequest(DataStorage D_CON, HandlerInterface h){
+        try {
+            if (D_CON.UserExists((User) this.getObject())) {
+                h.setAuthenticated(true);
+                h.setUser((ChatUser) this.getObject());
+                System.out.println("User logged in: " + this.GetUsername());
+                h.sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
+                } else {
+                    h.sendObject(new messageWrapper("Invalid username or password", "AUTH_FAIL"));
+                    }
+        } catch (IOException e) {}
     }
 }
