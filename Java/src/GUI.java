@@ -22,7 +22,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
-
+import src.ButtonListeners.AddImageListener;
+import src.ButtonListeners.CancelChatCreationListener;
+import src.ButtonListeners.ChatFocusListener;
+import src.ButtonListeners.ConfirmChatCreationListener;
+import src.ButtonListeners.CreateChatListener;
+import src.ButtonListeners.LoginListener;
+import src.ButtonListeners.SendMessageListener;
 import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.TextMessage;
@@ -30,16 +36,15 @@ import src.Model.Entities.TextMessage;
 
 public class GUI extends JFrame {
     private JPanel loginPanel, chatList, createChatroomPanel, messageWindow;
-    public JTextField username, message, chatroomName;
-    public JPasswordField password;
-    public JButton loginButton, createChatButton, addImgButton,
+    private JTextField username, message, chatroomName;
+    private JPasswordField password;
+    private JButton loginButton, createChatButton, addImgButton,
             sendButton, chatButton, cancelButton, confirmButton;
     private JLabel usernameLabel, passwordLabel, chatroomNameLabel, createChatroomLabel;
     private clientModel cModel;
-    private Control buttonListener;
     private JScrollPane chatScroll;
     private JScrollPane messagePane;
-    public Popup createChat;
+    private Popup createChat;
 
 
     public GUI(clientModel cModel) {
@@ -68,7 +73,6 @@ public class GUI extends JFrame {
         this.setVisible(true);
         this.setResizable(false);
         this.cModel = cModel;
-        this.buttonListener = new Control(this);
     }
 
     public void showLogInScreen() { //Should be called when initializing the program
@@ -85,7 +89,7 @@ public class GUI extends JFrame {
         loginButton.setBounds(1200, 300, 200, 100);
         loginButton.setFont(new Font("Consolas", Font.PLAIN, 35));
         loginButton.setFocusable(false);
-        loginButton.addActionListener(buttonListener);
+        loginButton.addActionListener(new LoginListener(this));
 
 
         username.setPreferredSize(new Dimension(750, 125));
@@ -147,7 +151,7 @@ public class GUI extends JFrame {
         createChatButton.setBounds(0, 0, 400, 100);
         createChatButton.setFont(new Font("Consolas", Font.BOLD, 35));
         createChatButton.setFocusable(false);
-        createChatButton.addActionListener(buttonListener);
+        createChatButton.addActionListener(new CreateChatListener(this));
 
         //where the join chat buttons from "a" are stored.
         UpdateChats(chatNames);
@@ -170,13 +174,13 @@ public class GUI extends JFrame {
         addImgButton.setFont(new Font("Consolas", Font.BOLD, 35));
         addImgButton.setFocusable(false);
         addImgButton.setActionCommand("addImage");
-        addImgButton.addActionListener(buttonListener);
+        addImgButton.addActionListener(new AddImageListener(this));
         this.add(addImgButton);
 
         sendButton.setBounds(1395, 925, 75, 75);
         sendButton.setFont(new Font("Consolas", Font.BOLD, 15));
         sendButton.setFocusable(false);
-        sendButton.addActionListener(buttonListener);
+        sendButton.addActionListener(new SendMessageListener(this));
         this.add(sendButton);
 
 
@@ -229,14 +233,14 @@ public class GUI extends JFrame {
         cancelButton = new JButton("Cancel");
         cancelButton.setBounds(25, 150, 75, 20);
         cancelButton.setActionCommand("cancelChatCreation");
-        cancelButton.addActionListener(buttonListener);
+        cancelButton.addActionListener(new CancelChatCreationListener(this));
 
 
         //JButton
         confirmButton = new JButton("Confirm");
         confirmButton.setBounds(400, 150, 75, 20);
         confirmButton.setActionCommand("confirmChatCreation");
-        confirmButton.addActionListener(buttonListener);
+        confirmButton.addActionListener(new ConfirmChatCreationListener(this));
 
         createChatroomPanel.add(chatroomName, BorderLayout.CENTER);
 
@@ -261,7 +265,7 @@ public class GUI extends JFrame {
             chatButton.setActionCommand("setChatFocus");
             chatButton.setName(chats.get(i));
 
-            chatButton.addActionListener(buttonListener);
+            chatButton.addActionListener(new ChatFocusListener(this.GetClientModel()));
 
             chatList.add(chatButton);
         }
@@ -353,6 +357,7 @@ public class GUI extends JFrame {
 
     public void removeCreateChatroomWindow() { //Should be called whenever 'cancel' or 'confirm' is pressed in a CreateChatroomWindow"
         createChat.hide();
+        chatroomName.setText("");
         this.revalidate();
         this.repaint();
     }
@@ -371,5 +376,13 @@ public class GUI extends JFrame {
 
     public String GetChatTitle() {
         return chatroomName.getText();
+    }
+
+    public String getMessage(){
+        return message.getText();
+    }
+
+    public void resetMessage(){
+        message.setText("");
     }
 }

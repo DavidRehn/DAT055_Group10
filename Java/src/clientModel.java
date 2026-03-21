@@ -1,25 +1,31 @@
 package src;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
+import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 
 public class clientModel extends Observable {
     private String currentChat;
-    private SocketChannel channel;
+    private final SocketChannel channel;
     private ArrayList<String> chats;
     private ArrayList<Message> messages;
     private String uiEvent;
     private boolean loggedIn;
     private String authError;
+    private AddImageRequest chosenImage;
 
     public clientModel(SocketChannel channel) {
         currentChat = null;
@@ -29,6 +35,7 @@ public class clientModel extends Observable {
         uiEvent = "";
         loggedIn = false;
         authError = "";
+        chosenImage = null;
     }
 
     public void AddChat(String name) {
@@ -65,6 +72,14 @@ public class clientModel extends Observable {
 
     public String GetAuthError() {
         return authError;
+    }
+
+    public AddImageRequest getChosenImage(){
+        return chosenImage;
+    }
+
+    public void setChosenImage(AddImageRequest img){
+        this.chosenImage = img;
     }
 
     public void HandleLoginSuccess(List<String> chatNames) {
@@ -135,6 +150,37 @@ public class clientModel extends Observable {
         dataBuffer.get(bytes);
         try (ObjectInputStream objIn = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             return objIn.readObject();
+        }
+    }
+
+    public void saveImage(GUI gui){
+        clientModel cModel = gui.GetClientModel();
+        System.out.println("add image");
+        JFileChooser fileChooser = new JFileChooser();
+        int result = fileChooser.showOpenDialog(gui);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String fileName = selectedFile.getName();
+            // Removes the format from the filename (because all valid files are converted to png)
+            int dotIndex = fileName.lastIndexOf('.');
+            if (dotIndex > 0) {
+                fileName = fileName.substring(0, dotIndex);
+            }
+            try {
+                BufferedImage img = ImageIO.read(selectedFile);
+                ByteArrayOutputStream b = new ByteArrayOutputStream();
+                ImageIO.write(img, "png", b);    // Automaticly converts all valid image formats to png
+                byte[] imageBytes = b.toByteArray();
+                if (img != null) {
+                    cModel.setChosenImage(new AddImageRequest(imageBytes, fileName, new ImageMessage(LocalDateTime.now(), cModel.GetCurrentChat(), "image"), cModel.GetCurrentChat()));
+                } else {
+                    System.out.println("Not a supported image format.");
+                }
+            } catch (IOException a) {
+                System.out.println("Error reading file.");
+            }
+        } else if (result == JFileChooser.CANCEL_OPTION) {
+            System.out.println("Canceled file upload");
         }
     }
 }
