@@ -1,7 +1,13 @@
 package src;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import src.Model.DAO.*;
 import src.Model.Entities.ImageMessage;
-
 public class AddImageRequest extends Sendable implements RunnableRequest{
     private ImageMessage message;
     private byte[] image;
@@ -45,13 +51,13 @@ public class AddImageRequest extends Sendable implements RunnableRequest{
             String fileName = this.GetFileName();
             ByteArrayInputStream b = new ByteArrayInputStream(img);
             BufferedImage image = ImageIO.read(b);
-            File outputDir = new File(SERVER_IMAGE_DIR);
+            File outputDir = new File(h.getServerImageDir());
             if (!outputDir.exists()) {
                 outputDir.mkdirs();
                 }
             File outputFile = new File(outputDir, fileName + ".png");
             ImageIO.write(image, "png", outputFile);
-            m.SetImagePath(CLIENT_IMAGE_DIR + fileName + ".png");
+            m.SetImagePath(h.getClientImageDir() + fileName + ".png");
             D_CON.AddMessage(m);
             System.out.println("saved image");
         

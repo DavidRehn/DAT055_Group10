@@ -1,7 +1,7 @@
 package src;
 
+import java.io.IOException;
 import src.Model.Entities.User;
-
 public interface HandlerInterface{
 
   public User getUser();

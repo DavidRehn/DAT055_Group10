@@ -1,8 +1,9 @@
 package src;
 
-import java.io.Serializable;
+import java.io.IOException;
+import src.Model.DAO.DataStorage;
 import src.Model.Entities.ChatUser;
-
+import src.Model.Entities.User;
 public class LoginRequest extends Sendable implements RunnableRequest {
     ChatUser user;
 

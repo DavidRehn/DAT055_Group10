@@ -1,21 +1,15 @@
 package src;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.*;
 import java.nio.channels.*;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javax.imageio.ImageIO;
-
 import src.Model.DAO.*;
-import src.Model.Entities.ChatUser;
-import src.Model.Entities.GroupChat;
-import src.Model.Entities.ImageMessage;
 import src.Model.Entities.Message;
 import src.Model.Entities.User;
 
-public class clientHandler implements Runnable {
+public class clientHandler implements Runnable, HandlerInterface {
     private static final CopyOnWriteArrayList<clientHandler> CONNECTED_HANDLERS = new CopyOnWriteArrayList<>();
     private static final String SERVER_IMAGE_DIR = "Java/src/ServerImages/";
     private static final String CLIENT_IMAGE_DIR = "Java/src/ClientImages/";
@@ -160,7 +154,7 @@ public class clientHandler implements Runnable {
     }
 
 
-    private void sendObject(Object obj) throws IOException {
+    public void sendObject(Object obj) throws IOException {
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try (ObjectOutputStream objOut = new ObjectOutputStream(byteStream)) {
             objOut.writeObject(obj);
@@ -179,7 +173,7 @@ public class clientHandler implements Runnable {
         }
     }
 
-    private void broadcastMessages(String chat) {
+    public void broadcastMessages(String chat) {
         ArrayList<Message> messages = D_CON.GetMessages(chat);
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
@@ -193,7 +187,7 @@ public class clientHandler implements Runnable {
         }
     }
 
-    private void broadcastChatsToUser() {
+    public void broadcastChatsToUser() {
         ArrayList<String> chats = D_CON.GetAllChats();
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated) {
@@ -207,7 +201,7 @@ public class clientHandler implements Runnable {
         }
     }
 
-    private void broadcastImage(String chat, byte[] imageBytes, String fileName) {
+    public void broadcastImage(String chat, byte[] imageBytes, String fileName) {
         messageWrapper wrapper = new messageWrapper(new imageWrapper(imageBytes, fileName), "addImg");
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
@@ -268,7 +262,7 @@ public void setAuthenticated(Boolean a){
     this.authenticated=a;
 }
 public void setFocus(String c){
-    this.currentChatFocus;
+    this.currentChatFocus=c;
 }
 
 

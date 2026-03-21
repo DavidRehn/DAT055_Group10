@@ -1,5 +1,8 @@
 package src;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import src.Model.DAO.DataStorage;
+import src.Model.Entities.Message;
 public class GetMessagesRequest extends Sendable implements RunnableRequest{
     private String chat;
 
@@ -16,7 +19,7 @@ public class GetMessagesRequest extends Sendable implements RunnableRequest{
     public void runRequest(DataStorage D_CON, HandlerInterface h){
         try {
         String chat = (String) this.getObject();
-        h.setFocus = chat;
+        h.setFocus(chat);
         if (!D_CON.ChatUserExists(h.getUser(), chat)) {
             D_CON.AddUserToChat(chat, h.getUser().getUserName());
             System.out.println("Added user " + h.getUser().getUserName() + " to chat " + chat);

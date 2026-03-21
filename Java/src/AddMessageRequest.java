@@ -1,7 +1,7 @@
 package src;
 
+import src.Model.DAO.DataStorage;
 import src.Model.Entities.Message;
-
 public class AddMessageRequest extends Sendable implements RunnableRequest{
     private Message message;
 
@@ -16,8 +16,7 @@ public class AddMessageRequest extends Sendable implements RunnableRequest{
     }
     @Override
     public void runRequest(DataStorage D_CON, HandlerInterface h){
-    try {
-    System.out.println(h.getUser());
+        System.out.println(h.getUser());
         Message r = (Message) this.getObject();
         System.out.println(r.GetChat());
         System.out.println(D_CON.ChatUserExists(h.getUser(), r.GetChat()));
@@ -27,7 +26,6 @@ public class AddMessageRequest extends Sendable implements RunnableRequest{
             D_CON.AddMessage(r);
             h.broadcastMessages(r.GetChat());
             System.out.println("Added message");
-            }
-        } catch (IOException e) {}
+        }
     }
 }
