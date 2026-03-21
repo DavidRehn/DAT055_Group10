@@ -25,7 +25,7 @@ public class GetMessagesRequest extends Sendable implements RunnableRequest{
             System.out.println("Added user " + h.getUser().getUserName() + " to chat " + chat);
             }
         ArrayList<Message> messages = D_CON.GetMessages(chat);
-        h.sendObject(new messageWrapper(messages, "MSG"));
+        h.sendObject(new messageWrapper(messages, MsgType.MSG));
         } catch (IOException e) {}
     }
 }

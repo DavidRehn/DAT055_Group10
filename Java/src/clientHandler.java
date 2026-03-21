@@ -139,7 +139,7 @@ public class clientHandler implements Runnable, HandlerInterface {
             System.out.println("Error while handling request");
             e.printStackTrace();
             try {
-                sendObject(new messageWrapper("Server error: " + e.getClass().getSimpleName(), "AUTH_FAIL"));
+                sendObject(new messageWrapper("Server error: " + e.getClass().getSimpleName(), MsgType.AUTH_FAIL));
             } catch (IOException ignored) {
             }
         } finally {
@@ -178,7 +178,7 @@ public class clientHandler implements Runnable, HandlerInterface {
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
                 try {
-                    handler.sendObject(new messageWrapper(messages, "MSG"));
+                    handler.sendObject(new messageWrapper(messages, MsgType.MSG));
                 } catch (IOException e) {
                     handler.sk.cancel();
                     CONNECTED_HANDLERS.remove(handler);
@@ -192,7 +192,7 @@ public class clientHandler implements Runnable, HandlerInterface {
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated) {
                 try {
-                    handler.sendObject(new messageWrapper(chats, "UI"));
+                    handler.sendObject(new messageWrapper(chats, MsgType.UI));
                 } catch (IOException e) {
                     handler.sk.cancel();
                     CONNECTED_HANDLERS.remove(handler);
@@ -202,7 +202,7 @@ public class clientHandler implements Runnable, HandlerInterface {
     }
 
     public void broadcastImage(String chat, byte[] imageBytes, String fileName) {
-        messageWrapper wrapper = new messageWrapper(new imageWrapper(imageBytes, fileName), "addImg");
+        messageWrapper wrapper = new messageWrapper(new imageWrapper(imageBytes, fileName), MsgType.ADD_IMG);
         for (clientHandler handler : CONNECTED_HANDLERS) {
             if (handler.authenticated && chat.equals(handler.currentChatFocus)) {
                 try {

@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-
 import src.Model.Entities.Message;
 
 public class client {
@@ -34,16 +33,16 @@ public class client {
         a.add("Chat1");
         a.add("Chat2");
         view.UpdateChatList(a);*/
-        Sendable message = null;
+        messageWrapper message = null;
         while (true) {
 
             message = null;
 
             try {
-                message = (Sendable) cModel.receiveObject();
-                String msgType = message.getMsgType();
+                message = (messageWrapper) cModel.receiveObject();
+                MsgType msgType = message.getMsg();
 
-                if (msgType.equals("UI")) {
+                if (msgType == MsgType.UI) {
                     ArrayList<String> chats = (ArrayList<String>) (message.getObject());
                     System.out.println("Received chats: " + chats);
                     if (!cModel.IsLoggedIn()) {
@@ -54,14 +53,14 @@ public class client {
                         System.out.println("Received chats");
                     }
 
-                } else if (msgType.equals("MSG")) {
+                } else if (msgType == MsgType.MSG) {
                     ArrayList<Message> messages = (ArrayList<Message>) message.getObject();
                     System.out.println(messages);
                     cModel.HandleMessagesUpdate(messages);
                     System.out.println("Received Messages");
-                } else if (msgType.equals("AUTH_FAIL")) {
+                } else if (msgType == MsgType.AUTH_FAIL) {
                     cModel.HandleAuthFailed((String) message.getObject());
-                } else if (msgType.equals("addImg")) {
+                } else if (msgType == MsgType.ADD_IMG) {
                     imageWrapper imgWrapper = (imageWrapper) message.getObject();
                     byte[] imageBytes = imgWrapper.GetImage();
                     ByteArrayInputStream b = new ByteArrayInputStream(imageBytes);
@@ -75,7 +74,6 @@ public class client {
                     ImageIO.write(image, "png", outputFile);
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
             }
 
 

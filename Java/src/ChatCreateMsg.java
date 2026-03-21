@@ -23,10 +23,10 @@ public class ChatCreateMsg extends Sendable implements RunnableRequest{
                 D_CON.AddUserToChat((String) this.getObject(), h.getUser().getUserName());
                 h.broadcastChatsToUser();
             } catch (RuntimeException ex) {
-                h.sendObject(new messageWrapper("Could not create chat.", "AUTH_FAIL"));
+                h.sendObject(new messageWrapper("Could not create chat.", MsgType.AUTH_FAIL));
                 }
         } else {
-            h.sendObject(new messageWrapper("Chat already exists", "AUTH_FAIL"));
+            h.sendObject(new messageWrapper("Chat already exists", MsgType.AUTH_FAIL));
             }
         } catch (IOException e) {}
     }

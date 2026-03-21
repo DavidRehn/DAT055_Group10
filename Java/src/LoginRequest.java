@@ -37,9 +37,9 @@ public class LoginRequest extends Sendable implements RunnableRequest {
                 h.setAuthenticated(true);
                 h.setUser((ChatUser) this.getObject());
                 System.out.println("User logged in: " + this.GetUsername());
-                h.sendObject(new messageWrapper(D_CON.GetAllChats(), "UI"));
+                h.sendObject(new messageWrapper(D_CON.GetAllChats(), MsgType.UI));
                 } else {
-                    h.sendObject(new messageWrapper("Invalid username or password", "AUTH_FAIL"));
+                    h.sendObject(new messageWrapper("Invalid username or password", MsgType.AUTH_FAIL));
                     }
         } catch (IOException e) {}
     }

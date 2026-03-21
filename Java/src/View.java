@@ -3,7 +3,6 @@ package src;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import src.Model.Entities.Message;
 
 public class View implements Observer {
